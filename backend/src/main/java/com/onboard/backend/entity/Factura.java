@@ -1,0 +1,68 @@
+package com.onboard.backend.entity;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+@Document(collection = "facturas")
+public class Factura {
+
+    @Id
+    private String idFactura;
+    private String idReserva;
+    private BigDecimal total;
+    private LocalDate fechaEmision;
+    private String razon;
+
+    public Factura() {}
+
+    public Factura(String idFactura, String idReserva, BigDecimal total, LocalDate fechaEmision, String razon) {
+        this.idFactura = idFactura;
+        this.idReserva = idReserva;
+        this.total = total;
+        this.fechaEmision = fechaEmision;
+        this.razon = razon;
+    }
+
+    public String getIdFactura() {
+        return idFactura;
+    }
+
+    public void setIdFactura(String idFactura) {
+        this.idFactura = idFactura;
+    }
+
+    public String getIdReserva() {
+        return idReserva;
+    }
+
+    public void setIdReserva(String idReserva) {
+        this.idReserva = idReserva;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public LocalDate getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(LocalDate fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
+    public String getRazon() {
+        return razon;
+    }
+
+    public void setRazon(String razon) {
+        this.razon = razon;
+    }
+}
