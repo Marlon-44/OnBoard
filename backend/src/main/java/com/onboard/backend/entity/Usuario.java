@@ -3,7 +3,7 @@ package com.onboard.backend.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Document(collection = "usuarios")
 public class Usuario {
@@ -13,16 +13,18 @@ public class Usuario {
 
     private String nombre;
     private String correo;
+    private String password;
     private String telefono;
     private String direccion;
-    private LocalDate fechaRegistro;
+    private LocalDateTime fechaRegistro;
     private String cuentaBancaria;
     private String idRol;
+ 
 
     public Usuario() {}
 
     public Usuario(String idUsuario, String nombre, String correo, String telefono, String direccion,
-                   LocalDate fechaRegistro, String cuentaBancaria, String idRol) {
+                   LocalDateTime fechaRegistro, String cuentaBancaria, String idRol, String password) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.correo = correo;
@@ -31,6 +33,7 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
         this.cuentaBancaria = cuentaBancaria;
         this.idRol = idRol;
+        this.password = password;
     }
 
     public String getIdUsuario() {
@@ -73,11 +76,11 @@ public class Usuario {
         this.direccion = direccion;
     }
 
-    public LocalDate getFechaRegistro() {
+    public LocalDateTime getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(LocalDate fechaRegistro) {
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 
@@ -95,5 +98,13 @@ public class Usuario {
 
     public void setIdRol(String idRol) {
         this.idRol = idRol;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
