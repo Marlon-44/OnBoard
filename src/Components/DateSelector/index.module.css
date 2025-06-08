@@ -1,0 +1,11 @@
+.date__picker{
+    width: 100%;
+    overflow-x: visible;
+}
+.date__picker label{
+    
+    font-size: 0.8rem;
+}
+@media screen and (min-width: 900px) {
+    
+}

@@ -1,0 +1,109 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.vehicle__type__container{
+    height: 100vh;
+    width: 100vw;
+    background-position: center;
+    background-size: cover;
+    color: #fff;
+}
+.vehicle__type__overlay{
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 0 5% 0;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(3px);
+    mask-image: linear-gradient(to top, black 10%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%); 
+    
+}
+.vehicle__type__info h2{
+        font-size: 5rem;
+        text-align: right;
+        margin-right: 10%;
+        font-family: "Oswald", sans-serif;
+    }
+.vehicle__type__button{
+    width: 80%;
+    height: 8%;
+    backdrop-filter: blur(8px); /* borrosidad */
+    -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    text-align: left;
+    margin-top: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    border-radius: 5px;
+    align-self: center;
+}
+.vehicle__type__button img{
+    width: 5%;
+}
+.vehicle__type__button:hover{
+    background-color: rgba(255, 255, 255, 0.329);
+    cursor: pointer;
+}
+.vehicle__type__button a{
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.vehicle__type__overlay:hover .vehicle__type__info{
+    opacity: 1;
+    transform: translateY(0);
+}
+@media screen and (min-width: 900px) {
+    .vehicle__type__container{
+        height: 100%;
+        width: 33%;
+        }
+    .vehicle__type__overlay{
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-left: 0;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(3px);
+        mask-image: linear-gradient(to top, black 10%, transparent 60%);
+        -webkit-mask-image: linear-gradient(to top, black 30%, transparent 100%); 
+    
+    }
+    .vehicle__type__button{
+        opacity: 0;
+        transform: translateY(20px);   
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        width: 80%;
+        height: 8%;
+        border: none;
+        text-align: left;
+        margin-top: 5%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 7%;
+    }
+    .vehicle__type__info{
+        transform: translateY(40px);   
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .vehicle__type__overlay:hover .vehicle__type__button{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

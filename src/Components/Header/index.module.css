@@ -1,0 +1,91 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+.header__container{
+    position: absolute;
+    width: 100vw;
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5% 0;
+    
+}
+.header__logo__container{
+    width: 20%;
+    height: 100%;
+    background-color: #4c005c;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border-radius: 0 0 10px 10px;
+     backdrop-filter: blur(8px); /* borrosidad */
+    -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.header__logo__container img{
+    width: 40%;
+    margin-bottom: 30%;
+}
+.header__buttons__container{
+    display: flex;
+    gap: 6%;
+    align-items: center;
+    width: 50%;
+}
+.header__buttons__container button{
+    border: none;
+    width: 100%;
+    height: 50%;
+    backdrop-filter: blur(8px); /* borrosidad */
+    -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+    border-radius: 10px;
+}
+.header__buttons__container button:hover{
+    cursor: pointer;
+    background-color: #23002b;
+}
+@media screen and (min-width: 900px) {
+    .header__container{
+        height: 15vh;
+        
+    }
+    .header__logo__container{
+        width: 8%;
+        height: 100%;
+        background-color: #4c005c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0 0 10px 10px;
+        backdrop-filter: blur(8px); /* borrosidad */
+        -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .header__logo__container img{
+        width: 40%;
+        margin-bottom: 0;
+    }
+    .header__buttons__container{
+        gap: 6%;
+        width: 20%;
+    }
+    .header__buttons__container button{
+        border: none;
+        width: 100%;
+        height: 30%;
+        background-color:#4c005c ;
+        color: #fff;
+        border-radius: 5px;
+        backdrop-filter: blur(8px); /* borrosidad */
+        -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+}

@@ -1,0 +1,41 @@
+
+
+.banner__container{
+    width: 98vw;
+    height: 99vh;
+    margin: auto;
+    margin-top: 1.5%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+}
+.banner__container video{
+
+    height: 98vh;
+    width: 98vw;
+    object-fit: cover;
+    position: absolute;
+    z-index: -1;
+    border-radius: 10px;
+}
+
+@media screen and (min-width: 900px) {
+    .banner__container{
+        width: 98vw;
+        height: 99vh;
+        margin: auto;
+        margin-top: 0.5%;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+    }
+    .banner__container video{
+
+        height: 98vh;
+        width: 98vw;
+        object-fit: cover;
+        position: absolute;
+        z-index: -1;
+        border-radius: 10px;
+    }
+}
