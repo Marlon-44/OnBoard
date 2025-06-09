@@ -1,0 +1,31 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.highligth__section__container{
+    background-color: #000;
+    height: 100vh;
+    width: 100vw;
+}
+.highligth__section__container video{
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    position: absolute;
+}
+.highligth__section{
+    width: 97vw;
+    height: 97vh;
+    margin: 2.5vh 1vw;
+    border-radius: 10px;
+    background-color: rgba(255, 0, 0, 0.075);
+    clip-path: polygon(0 0, 20% 0, 24% 5%, 75% 5%, 80% 0, 100% 0%, 100% 90%, 66% 90%, 63% 95%, 37% 95%, 33% 90%, 0 90%);
+    position: absolute;
+    backdrop-filter: blur(30px); /* borrosidad */
+    -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
+    background-color: rgba(255, 255, 255, 0.103);
+    box-shadow: 0 4px 10px rgb(255, 255, 255);
+    overflow: hidden;
+}
+
