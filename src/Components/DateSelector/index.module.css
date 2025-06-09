@@ -1,11 +1,14 @@
-.date__picker{
-    width: 100%;
+.date__time__picker{
     overflow-x: visible;
+    font-family: "Manrope", sans-serif ;
 }
-.date__picker label{
-    
-    font-size: 0.8rem;
+.date__time__picker label{
+    font-family: "Manrope";
+    font-size: 0.9rem;
+    color: #ffffffb3;
 }
 @media screen and (min-width: 900px) {
-    
+    .date__time__picker{
+        overflow-x: visible;
+    }
 }

@@ -1,11 +1,13 @@
-.combo__box{
-    min-width: 100%;
+.combo__box label{
     z-index: 10;
+    overflow-x: visible;
+    font-family: "Manrope", sans-serif;
+    color: #ffffffb3;
+    font-size: 0.9rem;
 }
 
 @media screen and (min-width: 900px) {
     .combo__box{
-        min-width: 100px;
         width: 25%;
     }
 }

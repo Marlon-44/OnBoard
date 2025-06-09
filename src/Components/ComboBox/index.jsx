@@ -2,25 +2,19 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import styles from "./index.module.css"
-export default function ComboBox({ array }) {
+import { text } from 'framer-motion/client';
+export default function ComboBox({ array, text}) {
     return (
         <Autocomplete
             disablePortal
             options={array}
-            sx={{
-                width: 300,
+            className={styles.combo__box}
+            sx={{width: 300,
+                overflow: "visible",
                 color: "white", // color del texto en el input desplegado
                 '& .MuiOutlinedInput-root': {
                     color: 'white', // texto del input principal
-                    '& fieldset': {
-                        borderColor: 'gray',
-                    },
-                    '&:hover fieldset': {
-                        borderColor: 'black',
-                    },
-                    '&.Mui-focused fieldset': {
-                        borderColor: 'white',
-                    },
+                    
                 },
                 '& .MuiSvgIcon-root': {
                     color: 'white', // ícono desplegable
@@ -30,19 +24,12 @@ export default function ComboBox({ array }) {
                 },
                 '& .MuiAutocomplete-clearIndicator': {
                     color: 'white', // ícono de limpiar
-                },
-                '& .MuiAutocomplete-option': {
-                    color: 'black', // texto de las opciones
-                    backgroundColor: 'white',
-                    '&:hover': {
-                        backgroundColor: '#f0f0f0',
-                    },
-                },
+                }
             }}
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label=""
+                    label={text}
                     variant="outlined"
                     
                 />

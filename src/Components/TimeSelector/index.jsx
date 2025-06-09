@@ -8,7 +8,22 @@ export default function TimeSelector() {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={['TimePicker']} >
-                <TimePicker label="Basic time picker" className={styles.time__picker}/>
+                <TimePicker label="Basic time picker" className={styles.time__picker}
+                sx={{ width: 300,
+                    color:"gray",
+                    
+                        '& .MuiInputLabel-root': {
+                            color: 'white', // color del label
+                        }
+                    }}
+                slotProps={{
+                        openPickerButton: {
+                            sx: {
+                                marginRight: 1,
+                                padding: 0, 
+                            }
+                        }
+                    }}/>
             </DemoContainer>
         </LocalizationProvider>
     );

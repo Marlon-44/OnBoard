@@ -13,11 +13,9 @@ const SearchBox = () => {
             transition={{duration: 2, ease:"easeOut"}}
             className={styles.search__container}>
                 
-            <ComboBox array={cities} />
+            <ComboBox array={cities} text="Ciudad"/>
             <DateSelector text="Fecha de Recogida"/>
-            <TimeSelector text="Hora de Recogida"/>
             <DateSelector text="Fecha de Entrega"/>
-            <TimeSelector text="Hora de Recogida"/>
             <button className={styles.search__button}>Buscar</button>
         </motion.div>
     )

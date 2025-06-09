@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Manrope", sans-serif;
 }
 
 .header__container{
@@ -49,7 +49,7 @@
 }
 .header__buttons__container button:hover{
     cursor: pointer;
-    background-color: #23002b;
+    background-color: #ffffff53;
 }
 @media screen and (min-width: 900px) {
     .header__container{

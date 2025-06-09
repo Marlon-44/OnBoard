@@ -7,22 +7,30 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import styles from "./index.module.css"
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-export default function DateSelector({text}) {
-     return (
+import { color } from 'framer-motion';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { BorderColor } from '@mui/icons-material';
+
+export default function BasicDateTimePicker({ text }) {
+    return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
-                <DatePicker
-                    label={text}
-                    sx={{
-                        width: {
-                            xs: '100%', // móviles
-                            sm: '50%',  // tablets
-                            md: '30%',  // pantallas medianas
-                            lg: '20%'   // pantallas grandes
+            <DemoContainer components={['DateTimePicker']}>
+                <DateTimePicker label={text} 
+                className={styles.date__time__picker}
+                sx={{
+                    width: 300,
+                    fontFamily: "Montserrat"
+                }}
+                slotProps={{
+                        openPickerButton: {
+                            sx: {
+                                marginRight:1,
+                                padding: 0, 
+                                color: "white"
+                            }
                         }
-                    }}
-                />
+                    }}/>
             </DemoContainer>
         </LocalizationProvider>
     );
-}
+} 
