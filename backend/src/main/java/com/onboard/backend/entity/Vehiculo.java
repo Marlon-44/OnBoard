@@ -1,5 +1,7 @@
 package com.onboard.backend.entity;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -23,13 +25,15 @@ public class Vehiculo {
     private float kilometraje;
     private String descripcion;
     private String idPropietario;
+    private List<String> fotosUrls;
 
-    public Vehiculo() {}
+    public Vehiculo() {
+    }
 
     public Vehiculo(String placa, String tipoVehiculo, String tipoTerreno, String marca, String modelo, int anio,
-                    int capacidadPasajeros, String soat, String tecnomecanica, String antecedentes,
-                    String tipoTransmision, String combustible, float kilometraje,
-                    String descripcion, String idPropietario) {
+            int capacidadPasajeros, String soat, String tecnomecanica, String antecedentes,
+            String tipoTransmision, String combustible, float kilometraje,
+            String descripcion, String idPropietario, List<String> fotosUrls) {
         this.placa = placa;
         this.tipoVehiculo = tipoVehiculo;
         this.tipoTerreno = tipoTerreno;
@@ -45,6 +49,7 @@ public class Vehiculo {
         this.kilometraje = kilometraje;
         this.descripcion = descripcion;
         this.idPropietario = idPropietario;
+        this.fotosUrls = fotosUrls;
     }
 
     public String getPlaca() {
@@ -166,4 +171,13 @@ public class Vehiculo {
     public void setIdPropietario(String idPropietario) {
         this.idPropietario = idPropietario;
     }
+
+    public List<String> getFotosUrls() {
+        return fotosUrls;
+    }
+
+    public void setFotosUrls(List<String> fotosUrls) {
+        this.fotosUrls = fotosUrls;
+    }
+
 }

@@ -7,7 +7,9 @@ import com.onboard.backend.util.EncriptadorAESGCM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private FileUploadService fileUploadService;
 
     @Autowired
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -68,6 +73,24 @@ public class UsuarioService {
 
     public Usuario obtenerUsuarioPorCorreo(String correo) {
         return usuarioRepository.findByCorreo(correo);
+    }
+
+
+
+    public String subirFotoPerfil(String usuarioId, MultipartFile file) throws IOException {
+        String fileUrl = fileUploadService.uploadProfilePhoto(file, usuarioId);
+
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
+        if (usuarioOpt.isEmpty()) {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+
+        Usuario usuario = usuarioOpt.get();
+        usuario.setFotoPerfilUrl(fileUrl);
+
+        usuarioRepository.save(usuario);
+
+        return fileUrl;
     }
 
 }

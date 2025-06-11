@@ -1,6 +1,7 @@
 package com.onboard.backend.controller;
 
 import com.onboard.backend.entity.Usuario;
+
 import com.onboard.backend.service.UsuarioService;
 import com.onboard.backend.service.UsuarioService.ResultadoLogin;
 
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +60,18 @@ public class UsuarioController {
                 return ResponseEntity.ok(usuario);
             default:
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado");
+        }
+    }
+
+    @PostMapping("/{id}/foto-perfil")
+    public ResponseEntity<String> subirFotoPerfil(@PathVariable String id, @RequestParam("file") MultipartFile file) {
+        try {
+            String url = usuarioService.subirFotoPerfil(id, file);
+            return ResponseEntity.ok(url);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al subir la foto");
         }
     }
 

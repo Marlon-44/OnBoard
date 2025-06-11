@@ -19,12 +19,14 @@ public class Usuario {
     private LocalDateTime fechaRegistro;
     private String cuentaBancaria;
     private String idRol;
- 
+    private String fotoPerfilUrl;
 
-    public Usuario() {}
+    public Usuario() {
+    }
 
     public Usuario(String idUsuario, String nombre, String correo, String telefono, String direccion,
-                   LocalDateTime fechaRegistro, String cuentaBancaria, String idRol, String password) {
+            LocalDateTime fechaRegistro, String cuentaBancaria, String idRol, String password,
+            String fotoPerfilUrl) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.correo = correo;
@@ -34,6 +36,7 @@ public class Usuario {
         this.cuentaBancaria = cuentaBancaria;
         this.idRol = idRol;
         this.password = password;
+        this.fotoPerfilUrl = fotoPerfilUrl;
     }
 
     public String getIdUsuario() {
@@ -107,4 +110,13 @@ public class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getFotoPerfilUrl() {
+    return fotoPerfilUrl;
+}
+
+public void setFotoPerfilUrl(String fotoPerfilUrl) {
+    this.fotoPerfilUrl = fotoPerfilUrl;
+}
+
 }

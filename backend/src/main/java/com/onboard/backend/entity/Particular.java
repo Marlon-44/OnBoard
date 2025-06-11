@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Particular {
 
     @Id
-    private String id;  // ID propio del Particular
+    private String id; 
 
-    private String idUsuario;  // Referencia al usuario general
+    private String idUsuario; 
 
     private String licenciaConduccion;
 
