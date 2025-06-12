@@ -1,0 +1,29 @@
+package com.onboard.backend.exception;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(InvalidInputException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidInput(InvalidInputException ex) {
+        ErrorResponse error = new ErrorResponse(
+            ex.getErrorCode(),               
+            ex.getMessage(),               
+            null                             
+        );
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
+        ErrorResponse error = new ErrorResponse(
+            "ERR_INTERNO", 
+            "Ocurrió un error inesperado",
+            ex.getMessage()
+        );
+        return ResponseEntity.internalServerError().body(error);
+    }
+}
