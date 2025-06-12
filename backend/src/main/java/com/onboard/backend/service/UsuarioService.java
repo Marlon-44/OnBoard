@@ -1,8 +1,10 @@
 package com.onboard.backend.service;
 
 import com.onboard.backend.entity.Usuario;
+import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.repository.UsuarioRepository;
 import com.onboard.backend.util.EncriptadorAESGCM;
+import com.onboard.backend.util.ValidationUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +35,43 @@ public class UsuarioService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Usuario saveUsuario(Usuario usuario) {
+        if (!ValidationUtils.isValidCedula(usuario.getIdUsuario())) {
+            throw new InvalidInputException(
+                    "La cedula ingresada es incorrecta, debe ser un numero entero entre 6 y 10 digitos: "
+                            + usuario.getIdUsuario(),
+                    "");
+        }
+
+        if (!ValidationUtils.isValidEmail(usuario.getCorreo())) {
+            throw new InvalidInputException("El correo ingresado no tienee el fotmato correcto" + usuario.getCorreo(),
+                    "");
+        }
+
+        if (!ValidationUtils.isValidCuentaBancaria(usuario.getCuentaBancaria())) {
+            throw new InvalidInputException("Invalid bank account format. Only digits allowed (10–20 characters).", "");
+        }
+
+        if (!ValidationUtils.isValidNombre(usuario.getNombre())) {
+            throw new InvalidInputException("Nombre inválido", "");
+        }
+
+        if (!ValidationUtils.isValidTelefono(usuario.getTelefono())) {
+            throw new InvalidInputException("Teléfono inválido", "");
+        }
+        if (!ValidationUtils.isValidDireccion(usuario.getDireccion())) {
+            throw new InvalidInputException("Dirección inválida", "");
+        }
+
+        if (usuarioRepository.existsById(usuario.getIdUsuario())) {
+            throw new InvalidInputException("Ya existe un usuario registrado con la cedula: " + usuario.getIdUsuario(),
+                    "");
+        }
+
+        if (usuarioRepository.existsByCorreo(usuario.getCorreo())) {
+            throw new InvalidInputException("Ya existe un usuario registrado con el correo: " + usuario.getCorreo(),
+                    "");
+        }
+
         String hashedPass = passwordEncoder.encode(usuario.getPassword());
         usuario.setPassword(hashedPass);
         usuario.setFechaRegistro(LocalDateTime.now());
@@ -75,8 +114,6 @@ public class UsuarioService {
         return usuarioRepository.findByCorreo(correo);
     }
 
-
-
     public String subirFotoPerfil(String usuarioId, MultipartFile file) throws IOException {
         String fileUrl = fileUploadService.uploadProfilePhoto(file, usuarioId);
 
@@ -91,6 +128,14 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
 
         return fileUrl;
+    }
+
+    public Usuario updateUsuario(String id, Usuario usuarioActualizado) {
+        Usuario usuarioExistente = usuarioRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        usuarioRepository.delete(usuarioExistente);
+        return usuarioRepository.save(usuarioActualizado);
     }
 
 }

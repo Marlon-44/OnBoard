@@ -54,4 +54,9 @@ public class VehiculoService {
 
         return urls;
     }
+
+    public Vehiculo updateVehiculo(String placa, Vehiculo vehiculoActualizado) {
+        vehiculoActualizado.setPlaca(placa);
+        return vehiculoRepository.save(vehiculoActualizado);
+    }
 }

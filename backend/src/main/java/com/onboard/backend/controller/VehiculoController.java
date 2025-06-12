@@ -46,10 +46,9 @@ public class VehiculoController {
         return ResponseEntity.noContent().build();
     }
 
-
-
     @PostMapping("/{id}/fotos")
-    public ResponseEntity<List<String>> subirFotosVehiculo(@PathVariable String id, @RequestParam("files") MultipartFile[] files) {
+    public ResponseEntity<List<String>> subirFotosVehiculo(@PathVariable String id,
+            @RequestParam("files") MultipartFile[] files) {
         try {
             List<String> urls = vehiculoService.subirFotosVehiculo(id, files);
             return ResponseEntity.ok(urls);
@@ -57,6 +56,18 @@ public class VehiculoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(List.of());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(List.of());
+        }
+    }
+
+    @PutMapping("/{placa}")
+    public ResponseEntity<Vehiculo> updateVehiculo(@PathVariable String placa, @RequestBody Vehiculo vehiculoActualizado) {
+        Optional<Vehiculo> vehiculoExistente = vehiculoService.getVehiculoById(placa);
+
+        if (vehiculoExistente.isPresent()) {
+            Vehiculo actualizado = vehiculoService.updateVehiculo(placa, vehiculoActualizado);
+            return ResponseEntity.ok(actualizado);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }

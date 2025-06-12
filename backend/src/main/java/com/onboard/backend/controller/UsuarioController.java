@@ -75,4 +75,16 @@ public class UsuarioController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> updateUsuario(@PathVariable String id, @RequestBody Usuario usuarioActualizado) {
+        Optional<Usuario> usuarioExistente = usuarioService.getUsuarioById(id);
+
+        if (usuarioExistente.isPresent()) {
+            Usuario actualizado = usuarioService.updateUsuario(id, usuarioActualizado);
+            return ResponseEntity.ok(actualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
