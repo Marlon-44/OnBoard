@@ -3,7 +3,7 @@ package com.onboard.backend.service;
 import com.onboard.backend.entity.Usuario;
 import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.repository.UsuarioRepository;
-import com.onboard.backend.util.EncriptadorAESGCM;
+import com.onboard.backend.security.EncriptadorAESGCM;
 import com.onboard.backend.util.ValidationUtils;
 
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class UsuarioService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Usuario saveUsuario(Usuario usuario) {
-        if (!ValidationUtils.isValidCedula(usuario.getIdUsuario())) {
+        if (!ValidationUtils.isValidDoc(usuario.getIdUsuario(), usuario.getTipoIdentificacion())) {
             throw new InvalidInputException(
                     "Invalid cedula format",
                     "INVALID_ID_FORMAT",
@@ -116,6 +116,14 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> getUsuarioById(String id) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isEmpty()) {
+            throw new InvalidInputException(
+                    "User not found",
+                    "USER_NOT_FOUND",
+                    "The user with ID '" + id
+                            + "' was not found in the database while uploading the profile photo");
+        }
         return usuarioRepository.findById(id);
     }
 
@@ -124,6 +132,14 @@ public class UsuarioService {
     }
 
     public void deleteUsuarioById(String id) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        if (usuarioOpt.isEmpty()) {
+            throw new InvalidInputException(
+                    "User not found",
+                    "USER_NOT_FOUND",
+                    "The user with ID '" + id
+                            + "' was not found in the database while uploading the profile photo");
+        }
         usuarioRepository.deleteById(id);
     }
 
@@ -142,6 +158,7 @@ public class UsuarioService {
     }
 
     public Usuario obtenerUsuarioPorCorreo(String correo) {
+
         return usuarioRepository.findByCorreo(correo);
     }
 
@@ -158,6 +175,9 @@ public class UsuarioService {
         }
 
         Usuario usuario = usuarioOpt.get();
+        if (usuario.getFotoPerfilUrl() != null) {
+            fileUploadService.deletePhotoByUrl(usuario.getFotoPerfilUrl());
+        }
         usuario.setFotoPerfilUrl(fileUrl);
 
         usuarioRepository.save(usuario);

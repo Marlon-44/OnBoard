@@ -1,4 +1,4 @@
-package com.onboard.backend.util;
+package com.onboard.backend.security;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.GCMParameterSpec;
@@ -14,7 +14,7 @@ public class EncriptadorAESGCM {
     private static final int TAG_LENGTH_BIT = 128; 
 
     
-    private static final String SECRET_KEY = ConfigAES.getClaveSecreta();
+    private static final String SECRET_KEY = EnvManager.getClaveSecreta();
 
     private static final SecureRandom secureRandom = new SecureRandom();
 

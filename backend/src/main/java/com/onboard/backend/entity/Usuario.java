@@ -11,6 +11,7 @@ public class Usuario {
     @Id
     private String idUsuario;
 
+    private TipoIdentificacion tipoIdentificacion;
     private String nombre;
     private String correo;
     private String password;
@@ -24,7 +25,8 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String idUsuario, String nombre, String correo, String telefono, String direccion,
+    public Usuario(String idUsuario, TipoIdentificacion tipoIdentificacion, String nombre, String correo,
+            String telefono, String direccion,
             LocalDateTime fechaRegistro, String cuentaBancaria, String idRol, String password,
             String fotoPerfilUrl) {
         this.idUsuario = idUsuario;
@@ -37,6 +39,7 @@ public class Usuario {
         this.idRol = idRol;
         this.password = password;
         this.fotoPerfilUrl = fotoPerfilUrl;
+        this.tipoIdentificacion = tipoIdentificacion;
     }
 
     public String getIdUsuario() {
@@ -112,11 +115,19 @@ public class Usuario {
     }
 
     public String getFotoPerfilUrl() {
-    return fotoPerfilUrl;
-}
+        return fotoPerfilUrl;
+    }
 
-public void setFotoPerfilUrl(String fotoPerfilUrl) {
-    this.fotoPerfilUrl = fotoPerfilUrl;
-}
+    public void setFotoPerfilUrl(String fotoPerfilUrl) {
+        this.fotoPerfilUrl = fotoPerfilUrl;
+    }
+
+     public TipoIdentificacion getTipoIdentificacion() {
+        return tipoIdentificacion;
+    }
+
+    public void setTipoIdentificacion(TipoIdentificacion tipoIdentificacion) {
+        this.tipoIdentificacion = tipoIdentificacion;
+    }
 
 }

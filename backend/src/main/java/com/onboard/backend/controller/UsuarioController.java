@@ -1,7 +1,7 @@
 package com.onboard.backend.controller;
 
 import com.onboard.backend.entity.Usuario;
-
+import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.service.UsuarioService;
 import com.onboard.backend.service.UsuarioService.ResultadoLogin;
 
@@ -52,14 +52,26 @@ public class UsuarioController {
         ResultadoLogin resultado = usuarioService.validarLogin(correo, password);
         switch (resultado) {
             case USUARIO_NO_ENCONTRADO:
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+                throw new InvalidInputException(
+                        "User not found",
+                        "USER_NOT_FOUND",
+                        "No user was found with the provided email: " + correo);
+
             case CONTRASENA_INCORRECTA:
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
+                throw new InvalidInputException(
+                        "Incorrect password",
+                        "INVALID_PASSWORD",
+                        "The password provided for the user with email " + correo + " is incorrect");
+
             case EXITO:
                 Usuario usuario = usuarioService.obtenerUsuarioPorCorreo(correo);
                 return ResponseEntity.ok(usuario);
+
             default:
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado");
+                throw new InvalidInputException(
+                        "Unexpected error",
+                        "UNEXPECTED_ERROR",
+                        "An unexpected error occurred during login for email: " + correo);
         }
     }
 
@@ -71,7 +83,11 @@ public class UsuarioController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al subir la foto");
+            throw new InvalidInputException(
+                    "Failed to upload photo",
+                    "PHOTO_UPLOAD_ERROR",
+                    "An internal error occurred while trying to upload the user's photo");
+
         }
     }
 
@@ -83,7 +99,11 @@ public class UsuarioController {
             Usuario actualizado = usuarioService.updateUsuario(id, usuarioActualizado);
             return ResponseEntity.ok(actualizado);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new InvalidInputException(
+                    "User not found",
+                    "USER_NOT_FOUND",
+                    "No user was found with the provided id: " + id);
+
         }
     }
 
