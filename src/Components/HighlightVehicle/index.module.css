@@ -1,0 +1,9 @@
+.vh__card__container{
+    width: 500px;
+    height: 200px;
+    backdrop-filter: blur(8px); /* borrosidad */
+    -webkit-backdrop-filter: blur(50px); /* compatibilidad Safari */
+    background-color: rgba(255, 255, 255, 0.103);
+    border-radius: 10px 100px 10px 100px;
+    margin-bottom: 5%;
+}

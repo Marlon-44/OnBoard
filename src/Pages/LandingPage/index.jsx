@@ -7,7 +7,7 @@ import styles from "./index.module.css"
 const Home =()=>{
     return(
         <div>
-            <Header/>
+            
             <Banner/>
             <TerrenoSection/>
             <HighlightSection/>

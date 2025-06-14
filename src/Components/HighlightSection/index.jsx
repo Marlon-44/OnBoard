@@ -1,6 +1,7 @@
 import useIsMobile from "../../Hooks/useIsMobile";
 import styles from "./index.module.css"
 import { useVehicleContext } from "../../features/vehicles/VehicleContext";
+import HighlightVehicle from "../HighlightVehicle";
 const HighlightSection = () => {
     const isMobile = useIsMobile();
     const { vehicles, loading, error } = useVehicleContext();
@@ -19,8 +20,15 @@ const HighlightSection = () => {
 
             </div>
             <div className={styles.highligth__section}>
-                
+                <div className={styles.highligth__section__box}>
+                    {loading && <p>Cargando vehículos...</p>}
+                    {error && <p>Ocurrió un error: {error.message}</p>}
+                    {vehicles.map((vehicle) => (
+                    <HighlightVehicle key={vehicle.id} vehicle={vehicle} />
+                    ))}
+                </div>
             </div>
+                
 
         </section>
     )
