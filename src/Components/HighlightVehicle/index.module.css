@@ -1,5 +1,5 @@
 .vh__card__container{
-    width: 500px;
+    width: 30%;
     height: 200px;
     backdrop-filter: blur(8px); /* borrosidad */
     -webkit-backdrop-filter: blur(50px); /* compatibilidad Safari */
