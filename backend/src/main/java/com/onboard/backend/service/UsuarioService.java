@@ -4,6 +4,7 @@ import com.onboard.backend.entity.Usuario;
 import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.repository.UsuarioRepository;
 import com.onboard.backend.security.EncriptadorAESGCM;
+import com.onboard.backend.util.FormatUtils;
 import com.onboard.backend.util.ValidationUtils;
 
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,16 @@ public class UsuarioService {
     @Autowired
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    @Autowired
+    private EmailService emailService;
+
     public Usuario saveUsuario(Usuario usuario) {
+        
+        usuario.setNombre(FormatUtils.capitalizarNombre(usuario.getNombre()));
+        usuario.setCorreo(FormatUtils.formatearCorreo(usuario.getCorreo()));
+        usuario.setDireccion(FormatUtils.limpiarCadena(usuario.getDireccion()));
+        usuario.setTelefono(FormatUtils.formatPhoneNumber(usuario.getTelefono()));
+
         if (!ValidationUtils.isValidDoc(usuario.getIdUsuario(), usuario.getTipoIdentificacion())) {
             throw new InvalidInputException(
                     "Invalid cedula format",
@@ -112,6 +122,12 @@ public class UsuarioService {
                     "An internal error occurred while encrypting the bank account information. Please contact the administrator.");
         }
         usuario.setFechaRegistro(LocalDateTime.now());
+        try {
+            emailService.enviarCorreoRegistro(usuario.getCorreo(), usuario.getNombre());
+        } catch (Exception e) {
+            logger.error("Error sending registration email to user: " + usuario.getCorreo(), e);
+
+        }
         return usuarioRepository.save(usuario);
     }
 
