@@ -20,6 +20,7 @@ public class ValidationUtils {
     private static final Pattern CUENTA_BANCARIA_PATTERN = Pattern.compile("^\\d{10,20}$");
     private static final Pattern NOMBRE_PATTERN = Pattern.compile("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,50}$");
     private static final Pattern TELEFONO_PATTERN = Pattern.compile("^\\+?\\d{7,15}$");
+    private static final Pattern LICENCIA_CONDUCCION_PATTERN = Pattern.compile("^\\d{6,12}$");
 
     private static final Pattern PLACA_PATTERN = Pattern.compile("^[A-Z]{3}\\d{3,4}$");
     private static final Pattern MARCA_PATTERN = Pattern.compile("^.{2,30}$");
@@ -124,5 +125,9 @@ public class ValidationUtils {
 
     public static boolean isValidDescripcion(String descripcion) {
         return descripcion != null && DESCRIPCION_PATTERN.matcher(descripcion).matches();
+    }
+
+    public static boolean isValidLicenciaConduccion(String licencia) {
+        return licencia != null && LICENCIA_CONDUCCION_PATTERN.matcher(licencia.trim()).matches();
     }
 }

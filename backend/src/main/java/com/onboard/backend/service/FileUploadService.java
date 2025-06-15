@@ -35,4 +35,9 @@ public class FileUploadService {
         supabaseStorageService.deleteFileByUrl(fileUrl);
     }
 
+    public String uploadDocumentAsPdf(MultipartFile file, String userId, String documentName) throws IOException {
+        String fileName = "documents/" + userId + "/" + documentName;
+        return supabaseStorageService.uploadDocumentAsPdf(file, fileName, "documentos");
+    }
+
 }

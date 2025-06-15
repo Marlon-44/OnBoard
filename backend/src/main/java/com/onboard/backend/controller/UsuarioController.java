@@ -1,5 +1,8 @@
 package com.onboard.backend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onboard.backend.entity.Empresa;
+import com.onboard.backend.entity.Particular;
 import com.onboard.backend.entity.Usuario;
 import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.service.UsuarioService;
@@ -13,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,9 +26,21 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping
-    public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
-        Usuario saved = usuarioService.saveUsuario(usuario);
+    @PostMapping("/registro")
+    public ResponseEntity<Usuario> createUsuario(@RequestBody Map<String, Object> body) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        Usuario usuario = mapper.convertValue(body.get("usuario"), Usuario.class);
+
+        Object datosAdicionales = null;
+
+        if (body.containsKey("particular")) {
+            datosAdicionales = mapper.convertValue(body.get("particular"), Particular.class);
+        } else if (body.containsKey("empresa")) {
+            datosAdicionales = mapper.convertValue(body.get("empresa"), Empresa.class);
+        }
+
+        Usuario saved = usuarioService.saveUsuario(usuario, datosAdicionales);
         return ResponseEntity.ok(saved);
     }
 
@@ -105,6 +121,20 @@ public class UsuarioController {
                     "No user was found with the provided id: " + id);
 
         }
+    }
+
+    @PutMapping("/verificacion/{id}")
+    public ResponseEntity<Usuario> verificarUsuario(
+            @PathVariable String id,
+            @RequestParam String estado) {
+        Usuario usuario = usuarioService.actualizarEstadoVerificacion(id, estado.toUpperCase());
+        return ResponseEntity.ok(usuario);
+    }
+
+    @GetMapping("/pendientes")
+    public ResponseEntity<List<Usuario>> obtenerUsuariosPendientes() {
+        List<Usuario> pendientes = usuarioService.getUsuariosPendientes();
+        return ResponseEntity.ok(pendientes);
     }
 
 }

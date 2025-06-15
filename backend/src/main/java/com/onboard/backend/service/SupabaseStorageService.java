@@ -16,6 +16,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import com.onboard.backend.exception.InvalidInputException;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.slf4j.Logger;
 
 @Service
@@ -151,6 +158,82 @@ public class SupabaseStorageService {
                     "Unexpected error",
                     "DELETE_IO_EXCEPTION",
                     "An unexpected I/O error occurred while deleting the image. Please contact the administrator.");
+        }
+    }
+
+    public String uploadDocumentAsPdf(MultipartFile file, String filePath, String bucketName) throws IOException {
+        byte[] pdfBytes;
+
+        String originalName = file.getOriginalFilename();
+        if (originalName == null || !originalName.toLowerCase().endsWith(".pdf")) {
+            BufferedImage image = ImageIO.read(file.getInputStream());
+            if (image == null) {
+                throw new InvalidInputException(
+                        "Invalid file format",
+                        "INVALID_FILE_FORMAT",
+                        "The uploaded file is not a valid image or PDF.");
+            }
+
+            try (PDDocument doc = new PDDocument();
+                    ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
+                PDPage page = new PDPage(new PDRectangle(image.getWidth(), image.getHeight()));
+                doc.addPage(page);
+
+                PDImageXObject pdImage = PDImageXObject.createFromByteArray(doc, convertToJpegAndCompress(file, 0.8f),
+                        null);
+                try (PDPageContentStream contents = new PDPageContentStream(doc, page)) {
+                    contents.drawImage(pdImage, 0, 0, image.getWidth(), image.getHeight());
+                }
+
+                doc.save(out);
+                pdfBytes = out.toByteArray();
+            }
+        } else {
+            pdfBytes = file.getBytes();
+        }
+
+        pdfBytes = compressPdf(pdfBytes);
+
+        if (!filePath.toLowerCase().endsWith(".pdf")) {
+            filePath += ".pdf";
+        }
+
+        String uploadUrl = SUPABASE_URL + "/storage/v1/object/" + bucketName + "/" + filePath;
+
+        RequestBody requestBody = RequestBody.create(pdfBytes, MediaType.parse("application/pdf"));
+        Request request = new Request.Builder()
+                .url(uploadUrl)
+                .addHeader("Authorization", "Bearer " + SUPABASE_API_KEY)
+                .addHeader("x-upsert", "true")
+                .put(requestBody)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                logger.error("Failed to upload PDF. Status: {}, Body: {}",
+                        response.code(),
+                        response.body() != null ? response.body().string() : "null");
+                throw new InvalidInputException(
+                        "PDF upload failed",
+                        "UPLOAD_FAILED",
+                        "The document could not be uploaded due to a service error.");
+            }
+            return SUPABASE_URL + "/storage/v1/object/public/" + bucketName + "/" + filePath;
+        }
+    }
+
+    private byte[] compressPdf(byte[] inputPdfBytes) throws IOException {
+        try (PDDocument document = PDDocument.load(inputPdfBytes);
+                ByteArrayOutputStream compressedOut = new ByteArrayOutputStream()) {
+
+            for (PDPage page : document.getPages()) {
+                page.setResources(new PDResources());
+            }
+
+            document.setAllSecurityToBeRemoved(true); 
+            document.save(compressedOut);
+            return compressedOut.toByteArray();
         }
     }
 

@@ -1,5 +1,6 @@
 package com.onboard.backend.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -25,6 +26,8 @@ public class Vehiculo {
     private float kilometraje;
     private String descripcion;
     private String idPropietario;
+    private LocalDateTime fechaRegistro;
+    private int cantidadAlquiler;
     private List<String> fotosUrls;
 
     public Vehiculo() {
@@ -33,7 +36,8 @@ public class Vehiculo {
     public Vehiculo(String placa, String tipoVehiculo, String tipoTerreno, String marca, String modelo, int anio,
             int capacidadPasajeros, String soat, String tecnomecanica, String antecedentes,
             String tipoTransmision, String combustible, float kilometraje,
-            String descripcion, String idPropietario, List<String> fotosUrls) {
+            String descripcion, String idPropietario, LocalDateTime fechaRegistro, int cantidadAlquiler,
+            List<String> fotosUrls) {
         this.placa = placa;
         this.tipoVehiculo = tipoVehiculo;
         this.tipoTerreno = tipoTerreno;
@@ -49,6 +53,8 @@ public class Vehiculo {
         this.kilometraje = kilometraje;
         this.descripcion = descripcion;
         this.idPropietario = idPropietario;
+        this.fechaRegistro = fechaRegistro;
+        this.cantidadAlquiler = cantidadAlquiler;
         this.fotosUrls = fotosUrls;
     }
 
@@ -178,6 +184,22 @@ public class Vehiculo {
 
     public void setFotosUrls(List<String> fotosUrls) {
         this.fotosUrls = fotosUrls;
+    }
+
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    public int getCantidadAlquiler() {
+        return cantidadAlquiler;
+    }
+
+    public void setCantidadAlquiler(int cantidadAlquiler) {
+        this.cantidadAlquiler = cantidadAlquiler;
     }
 
 }

@@ -20,6 +20,7 @@ public class Usuario {
     private LocalDateTime fechaRegistro;
     private String cuentaBancaria;
     private String idRol;
+    private EstadoVerificacion estadoVerificacion;
     private String fotoPerfilUrl;
 
     public Usuario() {
@@ -122,12 +123,20 @@ public class Usuario {
         this.fotoPerfilUrl = fotoPerfilUrl;
     }
 
-     public TipoIdentificacion getTipoIdentificacion() {
+    public TipoIdentificacion getTipoIdentificacion() {
         return tipoIdentificacion;
     }
 
     public void setTipoIdentificacion(TipoIdentificacion tipoIdentificacion) {
         this.tipoIdentificacion = tipoIdentificacion;
+    }
+
+    public EstadoVerificacion getEstadoVerificacion() {
+        return estadoVerificacion;
+    }
+
+    public void setEstadoVerificacion(EstadoVerificacion estadoVerificacion) {
+        this.estadoVerificacion = estadoVerificacion;
     }
 
 }

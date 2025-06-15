@@ -1,7 +1,12 @@
 package com.onboard.backend.service;
 
+import com.onboard.backend.entity.Empresa;
+import com.onboard.backend.entity.EstadoVerificacion;
+import com.onboard.backend.entity.Particular;
+import com.onboard.backend.entity.Rol;
 import com.onboard.backend.entity.Usuario;
 import com.onboard.backend.exception.InvalidInputException;
+import com.onboard.backend.repository.RolRepository;
 import com.onboard.backend.repository.UsuarioRepository;
 import com.onboard.backend.security.EncriptadorAESGCM;
 import com.onboard.backend.util.FormatUtils;
@@ -11,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -34,6 +40,9 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private RolRepository rolRepository;
+
+    @Autowired
     private FileUploadService fileUploadService;
 
     @Autowired
@@ -42,8 +51,15 @@ public class UsuarioService {
     @Autowired
     private EmailService emailService;
 
-    public Usuario saveUsuario(Usuario usuario) {
-        
+    @Autowired
+    private EmpresaService empresaService;
+
+    @Autowired
+    private ParticularService particularService;
+
+    @Transactional
+    public Usuario saveUsuario(Usuario usuario, Object datosAdicionales) {
+
         usuario.setNombre(FormatUtils.capitalizarNombre(usuario.getNombre()));
         usuario.setCorreo(FormatUtils.formatearCorreo(usuario.getCorreo()));
         usuario.setDireccion(FormatUtils.limpiarCadena(usuario.getDireccion()));
@@ -63,6 +79,15 @@ public class UsuarioService {
                     "Email does not match standard format: " + usuario.getCorreo()
                             + ". Example of a valid email: user@example.com");
         }
+
+        Rol rol = rolRepository.findByRol(usuario.getIdRol())
+                .orElseThrow(() -> new InvalidInputException(
+                        "Invalid role format",
+                        "INVALID_ROLE_FORMAT",
+                        "Role does not exist: " + usuario.getIdRol()
+                                + ". Valid examples: cliente_particular, propietario_particular, cliente_empresa"));
+
+        usuario.setIdRol(rol.getIdRol());
 
         /*
          * if (!ValidationUtils.isValidCuentaBancaria(usuario.getCuentaBancaria())) {
@@ -123,12 +148,46 @@ public class UsuarioService {
         }
         usuario.setFechaRegistro(LocalDateTime.now());
         try {
-            emailService.enviarCorreoRegistro(usuario.getCorreo(), usuario.getNombre());
-        } catch (Exception e) {
-            logger.error("Error sending registration email to user: " + usuario.getCorreo(), e);
 
+            String nombreRol = rol.getRol().toLowerCase();
+
+            if (nombreRol.contains("particular")) {
+                if (!(datosAdicionales instanceof Particular)) {
+                    throw new InvalidInputException(
+                            "Invalid additional data for particular",
+                            "INVALID_PARTICULAR_DATA",
+                            "The additional data provided does not match the 'particular' user role.");
+                }
+                Particular particular = (Particular) datosAdicionales;
+                particular.setIdUsuario(usuario.getIdUsuario());
+                particularService.saveParticular(particular);
+
+            } else if (nombreRol.contains("empresa")) {
+                if (!(datosAdicionales instanceof Empresa)) {
+                    throw new InvalidInputException(
+                            "Invalid additional data for empresa",
+                            "INVALID_EMPRESA_DATA",
+                            "The additional data provided does not match the 'empresa' user role.");
+                }
+                Empresa empresa = (Empresa) datosAdicionales;
+                empresa.setIdUsuario(usuario.getIdUsuario());
+                empresaService.saveEmpresa(empresa);
+            }
+
+            usuario.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
+            try {
+                emailService.enviarCorreoEstado(usuario.getCorreo(), usuario.getNombre(),
+                        usuario.getEstadoVerificacion());
+            } catch (Exception e) {
+                logger.error("Error sending registration email to user: " + usuario.getCorreo(), e);
+
+            }
+
+            return usuarioRepository.save(usuario);
+
+        } catch (Exception e) {
+            throw e;
         }
-        return usuarioRepository.save(usuario);
     }
 
     public Optional<Usuario> getUsuarioById(String id) {
@@ -149,14 +208,24 @@ public class UsuarioService {
 
     public void deleteUsuarioById(String id) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+
         if (usuarioOpt.isEmpty()) {
             throw new InvalidInputException(
                     "User not found",
                     "USER_NOT_FOUND",
-                    "The user with ID '" + id
-                            + "' was not found in the database while uploading the profile photo");
+                    "The user with ID '" + id + "' was not found in the database");
         }
-        usuarioRepository.deleteById(id);
+
+        Usuario usuario = usuarioOpt.get();
+
+        usuario.setEstadoVerificacion(EstadoVerificacion.INACTIVO);
+        usuarioRepository.save(usuario);
+
+        try {
+            emailService.enviarCorreoEstado(usuario.getCorreo(), usuario.getNombre(), usuario.getEstadoVerificacion());
+        } catch (Exception e) {
+            logger.error("Error sending status email to user: " + usuario.getCorreo(), e);
+        }
     }
 
     public ResultadoLogin validarLogin(String correo, String password) {
@@ -210,6 +279,48 @@ public class UsuarioService {
 
         usuarioRepository.delete(usuarioExistente);
         return usuarioRepository.save(usuarioActualizado);
+    }
+
+    public Usuario actualizarEstadoVerificacion(String idUsuario, String nuevoEstadoStr) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
+        if (usuarioOpt.isEmpty()) {
+            throw new InvalidInputException(
+                    "User not found",
+                    "USER_NOT_FOUND",
+                    "There is no user registered with the provided ID");
+        }
+
+        Usuario usuario = usuarioOpt.get();
+
+        EstadoVerificacion nuevoEstado;
+        try {
+            nuevoEstado = EstadoVerificacion.valueOf(nuevoEstadoStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidInputException(
+                    "Invalid verification state",
+                    "INVALID_STATE",
+                    "The provided verification state is not valid");
+        }
+
+        if (usuario.getEstadoVerificacion() != null &&
+                usuario.getEstadoVerificacion().equals(nuevoEstado)) {
+            logger.info("El estado ya es '" + nuevoEstado + "' para el usuario con ID: " + idUsuario);
+            return usuario;
+        }
+
+        usuario.setEstadoVerificacion(nuevoEstado);
+
+        try {
+            emailService.enviarCorreoEstado(usuario.getCorreo(), usuario.getNombre(), nuevoEstado);
+        } catch (Exception e) {
+            logger.error("Error sending status email to user: " + usuario.getCorreo(), e);
+        }
+
+        return usuarioRepository.save(usuario);
+    }
+
+    public List<Usuario> getUsuariosPendientes() {
+        return usuarioRepository.findByEstadoVerificacion("PENDIENTE");
     }
 
 }

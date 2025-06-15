@@ -21,9 +21,14 @@ public class VehiculoController {
     @Autowired
     private VehiculoService vehiculoService;
 
-    @PostMapping
-    public ResponseEntity<Vehiculo> createVehiculo(@RequestBody Vehiculo vehiculo) {
-        Vehiculo saved = vehiculoService.saveVehiculo(vehiculo);
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<Vehiculo> createVehiculo(
+            @RequestPart("vehiculo") Vehiculo vehiculo,
+            @RequestPart("tecnomecanica") MultipartFile tecnomecanica,
+            @RequestPart("antecedentes") MultipartFile antecedentes,
+            @RequestPart("fotos") MultipartFile[] fotos) throws IOException {
+
+        Vehiculo saved = vehiculoService.saveVehiculo(vehiculo, tecnomecanica, antecedentes, fotos);
         return ResponseEntity.ok(saved);
     }
 
@@ -60,7 +65,8 @@ public class VehiculoController {
     }
 
     @PutMapping("/{placa}")
-    public ResponseEntity<Vehiculo> updateVehiculo(@PathVariable String placa, @RequestBody Vehiculo vehiculoActualizado) {
+    public ResponseEntity<Vehiculo> updateVehiculo(@PathVariable String placa,
+            @RequestBody Vehiculo vehiculoActualizado) {
         Optional<Vehiculo> vehiculoExistente = vehiculoService.getVehiculoById(placa);
 
         if (vehiculoExistente.isPresent()) {
@@ -70,4 +76,15 @@ public class VehiculoController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/top6Alquiler")
+    public List<Vehiculo> getTop6Vehiculos() {
+        return vehiculoService.getTop6VehiculosMasAlquilados();
+    }
+
+    @GetMapping("/recientes")
+    public List<Vehiculo> getTop6VehiculosRecientes() {
+        return vehiculoService.getTop6VehiculosRecientes();
+    }
+
 }
