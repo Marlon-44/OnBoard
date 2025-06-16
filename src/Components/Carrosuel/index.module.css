@@ -1,0 +1,57 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.carouselContainer {
+  width: 100vw;
+}
+
+/* index.module.css */
+.overlayContent {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  text-align: left;
+  color: white;
+}
+
+.left {
+  left: 15%;
+  text-align: left;
+}
+
+.right {
+  right: 15%;
+  text-align: right;
+}
+
+.overlayContent h2 {
+  font-size: 3.5rem;
+  font-weight: 900;
+
+}
+
+.overlayContent h4 {
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  font-family: "Manrope";
+ 
+}
+
+.overlayContent a {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 10px 20px;
+  background-color: #ffffff09;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  border: 1px #fff solid;
+}
+
+.overlayContent a:hover {
+  background-color: #dddddd3f;
+}

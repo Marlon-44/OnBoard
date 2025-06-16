@@ -11,12 +11,13 @@
   font-family: "Montserrat", sans-serif;
 }
 
+
 /* Ajustar el ancho y el alto de los elementos para incluir bordes y paddings */
 html, body {
   width: 100%;
   height: 100%;
-  background-color: #262626;
-  overflow-x: hidden;
+  background-color: #000000;
+  
 }
 
 /* Eliminar estilos predeterminados de listas */

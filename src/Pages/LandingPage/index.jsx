@@ -4,10 +4,10 @@ import HighlightSection from "../../Components/HighlightSection";
 import SearchBox from "../../Components/SearchBox";
 import TerrenoSection from "../../Components/TerrenoSection";
 import styles from "./index.module.css"
-const Home =()=>{
+const Landing =()=>{
     return(
         <div>
-            
+            <Header/>
             <Banner/>
             <TerrenoSection/>
             <HighlightSection/>
@@ -15,4 +15,4 @@ const Home =()=>{
     )
 }
 
-export default Home;
+export default Landing;
