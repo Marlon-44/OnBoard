@@ -1,15 +1,16 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./Pages/LandingPage";
 import Header from "./Components/Header";
 import Footer from "./Components/Footer";
-
+import Landing from "./Pages/LandingPage";
+import Home from "./Pages/HomePage";
 const AppRoutes = () =>{
     
     return(
             <BrowserRouter>
-            <Header/>
+            
                 <Routes>
-                    <Route path="/" element={<Home/>}></Route>
+                    <Route path="/" element={<Landing/>}></Route>
+                    <Route path="/homePage" element={<Home/>}></Route>
                 </Routes>
             <Footer/>
             </BrowserRouter>

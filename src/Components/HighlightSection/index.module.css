@@ -15,11 +15,13 @@
     margin: 1rem 0;
     z-index: 10;
 }
-.highligth__section__inside button{
+.link{
     
-    height: 50px;
+    padding: 5% 0;
+    text-align: center;
     width: 50%;
     border: none;
+    text-decoration: none;
     color: #fff;
     border-radius: 5px;
     font-weight: 500;
@@ -28,7 +30,8 @@
     background-color: rgba(255, 255, 255, 0.233);
     margin-bottom: 5%;
 }
-.highligth__section__inside button:hover{
+
+.link:hover{
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.281);
 }
@@ -75,11 +78,11 @@
         margin: 1rem 0;
         
     }
-    .highligth__section__container button{
+    .link{
         z-index: 10;
-        height: 8%;
         width: 30%;
         margin: 0;
+        padding: 1.2% 0;
     }
 
     .highligth__section{

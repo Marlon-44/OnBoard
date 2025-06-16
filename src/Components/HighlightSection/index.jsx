@@ -1,12 +1,13 @@
 import useIsMobile from "../../Hooks/useIsMobile";
 import styles from "./index.module.css"
-import { useVehicleContext } from "../../features/vehicles/VehicleContext";
 import HighlightVehicle from "../HighlightVehicle";
 import {motion} from "framer-motion"
+import { useFeaturedVehicleContext } from "../../features/featuredVehicles/FeaturedVehiclesContext";
+import { Link } from "react-router-dom";
 const HighlightSection = () => {
     const isMobile = useIsMobile();
-    const { vehicles, loading, error } = useVehicleContext();
-    console.log("VEHICLES: ", vehicles)
+    const { featuredVehicles, loading, error } = useFeaturedVehicleContext();
+    console.log("FEATURED VEHICLES: ", featuredVehicles)
     return (
         <section className={styles.highligth__section__container}>
             
@@ -25,19 +26,23 @@ const HighlightSection = () => {
                     <div className={styles.highligth__section__box}>
                         {loading && <p>Cargando vehículos...</p>}
                         {error && <p>Ocurrió un error: {error.message}</p>}
-                        {vehicles.map((vehicle) => (
+                        {featuredVehicles.map((vehicle) => (
                         <HighlightVehicle 
                             key={vehicle.id} 
                             vehicle={vehicle}/>
                         ))}
                     </div>
-                    <motion.button
-                        initial={{opacity: 0, y:100}}
-                        whileInView={{opacity: 1, y:0}}
-                        transition={{duration: 1.5, ease: "easeOut"}}
-                        viewport={{once:true, amount: 0.2}}>
+                    
+                        
+                        <Link to="/homePage"
+                            className={styles.link}
+                            initial={{opacity: 0, y:50}}
+                            whileInView={{opacity: 1, y:0}}
+                            transition={{duration: 1.5, ease: "easeOut"}}
+                            viewport={{once:true, amount: 0.2}}>
                             View More
-                    </motion.button>
+                        </Link>
+                    
                 </div>
                 
             </div>
