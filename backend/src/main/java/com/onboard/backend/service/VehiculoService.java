@@ -123,7 +123,7 @@ public class VehiculoService {
 
         try {
             urlTecno = fileUploadService.uploadDocumentAsPdf(tecnomecanica, vehiculo.getIdPropietario(),
-                    "tecnomecanica.pdf");
+                    vehiculo.getPlaca(), "tecnomecanica.pdf");
         } catch (IOException e) {
             throw new InvalidInputException(
                     "Failed to upload 'tecnomecánica' document",
@@ -133,6 +133,7 @@ public class VehiculoService {
 
         try {
             urlAnte = fileUploadService.uploadDocumentAsPdf(antecedentes, vehiculo.getIdPropietario(),
+                    vehiculo.getPlaca(),
                     "antecedentes.pdf");
         } catch (IOException e) {
             throw new InvalidInputException(
@@ -142,7 +143,7 @@ public class VehiculoService {
         }
 
         try {
-            urlSoat = fileUploadService.uploadDocumentAsPdf(soat, vehiculo.getIdPropietario(),
+            urlSoat = fileUploadService.uploadDocumentAsPdf(soat, vehiculo.getIdPropietario(), vehiculo.getPlaca(),
                     "soat.pdf");
         } catch (IOException e) {
             throw new InvalidInputException(
