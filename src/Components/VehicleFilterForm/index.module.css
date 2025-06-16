@@ -1,0 +1,26 @@
+.filter__container {
+    padding: 1rem;
+    background-color: #f8f8f8;
+    border-radius: 1rem;
+    width: 20%;
+}
+
+.filter__container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+
+.checkbox__group,
+.radio__group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+}
