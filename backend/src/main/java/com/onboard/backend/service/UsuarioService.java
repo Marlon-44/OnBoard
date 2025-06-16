@@ -175,7 +175,7 @@ public class UsuarioService {
 
             usuario.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
             try {
-                emailService.enviarCorreoEstado(usuario.getCorreo(), usuario.getNombre(),
+                emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(),
                         usuario.getEstadoVerificacion());
             } catch (Exception e) {
                 logger.error("Error sending registration email to user: " + usuario.getCorreo(), e);
@@ -226,7 +226,7 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
 
         try {
-            emailService.enviarCorreoEstado(usuario.getCorreo(), usuario.getNombre(), usuario.getEstadoVerificacion());
+            emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(), usuario.getEstadoVerificacion());
         } catch (Exception e) {
             logger.error("Error sending status email to user: " + usuario.getCorreo(), e);
         }
@@ -317,7 +317,7 @@ public class UsuarioService {
         usuario.setEstadoVerificacion(nuevoEstado);
 
         try {
-            emailService.enviarCorreoEstado(usuario.getCorreo(), usuario.getNombre(), nuevoEstado);
+            emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(), nuevoEstado);
         } catch (Exception e) {
             logger.error("Error sending status email to user: " + usuario.getCorreo(), e);
         }

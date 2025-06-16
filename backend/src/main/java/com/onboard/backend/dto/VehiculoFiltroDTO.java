@@ -1,11 +1,13 @@
 package com.onboard.backend.dto;
 
+import java.util.List;
+
 public class VehiculoFiltroDTO {
 
-    private String tipoVehiculo;
-    private String tipoTerreno;
-    private String tipoTransmision;
-    private String combustible;
+    private List<String> tipoVehiculo;
+    private List<String> tipoTerreno;
+    private List<String> tipoTransmision;
+    private List<String> combustible;
 
     private Integer pasajerosExacto;
     private Integer pasajerosMin;
@@ -39,35 +41,35 @@ public class VehiculoFiltroDTO {
     public VehiculoFiltroDTO() {
     }
 
-    public String getTipoVehiculo() {
+    public List<String> getTipoVehiculo() {
         return tipoVehiculo;
     }
 
-    public void setTipoVehiculo(String tipoVehiculo) {
+    public void setTipoVehiculo(List<String> tipoVehiculo) {
         this.tipoVehiculo = tipoVehiculo;
     }
 
-    public String getTipoTerreno() {
+    public List<String> getTipoTerreno() {
         return tipoTerreno;
     }
 
-    public void setTipoTerreno(String tipoTerreno) {
+    public void setTipoTerreno(List<String> tipoTerreno) {
         this.tipoTerreno = tipoTerreno;
     }
 
-    public String getTipoTransmision() {
+    public List<String> getTipoTransmision() {
         return tipoTransmision;
     }
 
-    public void setTipoTransmision(String tipoTransmision) {
+    public void setTipoTransmision(List<String> tipoTransmision) {
         this.tipoTransmision = tipoTransmision;
     }
 
-    public String getCombustible() {
+    public List<String> getCombustible() {
         return combustible;
     }
 
-    public void setCombustible(String combustible) {
+    public void setCombustible(List<String> combustible) {
         this.combustible = combustible;
     }
 

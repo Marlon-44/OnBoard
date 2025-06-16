@@ -31,6 +31,7 @@ public class Vehiculo {
     private List<String> fotosUrls;
     private EstadoOferta estadoOferta;
     private float precioPorDia;
+    private EstadoVerificacion estadoVerificacion;
 
     public Vehiculo() {
     }
@@ -39,7 +40,8 @@ public class Vehiculo {
             int anio, int capacidadPasajeros, String soat, String tecnomecanica, String antecedentes,
             String tipoTransmision, String combustible, float kilometraje, String descripcion,
             String idPropietario, LocalDateTime fechaRegistro, int cantidadAlquiler,
-            List<String> fotosUrls, EstadoOferta estadoOferta, float precioPorDia) {
+            List<String> fotosUrls, EstadoOferta estadoOferta, float precioPorDia,
+            EstadoVerificacion estadoVerificacion) {
         this.placa = placa;
         this.tipoVehiculo = tipoVehiculo;
         this.tipoTerreno = tipoTerreno;
@@ -60,6 +62,7 @@ public class Vehiculo {
         this.fotosUrls = fotosUrls;
         this.estadoOferta = estadoOferta;
         this.precioPorDia = precioPorDia;
+        this.estadoVerificacion = estadoVerificacion;
     }
 
     public String getPlaca() {
@@ -220,6 +223,14 @@ public class Vehiculo {
 
     public float getPrecioPorDia() {
         return precioPorDia;
+    }
+
+    public EstadoVerificacion getEstadoVerificacion() {
+        return estadoVerificacion;
+    }
+
+    public void setEstadoVerificacion(EstadoVerificacion estadoVerificacion) {
+        this.estadoVerificacion = estadoVerificacion;
     }
 
 }

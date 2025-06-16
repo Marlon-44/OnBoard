@@ -37,17 +37,21 @@ public class VehiculoFiltroRepository {
 
         criterios.add(criterioOfertaActiva);
 
-        if (filtro.getTipoVehiculo() != null)
-            criterios.add(Criteria.where("tipoVehiculo").is(filtro.getTipoVehiculo()));
+        if (filtro.getTipoVehiculo() != null && !filtro.getTipoVehiculo().isEmpty()) {
+            criterios.add(Criteria.where("tipoVehiculo").in(filtro.getTipoVehiculo()));
+        }
 
-        if (filtro.getTipoTerreno() != null)
-            criterios.add(Criteria.where("tipoTerreno").is(filtro.getTipoTerreno()));
+        if (filtro.getTipoTerreno() != null && !filtro.getTipoTerreno().isEmpty()) {
+            criterios.add(Criteria.where("tipoTerreno").in(filtro.getTipoTerreno()));
+        }
 
-        if (filtro.getTipoTransmision() != null)
-            criterios.add(Criteria.where("tipoTransmision").is(filtro.getTipoTransmision()));
+        if (filtro.getTipoTransmision() != null && !filtro.getTipoTransmision().isEmpty()) {
+            criterios.add(Criteria.where("tipoTransmision").in(filtro.getTipoTransmision()));
+        }
 
-        if (filtro.getCombustible() != null)
-            criterios.add(Criteria.where("combustible").is(filtro.getCombustible()));
+        if (filtro.getCombustible() != null && !filtro.getCombustible().isEmpty()) {
+            criterios.add(Criteria.where("combustible").in(filtro.getCombustible()));
+        }
 
         if (filtro.getAnioMin() != null)
             criterios.add(Criteria.where("anio").gte(filtro.getAnioMin()));

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <body style="font-family: Arial, sans-serif; color: #333">
+        <h2 style="color: #f44336">
+            Vehicle Rejected, <span th:text="${nombre}">Usuario</span>
+        </h2>
+
+        <p>
+            Unfortunately, your vehicle with license plate
+            <strong th:text="${placa}">XXX000</strong> was not approved after
+            verification.
+        </p>
+
+        <p>
+            Please review your submitted information and documents, and try
+            again if needed.
+        </p>
+
+        <img
+            th:src="${logoUrl}"
+            alt="Logo"
+            style="width: 300px; margin-top: 20px"
+        />
+
+        <p>
+            If you believe this was an error or have any questions, feel free to
+            contact us.
+        </p>
+
+        <p style="font-size: 0.9em; color: gray">
+            This is an automated message — please do not reply.
+        </p>
+    </body>
+</html>

@@ -3,20 +3,25 @@ package com.onboard.backend.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Document(collection = "alquileres")
 public class Alquiler {
 
     @Id
     private String idAlquiler;
     private String idReserva;
-    private String estado;
+    private EstadoAlquiler estado;
+    private LocalDateTime fechaNovedad; // Nuevo atributo
 
-    public Alquiler() {}
+    public Alquiler() {
+    }
 
-    public Alquiler(String idAlquiler, String idReserva, String estado) {
+    public Alquiler(String idAlquiler, String idReserva, EstadoAlquiler estado, LocalDateTime fechaNovedad) {
         this.idAlquiler = idAlquiler;
         this.idReserva = idReserva;
         this.estado = estado;
+        this.fechaNovedad = fechaNovedad;
     }
 
     public String getIdAlquiler() {
@@ -35,11 +40,19 @@ public class Alquiler {
         this.idReserva = idReserva;
     }
 
-    public String getEstado() {
+    public EstadoAlquiler getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(EstadoAlquiler estado) {
         this.estado = estado;
+    }
+
+    public LocalDateTime getFechaNovedad() {
+        return fechaNovedad;
+    }
+
+    public void setFechaNovedad(LocalDateTime fechaNovedad) {
+        this.fechaNovedad = fechaNovedad;
     }
 }

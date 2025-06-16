@@ -11,7 +11,7 @@ public class Reserva {
     @Id
     private String idReserva;
     private String idCliente;
-    private String idOferta;
+    private String idVehiculo;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private String lugarRecogida;
@@ -20,11 +20,11 @@ public class Reserva {
 
     public Reserva() {}
 
-    public Reserva(String idReserva, String idCliente, String idOferta, LocalDateTime fechaInicio,
+    public Reserva(String idReserva, String idCliente, String idVehiculo, LocalDateTime fechaInicio,
                    LocalDateTime fechaFin, String lugarRecogida, String lugarEntrega, String estado) {
         this.idReserva = idReserva;
         this.idCliente = idCliente;
-        this.idOferta = idOferta;
+        this.idVehiculo = idVehiculo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.lugarRecogida = lugarRecogida;
@@ -48,12 +48,12 @@ public class Reserva {
         this.idCliente = idCliente;
     }
 
-    public String getIdOferta() {
-        return idOferta;
+    public String getIdVehiculo() {
+        return idVehiculo;
     }
 
-    public void setIdOferta(String idOferta) {
-        this.idOferta = idOferta;
+    public void setIdVehiculo(String idVehiculo) {
+        this.idVehiculo = idVehiculo;
     }
 
     public LocalDateTime getFechaInicio() {

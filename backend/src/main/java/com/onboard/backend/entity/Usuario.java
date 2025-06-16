@@ -22,6 +22,7 @@ public class Usuario {
     private String idRol;
     private EstadoVerificacion estadoVerificacion;
     private String fotoPerfilUrl;
+    
 
     public Usuario() {
     }

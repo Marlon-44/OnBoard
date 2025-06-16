@@ -2,6 +2,7 @@ package com.onboard.backend.service;
 
 import com.onboard.backend.dto.VehiculoFiltroDTO;
 import com.onboard.backend.entity.EstadoOferta;
+import com.onboard.backend.entity.EstadoVerificacion;
 import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.repository.UsuarioRepository;
@@ -90,6 +91,11 @@ public class VehiculoService {
                     "Allowed: Gasolina, Diesel, Eléctrico, Híbrido, Gas.");
         }
 
+        if (vehiculo.getPrecioPorDia() <= 0) {
+            throw new InvalidInputException("Invalid daily price", "INVALID_DAILY_PRICE",
+                    "The daily rental price must be greater than zero.");
+        }
+
         if (!ValidationUtils.isValidKilometraje(vehiculo.getKilometraje())) {
             throw new InvalidInputException("Invalid mileage", "INVALID_MILEAGE",
                     "Must be a non-negative number.");
@@ -106,6 +112,8 @@ public class VehiculoService {
         }
 
         vehiculo.setFechaRegistro(LocalDateTime.now());
+        vehiculo.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
+        vehiculo.setEstadoOferta(EstadoOferta.INACTIVA);
 
         String urlTecno;
         String urlAnte;
