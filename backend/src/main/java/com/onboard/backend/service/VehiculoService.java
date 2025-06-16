@@ -44,6 +44,7 @@ public class VehiculoService {
     public Vehiculo saveVehiculo(Vehiculo vehiculo,
             MultipartFile tecnomecanica,
             MultipartFile antecedentes,
+            MultipartFile soat,
             MultipartFile[] fotos) throws IOException {
 
         if (!ValidationUtils.isValidPlaca(vehiculo.getPlaca())) {
@@ -117,6 +118,7 @@ public class VehiculoService {
 
         String urlTecno;
         String urlAnte;
+        String urlSoat;
         List<String> urls;
 
         try {
@@ -140,6 +142,16 @@ public class VehiculoService {
         }
 
         try {
+            urlSoat = fileUploadService.uploadDocumentAsPdf(soat, vehiculo.getIdPropietario(),
+                    "soat.pdf");
+        } catch (IOException e) {
+            throw new InvalidInputException(
+                    "Failed to upload 'SOAT' document",
+                    "SOAT_UPLOAD_FAILED",
+                    "There was an error uploading the SOAT PDF. Please try again.");
+        }
+
+        try {
             urls = fileUploadService.uploadVehiclePhotos(fotos, vehiculo.getPlaca());
         } catch (IOException e) {
             throw new InvalidInputException(
@@ -150,6 +162,7 @@ public class VehiculoService {
 
         vehiculo.setTecnomecanica(urlTecno);
         vehiculo.setAntecedentes(urlAnte);
+        vehiculo.setSoat(urlSoat);
 
         if (vehiculo.getFotosUrls() == null) {
             vehiculo.setFotosUrls(new ArrayList<>());

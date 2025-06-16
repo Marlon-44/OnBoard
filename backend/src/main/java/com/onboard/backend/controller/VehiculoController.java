@@ -27,9 +27,10 @@ public class VehiculoController {
             @RequestPart("vehiculo") Vehiculo vehiculo,
             @RequestPart("tecnomecanica") MultipartFile tecnomecanica,
             @RequestPart("antecedentes") MultipartFile antecedentes,
+            @RequestPart("soat") MultipartFile soat,
             @RequestPart("fotos") MultipartFile[] fotos) throws IOException {
 
-        Vehiculo saved = vehiculoService.saveVehiculo(vehiculo, tecnomecanica, antecedentes, fotos);
+        Vehiculo saved = vehiculoService.saveVehiculo(vehiculo, tecnomecanica, antecedentes, soat, fotos);
         return ResponseEntity.ok(saved);
     }
 
