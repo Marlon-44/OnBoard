@@ -9,17 +9,19 @@ public class Empresa {
     @Id
     private String id;
 
-    private String idUsuario; 
+    private String idUsuario;
 
     private String representante;
-    private String cedulaRepresentante;
+    private String documentoRepresentante;
+    private TipoIdentificacion tipoDocumentoRepresentante;
 
     public Empresa() {}
 
-    public Empresa(String idUsuario, String representante, String cedulaRepresentante) {
+    public Empresa(String idUsuario, String representante, String documentoRepresentante, TipoIdentificacion tipoDocumentoRepresentante) {
         this.idUsuario = idUsuario;
         this.representante = representante;
-        this.cedulaRepresentante = cedulaRepresentante;
+        this.documentoRepresentante = documentoRepresentante;
+        this.tipoDocumentoRepresentante = tipoDocumentoRepresentante;
     }
 
     public String getId() {
@@ -42,11 +44,19 @@ public class Empresa {
         this.representante = representante;
     }
 
-    public String getCedulaRepresentante() {
-        return cedulaRepresentante;
+    public String getDocumentoRepresentante() {
+        return documentoRepresentante;
     }
 
-    public void setCedulaRepresentante(String cedulaRepresentante) {
-        this.cedulaRepresentante = cedulaRepresentante;
+    public void setDocumentoRepresentante(String documentoRepresentante) {
+        this.documentoRepresentante = documentoRepresentante;
+    }
+
+    public TipoIdentificacion getTipoDocumentoRepresentante() {
+        return tipoDocumentoRepresentante;
+    }
+
+    public void setTipoDocumentoRepresentante(TipoIdentificacion tipoDocumentoRepresentante) {
+        this.tipoDocumentoRepresentante = tipoDocumentoRepresentante;
     }
 }

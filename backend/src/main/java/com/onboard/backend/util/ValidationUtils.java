@@ -3,15 +3,28 @@ package com.onboard.backend.util;
 import java.util.regex.Pattern;
 
 import com.onboard.backend.entity.TipoIdentificacion;
+import com.onboard.backend.exception.InvalidInputException;
 
 import java.time.Year;
 
 public class ValidationUtils {
 
-    public static final String[] VEHICULOS_PERMITIDOS = { "Automóvil", "Moto", "Bus", "Lancha", "Camión" };
-    public static final String[] TIPOS_TRANSMISION_PERMITIDOS = { "Automática", "Manual" };
-    public static final String[] TIPOS_COMBUSTIBLE_PERMITIDOS = { "Gasolina", "Diesel", "Eléctrico", "Híbrido", "Gas" };
-    public static final String[] TIPOS_TERRENO_PERMITIDOS = { "Urbano", "Rural", "Mixto" };
+    public static final String[] VEHICULOS_PERMITIDOS = {
+            "Car", "Motorcycle", "Bus", "Boat", "Truck",
+            "SUV", "Van", "Pickup", "Bicycle", "ATV", "Jet Ski"
+    };
+
+    public static final String[] TIPOS_TRANSMISION_PERMITIDOS = {
+            "Automatic", "Manual", "Semi-automatic"
+    };
+
+    public static final String[] TIPOS_COMBUSTIBLE_PERMITIDOS = {
+            "Gasoline", "Diesel", "Electric", "Hybrid", "Natural Gas", "Hydrogen"
+    };
+
+    public static final String[] TIPOS_TERRENO_PERMITIDOS = {
+            "Urban", "Rural", "Mixed", "Highway", "Off-road"
+    };
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
     private static final Pattern CEDULA_PATTERN = Pattern.compile("^\\d{6,10}$");
@@ -32,19 +45,45 @@ public class ValidationUtils {
         return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
 
-    public static boolean isValidDoc(String identificacion, TipoIdentificacion tipo) {
-        if (identificacion == null || tipo == null)
-            return false;
+    public static void validarDocumento(String identificacion, TipoIdentificacion tipo) {
+        if (identificacion == null || tipo == null) {
+            throw new InvalidInputException(
+                    "Identification or type cannot be null",
+                    "NULL_ID_OR_TYPE",
+                    "Both identification and type are required.");
+        }
+
         switch (tipo) {
             case CC:
             case CE:
-                return CEDULA_PATTERN.matcher(identificacion).matches();
+                if (!CEDULA_PATTERN.matcher(identificacion).matches()) {
+                    throw new InvalidInputException(
+                            "Invalid cedula format",
+                            "INVALID_ID_FORMAT",
+                            "For CC or CE, ID must be 6 to 10 digits. Example: 1025487632");
+                }
+                break;
             case PASAPORTE:
-                return PASAPORTE_PATTERN.matcher(identificacion).matches();
+                if (!PASAPORTE_PATTERN.matcher(identificacion).matches()) {
+                    throw new InvalidInputException(
+                            "Invalid passport format",
+                            "INVALID_PASSPORT_FORMAT",
+                            "Passport format is invalid. Example: AB123456");
+                }
+                break;
             case NIT:
-                return NIT_PATTERN.matcher(identificacion).matches();
+                if (!NIT_PATTERN.matcher(identificacion).matches()) {
+                    throw new InvalidInputException(
+                            "Invalid NIT format",
+                            "INVALID_NIT_FORMAT",
+                            "NIT must follow the format 123456789-0. Example: 900123456-7");
+                }
+                break;
             default:
-                return false;
+                throw new InvalidInputException(
+                        "Unknown identification type",
+                        "UNKNOWN_ID_TYPE",
+                        "The identification type is not recognized.");
         }
     }
 
@@ -130,4 +169,5 @@ public class ValidationUtils {
     public static boolean isValidLicenciaConduccion(String licencia) {
         return licencia != null && LICENCIA_CONDUCCION_PATTERN.matcher(licencia.trim()).matches();
     }
+
 }

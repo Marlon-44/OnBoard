@@ -14,6 +14,8 @@ import com.onboard.backend.util.ValidationUtils;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +59,8 @@ public class UsuarioService {
     @Autowired
     private ParticularService particularService;
 
+
+
     @Transactional
     public Usuario saveUsuario(Usuario usuario, Object datosAdicionales) {
 
@@ -65,12 +69,7 @@ public class UsuarioService {
         usuario.setDireccion(FormatUtils.limpiarCadena(usuario.getDireccion()));
         usuario.setTelefono(FormatUtils.formatPhoneNumber(usuario.getTelefono()));
 
-        if (!ValidationUtils.isValidDoc(usuario.getIdUsuario(), usuario.getTipoIdentificacion())) {
-            throw new InvalidInputException(
-                    "Invalid cedula format",
-                    "INVALID_ID_FORMAT",
-                    "ID must be an integer between 6 and 10 digits: {id}");
-        }
+        ValidationUtils.validarDocumento(usuario.getIdUsuario(), usuario.getTipoIdentificacion());
 
         if (!ValidationUtils.isValidEmail(usuario.getCorreo())) {
             throw new InvalidInputException(
@@ -206,7 +205,7 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    public void deleteUsuarioById(String id) {
+    public ResponseEntity<String> deleteUsuarioById(String id) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
 
         if (usuarioOpt.isEmpty()) {
@@ -218,6 +217,11 @@ public class UsuarioService {
 
         Usuario usuario = usuarioOpt.get();
 
+        if (usuario.getEstadoVerificacion() == EstadoVerificacion.INACTIVO) {
+            logger.info("User with ID '{}' is already inactive. No changes were made.", id);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User is already inactive. No action taken.");
+        }
+
         usuario.setEstadoVerificacion(EstadoVerificacion.INACTIVO);
         usuarioRepository.save(usuario);
 
@@ -226,6 +230,8 @@ public class UsuarioService {
         } catch (Exception e) {
             logger.error("Error sending status email to user: " + usuario.getCorreo(), e);
         }
+
+        return ResponseEntity.ok("User deactivated successfully.");
     }
 
     public ResultadoLogin validarLogin(String correo, String password) {
@@ -322,5 +328,4 @@ public class UsuarioService {
     public List<Usuario> getUsuariosPendientes() {
         return usuarioRepository.findByEstadoVerificacion("PENDIENTE");
     }
-
 }

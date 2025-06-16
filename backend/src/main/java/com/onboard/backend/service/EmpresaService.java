@@ -3,6 +3,8 @@ package com.onboard.backend.service;
 import com.onboard.backend.entity.Empresa;
 import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.repository.EmpresaRepository;
+import com.onboard.backend.util.ValidationUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,20 +23,12 @@ public class EmpresaService {
                     "The user ID cannot be null or empty.");
         }
 
-        if (empresa.getRepresentante() == null || empresa.getRepresentante().trim().isEmpty()) {
+        if (!ValidationUtils.isValidRepresentante(empresa.getRepresentante())) {
             throw new InvalidInputException("Invalid representative name", "INVALID_REPRESENTATIVE",
-                    "The representative name cannot be null or empty.");
+                    "Representative name must be between 3 and 100 characters and cannot be empty.");
         }
 
-        if (empresa.getRepresentante().length() < 3 || empresa.getRepresentante().length() > 100) {
-            throw new InvalidInputException("Invalid representative name length", "INVALID_REPRESENTATIVE_LENGTH",
-                    "Representative name must be between 3 and 100 characters.");
-        }
-
-        if (empresa.getCedulaRepresentante() == null || !empresa.getCedulaRepresentante().matches("^\\d{6,10}$")) {
-            throw new InvalidInputException("Invalid ID number", "INVALID_CEDULA",
-                    "The ID number must contain between 6 and 10 digits.");
-        }
+        ValidationUtils.validarDocumento(empresa.getDocumentoRepresentante(), empresa.getTipoDocumentoRepresentante());
 
         if (empresaRepository.existsById(empresa.getIdUsuario())) {
             throw new InvalidInputException("Empresa already exists", "EMPRESA_ALREADY_EXISTS",

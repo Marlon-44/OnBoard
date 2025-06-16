@@ -29,15 +29,17 @@ public class Vehiculo {
     private LocalDateTime fechaRegistro;
     private int cantidadAlquiler;
     private List<String> fotosUrls;
+    private EstadoOferta estadoOferta;
+    private float precioPorDia;
 
     public Vehiculo() {
     }
 
-    public Vehiculo(String placa, String tipoVehiculo, String tipoTerreno, String marca, String modelo, int anio,
-            int capacidadPasajeros, String soat, String tecnomecanica, String antecedentes,
-            String tipoTransmision, String combustible, float kilometraje,
-            String descripcion, String idPropietario, LocalDateTime fechaRegistro, int cantidadAlquiler,
-            List<String> fotosUrls) {
+    public Vehiculo(String placa, String tipoVehiculo, String tipoTerreno, String marca, String modelo,
+            int anio, int capacidadPasajeros, String soat, String tecnomecanica, String antecedentes,
+            String tipoTransmision, String combustible, float kilometraje, String descripcion,
+            String idPropietario, LocalDateTime fechaRegistro, int cantidadAlquiler,
+            List<String> fotosUrls, EstadoOferta estadoOferta, float precioPorDia) {
         this.placa = placa;
         this.tipoVehiculo = tipoVehiculo;
         this.tipoTerreno = tipoTerreno;
@@ -56,6 +58,8 @@ public class Vehiculo {
         this.fechaRegistro = fechaRegistro;
         this.cantidadAlquiler = cantidadAlquiler;
         this.fotosUrls = fotosUrls;
+        this.estadoOferta = estadoOferta;
+        this.precioPorDia = precioPorDia;
     }
 
     public String getPlaca() {
@@ -200,6 +204,22 @@ public class Vehiculo {
 
     public void setCantidadAlquiler(int cantidadAlquiler) {
         this.cantidadAlquiler = cantidadAlquiler;
+    }
+
+    public void setEstadoOferta(EstadoOferta estadoOferta) {
+        this.estadoOferta = estadoOferta;
+    }
+
+    public void setPrecioPorDia(float precioPorDia) {
+        this.precioPorDia = precioPorDia;
+    }
+
+    public EstadoOferta getEstadoOferta() {
+        return estadoOferta;
+    }
+
+    public float getPrecioPorDia() {
+        return precioPorDia;
     }
 
 }

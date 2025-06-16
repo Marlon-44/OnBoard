@@ -1,21 +1,28 @@
 package com.onboard.backend.service;
 
+import com.onboard.backend.dto.VehiculoFiltroDTO;
+import com.onboard.backend.entity.EstadoOferta;
 import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.repository.UsuarioRepository;
+import com.onboard.backend.repository.VehiculoFiltroRepository;
 import com.onboard.backend.repository.VehiculoRepository;
 import com.onboard.backend.util.ValidationUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class VehiculoService {
@@ -28,6 +35,9 @@ public class VehiculoService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
     @Transactional
     public Vehiculo saveVehiculo(Vehiculo vehiculo,
@@ -204,24 +214,19 @@ public class VehiculoService {
 
         Vehiculo vehiculoExistente = vehiculoOpt.get();
 
-        /*
-         * vehiculoExistente.setTipoVehiculo(vehiculoActualizado.getTipoVehiculo());
-         * vehiculoExistente.setTipoTerreno(vehiculoActualizado.getTipoTerreno());
-         * vehiculoExistente.setMarca(vehiculoActualizado.getMarca());
-         * vehiculoExistente.setModelo(vehiculoActualizado.getModelo());
-         * vehiculoExistente.setAnio(vehiculoActualizado.getAnio());
-         * vehiculoExistente.setCapacidadPasajeros(vehiculoActualizado.
-         * getCapacidadPasajeros());
-         * vehiculoExistente.setSoat(vehiculoActualizado.getSoat());
-         * vehiculoExistente.setTecnomecanica(vehiculoActualizado.getTecnomecanica());
-         * vehiculoExistente.setAntecedentes(vehiculoActualizado.getAntecedentes());
-         * vehiculoExistente.setTipoTransmision(vehiculoActualizado.getTipoTransmision()
-         * );
-         * vehiculoExistente.setCombustible(vehiculoActualizado.getCombustible());
-         * vehiculoExistente.setKilometraje(vehiculoActualizado.getKilometraje());
-         * vehiculoExistente.setDescripcion(vehiculoActualizado.getDescripcion());
-         * vehiculoExistente.setIdPropietario(vehiculoActualizado.getIdPropietario());
-         */
+        vehiculoExistente.setTipoVehiculo(vehiculoActualizado.getTipoVehiculo());
+        vehiculoExistente.setTipoTerreno(vehiculoActualizado.getTipoTerreno());
+        vehiculoExistente.setMarca(vehiculoActualizado.getMarca());
+        vehiculoExistente.setModelo(vehiculoActualizado.getModelo());
+        vehiculoExistente.setAnio(vehiculoActualizado.getAnio());
+        vehiculoExistente.setCapacidadPasajeros(vehiculoActualizado.getCapacidadPasajeros());
+        vehiculoExistente.setAntecedentes(vehiculoActualizado.getAntecedentes());
+        vehiculoExistente.setTipoTransmision(vehiculoActualizado.getTipoTransmision());
+        vehiculoExistente.setCombustible(vehiculoActualizado.getCombustible());
+        vehiculoExistente.setKilometraje(vehiculoActualizado.getKilometraje());
+        vehiculoExistente.setDescripcion(vehiculoActualizado.getDescripcion());
+        vehiculoExistente.setEstadoOferta(vehiculoActualizado.getEstadoOferta());
+        vehiculoExistente.setPrecioPorDia(vehiculoActualizado.getPrecioPorDia());
 
         return vehiculoRepository.save(vehiculoExistente);
     }
@@ -232,6 +237,49 @@ public class VehiculoService {
 
     public List<Vehiculo> getTop6VehiculosRecientes() {
         return vehiculoRepository.findTop6ByOrderByFechaRegistroDesc();
+    }
+
+    @Autowired
+    private VehiculoFiltroRepository vehiculoFiltroRepository;
+
+    public List<Vehiculo> buscarPorFiltros(VehiculoFiltroDTO filtros) {
+        return vehiculoFiltroRepository.filtrarVehiculos(filtros);
+    }
+
+    public List<String> obtenerVehiculosPorPrecio(Double precioMin, Double precioMax) {
+        Criteria estadoActiva = Criteria.where("estadoOferta").is(EstadoOferta.ACTIVA.name());
+
+        Criteria rangoPrecio = new Criteria();
+        if (precioMin != null && precioMax != null) {
+            rangoPrecio = Criteria.where("precioPorDia").gte(precioMin).lte(precioMax);
+        } else if (precioMin != null) {
+            rangoPrecio = Criteria.where("precioPorDia").gte(precioMin);
+        } else if (precioMax != null) {
+            rangoPrecio = Criteria.where("precioPorDia").lte(precioMax);
+        }
+
+        Query query = new Query();
+        if (precioMin != null || precioMax != null) {
+            query.addCriteria(new Criteria().andOperator(estadoActiva, rangoPrecio));
+        } else {
+            query.addCriteria(estadoActiva);
+        }
+
+        query.fields().include("placa");
+
+        return mongoTemplate.find(query, Vehiculo.class)
+                .stream()
+                .map(Vehiculo::getPlaca)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> obtenerVehiculosConOfertaActiva() {
+        return vehiculoRepository.findAll().stream()
+                .filter(v -> v.getEstadoOferta() == EstadoOferta.ACTIVA)
+                .map(Vehiculo::getPlaca)
+                .distinct()
+                .toList();
     }
 
 }

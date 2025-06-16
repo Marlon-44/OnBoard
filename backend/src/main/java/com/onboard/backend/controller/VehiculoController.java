@@ -1,5 +1,6 @@
 package com.onboard.backend.controller;
 
+import com.onboard.backend.dto.VehiculoFiltroDTO;
 import com.onboard.backend.entity.Vehiculo;
 
 import com.onboard.backend.service.VehiculoService;
@@ -87,4 +88,8 @@ public class VehiculoController {
         return vehiculoService.getTop6VehiculosRecientes();
     }
 
+    @PostMapping("/filtrar")
+    public List<Vehiculo> buscarPorFiltros(@RequestBody VehiculoFiltroDTO filtros) {
+        return vehiculoService.buscarPorFiltros(filtros);
+    }
 }

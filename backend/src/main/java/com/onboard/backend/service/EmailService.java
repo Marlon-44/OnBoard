@@ -57,7 +57,7 @@ public class EmailService {
                     asunto = "⚠️ Your account has been suspended";
                 }
                 default -> {
-                    plantilla = "email/registro";
+                    plantilla = "email/pendiente";
                     asunto = "🎉 Welcome to OnBoard!";
                 }
             }

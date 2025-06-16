@@ -26,7 +26,7 @@ public class RolController {
     public ResponseEntity<Rol> getRolById(@PathVariable String id) {
         Optional<Rol> rol = rolService.getRolById(id);
         return rol.map(ResponseEntity::ok)
-                  .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -39,5 +39,11 @@ public class RolController {
     public ResponseEntity<Void> deleteRolById(@PathVariable String id) {
         rolService.deleteRolById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Rol> updateRol(@PathVariable String id, @RequestBody Rol rol) {
+        Rol actualizado = rolService.updateRol(id, rol);
+        return ResponseEntity.ok(actualizado);
     }
 }
