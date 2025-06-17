@@ -1,6 +1,6 @@
 .search__container {
     
-    width: 30%;
+    width: 100%;
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
@@ -9,7 +9,7 @@
 }
 
 .search__icon {
-    width: 8%;
+    width: 5%;
 }
 .search__icon:hover {
     cursor: pointer;
@@ -27,4 +27,11 @@
 
 .search__input:focus {
     border-color: #007bff;
+}
+@media screen and (min-width:900px) {
+    .search__container {
+        
+        width: 30%;
+    }
+
 }

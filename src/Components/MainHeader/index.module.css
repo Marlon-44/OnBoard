@@ -1,18 +1,29 @@
 .header__container {
     width: 100vw;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.logo__account__box {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .header__up__section {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     margin: 1% 2%;
+    gap: 1.5rem;
 }
-.header__up__section h2{
+
+.header__up__section h2 {
     font-size: 2rem;
     font-family: "Montserrat";
     font-weight: 700;
 }
+
 .header__logo__container img {
     width: 70%;
 }
@@ -35,14 +46,34 @@
     -webkit-overflow-scrolling: touch;
     padding: 10px;
     box-sizing: border-box;
-    justify-content: center;
 
 }
 
 .header__down__section button {
     border: none;
     background-color: rgb(243, 243, 243);
-    padding: 10px 2%;
+    padding: 10px 5%;
     border-radius: 50px;
     margin-right: 2%;
+}
+
+@media screen and (min-width: 900px) {
+    .header__up__section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1% 2%;
+    }
+
+    .hd__button__container {
+        justify-content: center;
+    }
+
+    .header__down__section button {
+        border: none;
+        background-color: rgb(243, 243, 243);
+        padding: 10px 2%;
+        border-radius: 50px;
+        margin-right: 2%;
+    }
 }

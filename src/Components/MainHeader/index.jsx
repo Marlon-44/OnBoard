@@ -11,11 +11,13 @@ const MainHeader = () => {
             className={styles.header__container}>
 
             <div className={styles.header__up__section}>
-                <h2>OnBoard</h2>
-                <Search />
-                <Link to="/homePage" className={styles.header__logo__container}>
-                    <img src="assets/icon__user__black.png" alt="" />
-                </Link>
+                <div className={styles.logo__account__box}>
+                    <h2>OnBoard</h2>
+                    <Link to="/homePage" className={styles.header__logo__container}>
+                        <img src="assets/icon__user__black.png" alt="" />
+                    </Link>
+                </div>
+                <Search/>
             </div>
 
             <div className={styles.header__down__section}>
