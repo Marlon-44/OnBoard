@@ -6,13 +6,11 @@ const VehicleCard =({vehicle})=>{
                 <img src={vehicle.fotosUrls[0]} alt="" />
             </div>
             <div className={styles.info__section}>
-                
                 <h3>{`${vehicle.marca} ${vehicle.modelo}`}</h3>
-                <h2>{` $${vehicle.precio} /day`}</h2>
+                <h2>{` $${vehicle.precioPorDia} /day`}</h2>
                 <p>{`${vehicle.anio} | ${vehicle.kilometraje} Km`}</p>
                 <h4>Cartagena De Indias - Bolivar</h4>
             </div>
-            <h2>{vehicle.placa}</h2>
         </div>
     )
 }

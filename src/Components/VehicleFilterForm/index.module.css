@@ -1,8 +1,9 @@
 .filter__container {
     padding: 1rem;
     background-color: #f8f8f8;
-    border-radius: 1rem;
+    border-radius: 10px;
     width: 20%;
+
 }
 
 .filter__container h2 {
@@ -23,4 +24,14 @@ label {
     align-items: center;
     gap: 0.4rem;
     font-size: 0.9rem;
+}
+.checkbox__group, .radio__group{
+    display: flex;
+    flex-direction: column;
+}
+
+.filter__type h3{
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 2rem;
 }
