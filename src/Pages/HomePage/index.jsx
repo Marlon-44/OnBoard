@@ -27,7 +27,7 @@ const Home = () => {
                             <p>No se encontraron vehículos.</p>
                         ) : (
                             ofertas.map((vehiculo) => (
-                                <VehicleCard key={vehiculo.id} data={vehiculo} />
+                                <VehicleCard key={vehiculo.placa} vehicle={vehiculo} />
                             ))
                         )}
                     </div>
