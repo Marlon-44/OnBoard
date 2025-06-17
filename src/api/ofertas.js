@@ -1,6 +1,6 @@
 export async function getOfertas(){
     try {
-        const response = await fetch("http://localhost:8080/api/vehiculos");
+        const response = await fetch("http://localhost:8080/api/vehiculos/sorted-by-date-desc");
         if (!response.ok) {
             throw new Error("Error getting the ofertas")
         }

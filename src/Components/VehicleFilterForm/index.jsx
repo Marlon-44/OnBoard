@@ -81,7 +81,7 @@ const VehicleFilterForm = () => {
         <aside className={styles.filter__container}>
             <h2>Filtrar vehículos</h2>
 
-            <section>
+            <section className={styles.filter__type}>
                 <h3>Tipo de Vehículo</h3>
                 <div className={styles.checkbox__group}>
                     {VEHICULOS_PERMITIDOS.map(v => (
@@ -97,7 +97,7 @@ const VehicleFilterForm = () => {
                 </div>
             </section>
 
-            <section>
+            <section className={styles.filter__type}>
                 <h3>Transmisión</h3>
                 <div className={styles.radio__group}>
                     {TIPOS_TRANSMISION_PERMITIDOS.map(t => (
@@ -114,7 +114,7 @@ const VehicleFilterForm = () => {
                 </div>
             </section>
 
-            <section>
+            <section className={styles.filter__type}>
                 <h3>Combustible</h3>
                 <div className={styles.checkbox__group}>
                     {TIPOS_COMBUSTIBLE_PERMITIDOS.map(c => (
@@ -130,7 +130,7 @@ const VehicleFilterForm = () => {
                 </div>
             </section>
 
-            <section>
+            <section className={styles.filter__type}>
                 <h3>Terreno</h3>
                 <div className={styles.checkbox__group}>
                     {TIPOS_TERRENO_PERMITIDOS.map(t => (
@@ -146,7 +146,7 @@ const VehicleFilterForm = () => {
                 </div>
             </section>
 
-            <section>
+            <section className={styles.filter__type}>
                 <h3>Rango de Precio</h3>
                 <input
                     type="range"
@@ -167,7 +167,7 @@ const VehicleFilterForm = () => {
                 <p>${filters.precio[0]} - ${filters.precio[1]}</p>
             </section>
 
-            <section>
+            <section className={styles.filter__type}>
                 <h3>Año del vehículo</h3>
                 <input
                     type="range"
@@ -186,7 +186,7 @@ const VehicleFilterForm = () => {
                 <p>{filters.anio[0]} - {filters.anio[1]}</p>
             </section>
 
-            <section>
+            <section className={styles.filter__type}>
                 <h3>Capacidad de Pasajeros</h3>
                 <label>
                     Mínimo:

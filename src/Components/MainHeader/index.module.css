@@ -8,7 +8,11 @@
     align-items: center;
     margin: 1% 2%;
 }
-
+.header__up__section h2{
+    font-size: 2rem;
+    font-family: "Montserrat";
+    font-weight: 700;
+}
 .header__logo__container img {
     width: 70%;
 }
