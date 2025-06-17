@@ -31,4 +31,6 @@ public interface VehiculoRepository extends MongoRepository<Vehiculo, String> {
 
     List<Vehiculo> findAllByOrderByCantidadAlquilerAsc();
 
+    
+
 }

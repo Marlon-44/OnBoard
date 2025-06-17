@@ -40,4 +40,5 @@ public class Particular {
     public void setLicenciaConduccion(String licenciaConduccion) {
         this.licenciaConduccion = licenciaConduccion;
     }
+    
 }

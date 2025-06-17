@@ -49,4 +49,27 @@ public class EmpresaService {
     public void deleteEmpresaById(String idUsuario) {
         empresaRepository.deleteById(idUsuario);
     }
+
+    public Empresa updateEmpresa(Empresa empresa) {
+        Empresa existente = empresaRepository.findById(empresa.getIdUsuario())
+                .orElseThrow(() -> new InvalidInputException(
+                        "Empresa no encontrada",
+                        "EMPRESA_NOT_FOUND",
+                        "No se encontró una empresa con ID de usuario: " + empresa.getIdUsuario()));
+
+        if (empresa.getRepresentante() != null) {
+            if (!ValidationUtils.isValidRepresentante(empresa.getRepresentante())) {
+                throw new InvalidInputException("Invalid representative name", "INVALID_REPRESENTATIVE",
+                        "Representative name must be between 3 and 100 characters and cannot be empty.");
+            }
+            existente.setRepresentante(empresa.getRepresentante());
+        }
+        if ((empresa.getDocumentoRepresentante() != null && empresa.getDocumentoRepresentante().isBlank())
+                && empresa.getTipoDocumentoRepresentante() != null) {
+            ValidationUtils.validarDocumento(empresa.getDocumentoRepresentante(),
+                    empresa.getTipoDocumentoRepresentante());
+        }
+        return empresaRepository.save(existente);
+    }
+
 }

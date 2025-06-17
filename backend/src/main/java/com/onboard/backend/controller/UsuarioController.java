@@ -107,18 +107,28 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable String id, @RequestBody Usuario usuarioActualizado) {
+    public ResponseEntity<Usuario> updateUsuario(@PathVariable String id, @RequestBody Map<String, Object> body) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        Usuario usuarioActualizado = mapper.convertValue(body.get("usuario"), Usuario.class);
+
+        Object datosAdicionales = null;
+        if (body.containsKey("particular")) {
+            datosAdicionales = mapper.convertValue(body.get("particular"), Particular.class);
+        } else if (body.containsKey("empresa")) {
+            datosAdicionales = mapper.convertValue(body.get("empresa"), Empresa.class);
+        }
+
         Optional<Usuario> usuarioExistente = usuarioService.getUsuarioById(id);
 
         if (usuarioExistente.isPresent()) {
-            Usuario actualizado = usuarioService.updateUsuario(id, usuarioActualizado);
+            Usuario actualizado = usuarioService.updateUsuario(id, usuarioActualizado, datosAdicionales);
             return ResponseEntity.ok(actualizado);
         } else {
             throw new InvalidInputException(
                     "User not found",
                     "USER_NOT_FOUND",
                     "No user was found with the provided id: " + id);
-
         }
     }
 

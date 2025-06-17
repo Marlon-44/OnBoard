@@ -59,8 +59,6 @@ public class UsuarioService {
     @Autowired
     private ParticularService particularService;
 
-
-
     @Transactional
     public Usuario saveUsuario(Usuario usuario, Object datosAdicionales) {
 
@@ -150,23 +148,23 @@ public class UsuarioService {
 
             String nombreRol = rol.getRol().toLowerCase();
 
-            if (nombreRol.contains("particular")) {
+            if (nombreRol.contains("individual")) {
                 if (!(datosAdicionales instanceof Particular)) {
                     throw new InvalidInputException(
-                            "Invalid additional data for particular",
+                            "Invalid additional data for individual",
                             "INVALID_PARTICULAR_DATA",
-                            "The additional data provided does not match the 'particular' user role.");
+                            "The additional data provided does not match the 'individual' user role.");
                 }
                 Particular particular = (Particular) datosAdicionales;
                 particular.setIdUsuario(usuario.getIdUsuario());
                 particularService.saveParticular(particular);
 
-            } else if (nombreRol.contains("empresa")) {
+            } else if (nombreRol.contains("company")) {
                 if (!(datosAdicionales instanceof Empresa)) {
                     throw new InvalidInputException(
-                            "Invalid additional data for empresa",
-                            "INVALID_EMPRESA_DATA",
-                            "The additional data provided does not match the 'empresa' user role.");
+                            "Invalid additional data for company",
+                            "INVALID_COMPANY_DATA",
+                            "The additional data provided does not match the 'company' user role.");
                 }
                 Empresa empresa = (Empresa) datosAdicionales;
                 empresa.setIdUsuario(usuario.getIdUsuario());
@@ -226,7 +224,8 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
 
         try {
-            emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(), usuario.getEstadoVerificacion());
+            emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(),
+                    usuario.getEstadoVerificacion());
         } catch (Exception e) {
             logger.error("Error sending status email to user: " + usuario.getCorreo(), e);
         }
@@ -276,15 +275,85 @@ public class UsuarioService {
         return fileUrl;
     }
 
-    public Usuario updateUsuario(String id, Usuario usuarioActualizado) {
+    @Transactional
+    public Usuario updateUsuario(String id, Usuario usuarioActualizado, Object datosAdicionales) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new InvalidInputException(
                         "User not found",
                         "USER_NOT_FOUND",
                         "Cannot update user. No user exists in the database with ID: " + id));
 
-        usuarioRepository.delete(usuarioExistente);
-        return usuarioRepository.save(usuarioActualizado);
+        if (usuarioActualizado.getCorreo() != null
+                && !usuarioActualizado.getCorreo().equals(usuarioExistente.getCorreo())) {
+            if (!ValidationUtils.isValidEmail(usuarioActualizado.getCorreo())) {
+                throw new InvalidInputException(
+                        "Invalid email format",
+                        "INVALID_EMAIL_FORMAT",
+                        "Email does not match standard format: " + usuarioActualizado.getCorreo());
+            }
+            usuarioExistente.setCorreo(FormatUtils.formatearCorreo(usuarioActualizado.getCorreo()));
+        }
+
+        if (usuarioActualizado.getNombre() != null) {
+            if (!ValidationUtils.isValidNombre(usuarioActualizado.getNombre())) {
+                throw new InvalidInputException(
+                        "Invalid name",
+                        "INVALID_NAME_FORMAT",
+                        "Invalid name: " + usuarioActualizado.getNombre());
+            }
+            usuarioExistente.setNombre(FormatUtils.capitalizarNombre(usuarioActualizado.getNombre()));
+        }
+
+        if (usuarioActualizado.getPassword() != null) {
+            usuarioExistente.setPassword(passwordEncoder.encode(usuarioActualizado.getPassword()));
+        }
+
+        if (usuarioActualizado.getTelefono() != null) {
+            if (!ValidationUtils.isValidTelefono(usuarioActualizado.getTelefono())) {
+                throw new InvalidInputException(
+                        "Invalid phone number",
+                        "INVALID_PHONE_NUMBER_FORMAT",
+                        "Invalid phone number: " + usuarioActualizado.getTelefono());
+            }
+            usuarioExistente.setTelefono(FormatUtils.formatPhoneNumber(usuarioActualizado.getTelefono()));
+        }
+
+        if (usuarioActualizado.getDireccion() != null) {
+            if (!ValidationUtils.isValidDireccion(usuarioActualizado.getDireccion())) {
+                throw new InvalidInputException(
+                        "Invalid address",
+                        "INVALID_ADDRESS_FORMAT",
+                        "Invalid address: " + usuarioActualizado.getDireccion());
+            }
+            usuarioExistente.setDireccion(FormatUtils.limpiarCadena(usuarioActualizado.getDireccion()));
+        }
+
+        if (usuarioActualizado.getCuentaBancaria() != null) {
+            try {
+                String cuentaEncriptada = EncriptadorAESGCM.encriptar(usuarioActualizado.getCuentaBancaria());
+                usuarioExistente.setCuentaBancaria(cuentaEncriptada);
+            } catch (Exception e) {
+                logger.error("Error encrypting bank account", e);
+                throw new InvalidInputException(
+                        "Encryption error",
+                        "BANK_ACCOUNT_ENCRYPTION_ERROR",
+                        "An error occurred while encrypting the bank account information.");
+            }
+        }
+
+        Rol rol = rolRepository.findById(usuarioExistente.getIdRol())
+                .orElseThrow(() -> new InvalidInputException("Rol no encontrado", "ROL_NOT_FOUND", ""));
+
+        String nombreRol = rol.getRol().toLowerCase();
+        if (nombreRol.contains("individual") && datosAdicionales instanceof Particular particular) {
+            particular.setIdUsuario(id);
+            particularService.updateParticular(particular);
+        } else if (nombreRol.contains("company") && datosAdicionales instanceof Empresa empresa) {
+            empresa.setIdUsuario(id);
+            empresaService.updateEmpresa(empresa);
+        }
+
+        return usuarioRepository.save(usuarioExistente);
     }
 
     public Usuario actualizarEstadoVerificacion(String idUsuario, String nuevoEstadoStr) {

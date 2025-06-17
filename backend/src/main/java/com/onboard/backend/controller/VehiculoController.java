@@ -93,4 +93,10 @@ public class VehiculoController {
     public List<Vehiculo> buscarPorFiltros(@RequestBody VehiculoFiltroDTO filtros) {
         return vehiculoService.buscarPorFiltros(filtros);
     }
+
+    @GetMapping("/sorted-by-date-desc")
+    public ResponseEntity<List<Vehiculo>> obtenerVehiculosOrdenadosPorFecha() {
+        List<Vehiculo> vehiculos = vehiculoService.obtenerVehiculosOrdenadosPorFecha();
+        return ResponseEntity.ok(vehiculos);
+    }
 }

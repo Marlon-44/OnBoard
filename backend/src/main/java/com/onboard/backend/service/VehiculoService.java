@@ -304,4 +304,8 @@ public class VehiculoService {
                 .toList();
     }
 
+    public List<Vehiculo> obtenerVehiculosOrdenadosPorFecha() {
+        return vehiculoRepository.findAllByOrderByFechaRegistroDesc();
+    }
+
 }

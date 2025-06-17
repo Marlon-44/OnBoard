@@ -31,7 +31,7 @@ public class ValidationUtils {
     private static final Pattern PASAPORTE_PATTERN = Pattern.compile("^[A-Z]{1,2}\\d{6,8}$");
     private static final Pattern NIT_PATTERN = Pattern.compile("^\\d{6,10}-\\d$");
     private static final Pattern CUENTA_BANCARIA_PATTERN = Pattern.compile("^\\d{10,20}$");
-    private static final Pattern NOMBRE_PATTERN = Pattern.compile("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,50}$");
+    private static final Pattern NOMBRE_PATTERN = Pattern.compile("^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{3,100}$");
     private static final Pattern TELEFONO_PATTERN = Pattern.compile("^\\+?\\d{7,15}$");
     private static final Pattern LICENCIA_CONDUCCION_PATTERN = Pattern.compile("^\\d{6,12}$");
 
