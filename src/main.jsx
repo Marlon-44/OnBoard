@@ -4,16 +4,19 @@ import AppRoutes from './routes'
 import { VehicleProvider } from './features/vehicles/VehicleProvider'
 import { FeaturedVehicleProvider } from './features/featuredVehicles/FeaturedVehiclesProvider'
 import OfertasProvider from './features/ofertas/OfertasProvider'
+import { ReviewsProvider } from './features/reviews/ReviewsProvider'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <OfertasProvider>
-      <FeaturedVehicleProvider>
-        <VehicleProvider>
-          <AppRoutes>
-          </AppRoutes>
-        </VehicleProvider>
-      </FeaturedVehicleProvider>
-    </OfertasProvider>
+    <ReviewsProvider>
+      <OfertasProvider>
+        <FeaturedVehicleProvider>
+          <VehicleProvider>
+            <AppRoutes>
+            </AppRoutes>
+          </VehicleProvider>
+        </FeaturedVehicleProvider>
+      </OfertasProvider>
+    </ReviewsProvider>
   </StrictMode>,
 )

@@ -62,13 +62,16 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 1% 2%;
+        margin: 1% 2% 0;
+        gap: 0;
     }
 
     .hd__button__container {
         justify-content: center;
     }
-
+    .header__down__section{
+        margin: 0 0 1%;
+    }
     .header__down__section button {
         border: none;
         background-color: rgb(243, 243, 243);

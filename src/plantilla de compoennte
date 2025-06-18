@@ -1,0 +1,10 @@
+import styles from "./index.module.css"
+
+const ReviewCard =()=>{
+    return(
+        <div className="">
+        </div>
+    )
+}
+
+export default ReviewCard;

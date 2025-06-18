@@ -8,7 +8,7 @@ const Search = () => {
                 placeholder="Search..."
                 className={styles.search__input}
             />
-            <img src="assets/search__icon__black.svg" alt="" className={styles.search__icon} />
+            <img src="/assets/search__icon__black.svg" alt="" className={styles.search__icon} />
         </div>
     )
 }

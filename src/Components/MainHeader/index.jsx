@@ -14,7 +14,7 @@ const MainHeader = () => {
                 <div className={styles.logo__account__box}>
                     <h2>OnBoard</h2>
                     <Link to="/homePage" className={styles.header__logo__container}>
-                        <img src="assets/icon__user__black.png" alt="" />
+                        <img src="/assets/icon__user__black.png" alt="" />
                     </Link>
                 </div>
                 <Search/>

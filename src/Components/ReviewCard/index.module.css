@@ -1,0 +1,21 @@
+.review__container {
+    width: 100%;
+    margin: auto;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.review__container h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+@media screen and (min-width: 900px) {
+    .review__container {
+        width: 48%;
+        margin-bottom: 2rem;
+    }
+    .review__container h2 {
+    font-size: 1.5rem;
+}
+}

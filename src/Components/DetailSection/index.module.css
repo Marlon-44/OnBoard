@@ -1,0 +1,14 @@
+
+.vehicle__details{
+    width: 90vw;
+    margin: auto;
+    margin-top: 5rem;
+}
+.vehicle__details h2{
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.details__table tbody tr th{
+    width: 20%;
+}
