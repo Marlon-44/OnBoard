@@ -82,7 +82,7 @@ public class UsuarioService {
                         "Invalid role format",
                         "INVALID_ROLE_FORMAT",
                         "Role does not exist: " + usuario.getIdRol()
-                                + ". Valid examples: cliente_particular, propietario_particular, cliente_empresa"));
+                                + ". Valid examples: company_owner, company_dual, company_client, individual_client, individual_owner, individual_dual"));
 
         usuario.setIdRol(rol.getIdRol());
 

@@ -44,24 +44,6 @@ public class UsuarioController {
         return ResponseEntity.ok(saved);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUsuarioById(@PathVariable String id) {
-        Optional<Usuario> usuario = usuarioService.getUsuarioById(id);
-        return usuario.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Usuario>> getAllUsuarios() {
-        List<Usuario> usuarios = usuarioService.getAllUsuarios();
-        return ResponseEntity.ok(usuarios);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUsuarioById(@PathVariable String id) {
-        return usuarioService.deleteUsuarioById(id);
-    }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String correo, @RequestParam String password) {
         ResultadoLogin resultado = usuarioService.validarLogin(correo, password);
@@ -88,6 +70,24 @@ public class UsuarioController {
                         "UNEXPECTED_ERROR",
                         "An unexpected error occurred during login for email: " + correo);
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> getUsuarioById(@PathVariable String id) {
+        Optional<Usuario> usuario = usuarioService.getUsuarioById(id);
+        return usuario.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Usuario>> getAllUsuarios() {
+        List<Usuario> usuarios = usuarioService.getAllUsuarios();
+        return ResponseEntity.ok(usuarios);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUsuarioById(@PathVariable String id) {
+        return usuarioService.deleteUsuarioById(id);
     }
 
     @PostMapping("/{id}/foto-perfil")
