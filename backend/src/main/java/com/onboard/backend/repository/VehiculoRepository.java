@@ -23,6 +23,8 @@ public interface VehiculoRepository extends MongoRepository<Vehiculo, String> {
 
     List<Vehiculo> findAllByOrderByFechaRegistroDesc();
 
+    List<Vehiculo> findAllByIdPropietario(String idPropietario);
+
     List<Vehiculo> findByCapacidadPasajeros(int capacidadPasajeros);
 
     List<Vehiculo> findByCapacidadPasajerosGreaterThanEqualAndCapacidadPasajerosLessThanEqual(int min, int max);

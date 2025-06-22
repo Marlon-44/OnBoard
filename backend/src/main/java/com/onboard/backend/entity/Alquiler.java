@@ -3,6 +3,8 @@ package com.onboard.backend.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.onboard.backend.model.EstadoAlquiler;
+
 import java.time.LocalDateTime;
 
 @Document(collection = "alquileres")
@@ -12,16 +14,18 @@ public class Alquiler {
     private String idAlquiler;
     private String idReserva;
     private EstadoAlquiler estado;
-    private LocalDateTime fechaNovedad; // Nuevo atributo
+    private LocalDateTime fechaNovedad; 
+    private double precioTotal;
 
     public Alquiler() {
     }
 
-    public Alquiler(String idAlquiler, String idReserva, EstadoAlquiler estado, LocalDateTime fechaNovedad) {
+    public Alquiler(String idAlquiler, String idReserva, EstadoAlquiler estado, LocalDateTime fechaNovedad, double precioTotal) {
         this.idAlquiler = idAlquiler;
         this.idReserva = idReserva;
         this.estado = estado;
         this.fechaNovedad = fechaNovedad;
+        this.precioTotal = precioTotal;
     }
 
     public String getIdAlquiler() {
@@ -54,5 +58,13 @@ public class Alquiler {
 
     public void setFechaNovedad(LocalDateTime fechaNovedad) {
         this.fechaNovedad = fechaNovedad;
+    }
+
+    public double getPrecioTotal() {
+        return precioTotal;
+    }
+
+    public void setPrecioTotal(double precioTotal) {
+        this.precioTotal = precioTotal;
     }
 }

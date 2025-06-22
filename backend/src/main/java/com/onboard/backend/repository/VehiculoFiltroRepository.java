@@ -1,8 +1,8 @@
 package com.onboard.backend.repository;
 
 import com.onboard.backend.dto.VehiculoFiltroDTO;
-import com.onboard.backend.entity.EstadoOferta;
 import com.onboard.backend.entity.Vehiculo;
+import com.onboard.backend.model.EstadoOferta;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

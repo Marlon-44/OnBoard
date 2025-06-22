@@ -1,11 +1,12 @@
 package com.onboard.backend.service;
 
 import com.onboard.backend.dto.VehiculoFiltroDTO;
-import com.onboard.backend.entity.EstadoOferta;
-import com.onboard.backend.entity.EstadoVerificacion;
+import com.onboard.backend.entity.Usuario;
 import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.exception.InvalidInputException;
-import com.onboard.backend.repository.UsuarioRepository;
+import com.onboard.backend.model.Calificacion;
+import com.onboard.backend.model.EstadoOferta;
+import com.onboard.backend.model.EstadoVerificacion;
 import com.onboard.backend.repository.VehiculoFiltroRepository;
 import com.onboard.backend.repository.VehiculoRepository;
 import com.onboard.backend.util.ValidationUtils;
@@ -21,6 +22,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,10 +37,16 @@ public class VehiculoService {
     private FileUploadService fileUploadService;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private VehiculoFiltroRepository vehiculoFiltroRepository;
 
     @Transactional
     public Vehiculo saveVehiculo(Vehiculo vehiculo,
@@ -50,6 +58,13 @@ public class VehiculoService {
         if (!ValidationUtils.isValidPlaca(vehiculo.getPlaca())) {
             throw new InvalidInputException("Invalid license plate", "INVALID_VEHICLE_LICENSE_PLATE",
                     "Expected format: ABC123 or ABC1234");
+        }
+
+        if (vehiculoRepository.existsById(vehiculo.getPlaca())) {
+            throw new InvalidInputException(
+                    "License plate already registered",
+                    "VEHICLE_ALREADY_EXISTS",
+                    "A vehicle with this license plate is already registered.");
         }
 
         if (!ValidationUtils.isValidTipoVehiculo(vehiculo.getTipoVehiculo())) {
@@ -107,14 +122,9 @@ public class VehiculoService {
                     "Must be 10–500 characters.");
         }
 
-        if (!usuarioRepository.existsById(vehiculo.getIdPropietario())) {
-            throw new InvalidInputException("Owner not found", "USER_NOT_FOUND",
-                    "No user found with given ID.");
-        }
+        Usuario usuario = usuarioService.getUsuarioById(vehiculo.getIdPropietario()).get();
 
         vehiculo.setFechaRegistro(LocalDateTime.now());
-        vehiculo.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
-        vehiculo.setEstadoOferta(EstadoOferta.INACTIVA);
 
         String urlTecno;
         String urlAnte;
@@ -170,6 +180,14 @@ public class VehiculoService {
         }
         vehiculo.getFotosUrls().addAll(urls);
 
+        vehiculo.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
+        emailService.enviarCorreoEstadoVehiculo(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
+                vehiculo.getEstadoVerificacion());
+
+        vehiculo.setEstadoOferta(EstadoOferta.INACTIVA);
+        emailService.enviarCorreoEstadoOferta(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
+                vehiculo.getEstadoOferta());
+
         return vehiculoRepository.save(vehiculo);
     }
 
@@ -190,30 +208,19 @@ public class VehiculoService {
     }
 
     public void deleteVehiculoById(String id) {
-        Optional<Vehiculo> vehiculoOpt = vehiculoRepository.findById(id);
-        if (vehiculoOpt.isEmpty()) {
-            throw new InvalidInputException(
-                    "Vehicle not found",
-                    "VEHICLE_NOT_FOUND",
-                    "No vehicle was found with the specified identifier or license plate.");
-
-        }
-        vehiculoRepository.deleteById(id);
+        Vehiculo vehiculo = getVehiculoById(id).get();
+        vehiculo.setEstadoVerificacion(EstadoVerificacion.INACTIVO);
+        vehiculo.setEstadoOferta(EstadoOferta.FINALIZADA);
+        Usuario usuario = usuarioService.getUsuarioById(vehiculo.getIdPropietario()).get();
+        emailService.enviarCorreoEstadoVehiculo(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
+                vehiculo.getEstadoVerificacion());
     }
 
     public List<String> subirFotosVehiculo(String vehiculoId, MultipartFile[] files) throws IOException {
         List<String> urls = fileUploadService.uploadVehiclePhotos(files, vehiculoId);
 
-        Optional<Vehiculo> vehiculoOpt = vehiculoRepository.findById(vehiculoId);
-        if (vehiculoOpt.isEmpty()) {
-            throw new InvalidInputException(
-                    "Vehicle not found",
-                    "VEHICLE_NOT_FOUND",
-                    "No vehicle was found with the specified identifier or license plate.");
+        Vehiculo vehiculo = getVehiculoById(vehiculoId).get();
 
-        }
-
-        Vehiculo vehiculo = vehiculoOpt.get();
         if (vehiculo.getFotosUrls() == null) {
             vehiculo.setFotosUrls(new ArrayList<>());
         }
@@ -225,18 +232,7 @@ public class VehiculoService {
     }
 
     public Vehiculo updateVehiculo(String placa, Vehiculo vehiculoActualizado) {
-        Optional<Vehiculo> vehiculoOpt = vehiculoRepository.findById(placa);
-
-        if (vehiculoOpt.isEmpty()) {
-            throw new InvalidInputException(
-                    "Vehicle not found",
-                    "VEHICLE_NOT_FOUND",
-                    "No vehicle was found with the specified identifier or license plate.");
-        }
-
-        Vehiculo vehiculoExistente = vehiculoOpt.get();
-
-        vehiculoExistente.setTipoVehiculo(vehiculoActualizado.getTipoVehiculo());
+        Vehiculo vehiculoExistente = getVehiculoById(placa).get();
         vehiculoExistente.setTipoTerreno(vehiculoActualizado.getTipoTerreno());
         vehiculoExistente.setMarca(vehiculoActualizado.getMarca());
         vehiculoExistente.setModelo(vehiculoActualizado.getModelo());
@@ -253,6 +249,62 @@ public class VehiculoService {
         return vehiculoRepository.save(vehiculoExistente);
     }
 
+    public Vehiculo cambiarEstadoVerificacion(String placa, EstadoVerificacion estadoVerificacion) {
+        Vehiculo vehiculo = getVehiculoById(placa).get();
+        Usuario usuario = usuarioService.getUsuarioById(vehiculo.getIdPropietario()).get();
+
+        if (estadoVerificacion.name().equals(vehiculo.getEstadoVerificacion().name())) {
+            throw new InvalidInputException(
+                    "Verification status unchanged",
+                    "VERIFICATION_STATUS_UNCHANGED",
+                    "The vehicle already has the specified verification status. No changes were made.");
+        }
+        vehiculo.setEstadoVerificacion(estadoVerificacion);
+
+        emailService.enviarCorreoEstadoVehiculo(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
+                vehiculo.getEstadoVerificacion());
+
+        return vehiculoRepository.save(vehiculo);
+    }
+
+    public Vehiculo cambiarEstadoOferta(String placa, EstadoOferta estadoOferta) {
+        Vehiculo vehiculo = getVehiculoById(placa).get();
+        Usuario usuario = usuarioService.getUsuarioById(vehiculo.getIdPropietario()).get();
+
+        if (estadoOferta.name().equals(vehiculo.getEstadoOferta().name())) {
+            throw new InvalidInputException(
+                    "Offer status unchanged",
+                    "OFFER_STATUS_UNCHANGED",
+                    "The vehicle already has the specified offer status. No changes were made.");
+        }
+
+        vehiculo.setEstadoOferta(estadoOferta);
+
+        emailService.enviarCorreoEstadoOferta(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
+                vehiculo.getEstadoOferta());
+
+        return vehiculoRepository.save(vehiculo);
+    }
+
+    @Transactional
+    public Vehiculo calificarVehiculo(String placa, String idUsuario, Calificacion calificacion) {
+        Vehiculo vehiculo = getVehiculoById(placa).get();
+        if (calificacion.getValor() < 1 || calificacion.getValor() > 5) {
+            throw new InvalidInputException(
+                    "Invalid rating",
+                    "INVALID_RATING",
+                    "Rating must be between 1 and 5.");
+        }
+
+        if (vehiculo.getCalificaciones() == null) {
+            vehiculo.setCalificaciones(new HashMap<>());
+        }
+
+        vehiculo.getCalificaciones().put(idUsuario, calificacion);
+
+        return vehiculoRepository.save(vehiculo);
+    }
+
     public List<Vehiculo> getTop6VehiculosMasAlquilados() {
         return vehiculoRepository.findTop6ByOrderByCantidadAlquilerDesc();
     }
@@ -260,9 +312,6 @@ public class VehiculoService {
     public List<Vehiculo> getTop6VehiculosRecientes() {
         return vehiculoRepository.findTop6ByOrderByFechaRegistroDesc();
     }
-
-    @Autowired
-    private VehiculoFiltroRepository vehiculoFiltroRepository;
 
     public List<Vehiculo> buscarPorFiltros(VehiculoFiltroDTO filtros) {
         return vehiculoFiltroRepository.filtrarVehiculos(filtros);
@@ -296,16 +345,28 @@ public class VehiculoService {
                 .collect(Collectors.toList());
     }
 
-    public List<String> obtenerVehiculosConOfertaActiva() {
-        return vehiculoRepository.findAll().stream()
+    public List<Vehiculo> obtenerVehiculosOrdenadosPorFecha() {
+        List<Vehiculo> vehiculos = vehiculoRepository.findAllByOrderByFechaRegistroDesc();
+        for (Vehiculo v : vehiculos) {
+            if (!(v.getEstadoOferta() == EstadoOferta.ACTIVA)) {
+                vehiculos.remove(v);
+            }
+        }
+        return vehiculos;
+    }
+
+    public List<Vehiculo> obtenerVehiculosPorIdPropietario(String idPropietario) {
+        return vehiculoRepository.findAllByIdPropietario(idPropietario).stream()
                 .filter(v -> v.getEstadoOferta() == EstadoOferta.ACTIVA)
-                .map(Vehiculo::getPlaca)
                 .distinct()
                 .toList();
     }
 
-    public List<Vehiculo> obtenerVehiculosOrdenadosPorFecha() {
-        return vehiculoRepository.findAllByOrderByFechaRegistroDesc();
+    public List<Vehiculo> obtenerVehiculosConOfertaActiva() {
+        return vehiculoRepository.findAll().stream()
+                .filter(v -> v.getEstadoOferta() == EstadoOferta.ACTIVA)
+                .distinct()
+                .toList();
     }
 
 }

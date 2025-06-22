@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Rental Details - Client</title>
+        <link rel="stylesheet" href="contrato.css" />
+    </head>
+    <body>
+        <h1>Vehicle Rental Agreement Details</h1>
+
+        <p>
+            ${saludo}
+            <br /><br />
+            This document has been generated through the
+            <strong>OnBoard</strong> platform, which facilitates vehicle rental
+            contact and management between owners and renters.
+        </p>
+
+        <p>
+            Below are the conditions and relevant details regarding the
+            requested vehicle rental. This document reflects the terms agreed
+            upon by the involved parties to ensure a safe, comfortable, and
+            efficient mobility experience.
+        </p>
+
+        <p><strong>City:</strong> ${ciudad}</p>
+        <p><strong>Document generation date:</strong> ${fecha}</p>
+
+        <h2 class="section-title">Client Information</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <td>${nombreCliente}</td>
+            </tr>
+            <tr>
+                <th>Identification Type</th>
+                <td>${tipoIdentificacionCliente}</td>
+            </tr>
+            <tr>
+                <th>Document Number</th>
+                <td>${idCliente}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>${telefonoCliente}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>${direccionCliente}</td>
+            </tr>
+        </table>
+
+        <h2 class="section-title">Owner Information</h2>
+        <table>
+            <tr>
+                <th>Name</th>
+                <td>${nombrePropietario}</td>
+            </tr>
+            <tr>
+                <th>Identification Type</th>
+                <td>${tipoIdentificacionPropietario}</td>
+            </tr>
+            <tr>
+                <th>Document Number</th>
+                <td>${idPropietario}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>${telefonoPropietario}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>${direccionPropietario}</td>
+            </tr>
+        </table>
+
+        <h2 class="section-title">Vehicle Information</h2>
+        <table>
+            <tr>
+                <th>License Plate</th>
+                <td>${placa}</td>
+            </tr>
+            <tr>
+                <th>Brand</th>
+                <td>${marca}</td>
+            </tr>
+            <tr>
+                <th>Model</th>
+                <td>${modelo}</td>
+            </tr>
+            <tr>
+                <th>Year</th>
+                <td>${anio}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>${tipoVehiculo}</td>
+            </tr>
+            <tr>
+                <th>Transmission</th>
+                <td>${transmision}</td>
+            </tr>
+            <tr>
+                <th>Fuel</th>
+                <td>${combustible}</td>
+            </tr>
+            <tr>
+                <th>Mileage</th>
+                <td>${kilometraje} km</td>
+            </tr>
+            <tr>
+                <th>Capacity</th>
+                <td>${capacidad} passengers</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>${descripcion}</td>
+            </tr>
+        </table>
+
+        <h2 class="section-title">Vehicle Documents</h2>
+        <table>
+            <tr>
+                <th>SOAT</th>
+                <td><a href="${urlSoat}" target="_blank">View document</a></td>
+            </tr>
+            <tr>
+                <th>Technical Inspection</th>
+                <td><a href="${urlTecno}" target="_blank">View document</a></td>
+            </tr>
+            <tr>
+                <th>Background Check</th>
+                <td>
+                    <a href="${urlAntecedentes}" target="_blank"
+                        >View document</a
+                    >
+                </td>
+            </tr>
+        </table>
+
+        <h2 class="section-title">Rental Conditions</h2>
+        <table>
+            <tr>
+                <th>Start Date</th>
+                <td>${fechaInicio}</td>
+            </tr>
+            <tr>
+                <th>End Date</th>
+                <td>${fechaFin}</td>
+            </tr>
+            <tr>
+                <th>Pick-Up Location</th>
+                <td>${lugarRecogida}</td>
+            </tr>
+            <tr>
+                <th>Drop-Off Location</th>
+                <td>${lugarEntrega}</td>
+            </tr>
+            <tr>
+                <th>Daily Rate</th>
+                <td>$${precioPorDia}</td>
+            </tr>
+            <tr>
+                <th>Estimated Total</th>
+                <td><strong>$${total}</strong></td>
+            </tr>
+        </table>
+
+        <p class="small">
+            This document has been generated exclusively for the renter as a
+            record of the details of the described vehicle rental agreement.
+        </p>
+
+        <p class="small">
+            By receiving this document, I confirm that I have read and
+            <a
+                href="https://lklfmpejhtqwuhlyhpud.supabase.co/storage/v1/object/public/documentos/negocio/terminos_condiciones_onboard.pdf"
+                target="_blank"
+            >
+                <strong>accept the terms and conditions of OnBoard</strong> </a
+            >, the platform through which this rental was managed.
+        </p>
+
+        <p class="small">
+            For more information about our services, please visit
+            <a href="https://onboard.com" target="_blank">www.onboard.com</a>.
+        </p>
+    </body>
+</html>

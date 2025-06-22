@@ -1,11 +1,11 @@
 package com.onboard.backend.service;
 
 import com.onboard.backend.entity.Empresa;
-import com.onboard.backend.entity.EstadoVerificacion;
 import com.onboard.backend.entity.Particular;
 import com.onboard.backend.entity.Rol;
 import com.onboard.backend.entity.Usuario;
 import com.onboard.backend.exception.InvalidInputException;
+import com.onboard.backend.model.EstadoVerificacion;
 import com.onboard.backend.repository.RolRepository;
 import com.onboard.backend.repository.UsuarioRepository;
 import com.onboard.backend.security.EncriptadorAESGCM;
@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
+import org.apache.commons.lang3.StringUtils;
+
 
 @Service
 public class UsuarioService {
@@ -133,7 +135,8 @@ public class UsuarioService {
         String hashedPass = passwordEncoder.encode(usuario.getPassword());
         usuario.setPassword(hashedPass);
         usuario.setFechaRegistro(LocalDateTime.now());
-        try {
+        if(StringUtils.isNotBlank(usuario.getCuentaBancaria())){
+            try {
             String cuentaEncriptada = EncriptadorAESGCM.encriptar(usuario.getCuentaBancaria());
             usuario.setCuentaBancaria(cuentaEncriptada);
         } catch (Exception e) {
@@ -142,6 +145,7 @@ public class UsuarioService {
                     "Unable to encrypt bank account",
                     "BANK_ACCOUNT_ENCRYPTION_ERROR",
                     "An internal error occurred while encrypting the bank account information. Please contact the administrator.");
+        }
         }
         usuario.setFechaRegistro(LocalDateTime.now());
         try {
@@ -172,13 +176,10 @@ public class UsuarioService {
             }
 
             usuario.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
-            try {
+   
                 emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(),
                         usuario.getEstadoVerificacion());
-            } catch (Exception e) {
-                logger.error("Error sending registration email to user: " + usuario.getCorreo(), e);
 
-            }
 
             return usuarioRepository.save(usuario);
 
@@ -223,12 +224,8 @@ public class UsuarioService {
         usuario.setEstadoVerificacion(EstadoVerificacion.INACTIVO);
         usuarioRepository.save(usuario);
 
-        try {
-            emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(),
-                    usuario.getEstadoVerificacion());
-        } catch (Exception e) {
-            logger.error("Error sending status email to user: " + usuario.getCorreo(), e);
-        }
+        emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(),
+                usuario.getEstadoVerificacion());
 
         return ResponseEntity.ok("User deactivated successfully.");
     }
@@ -385,11 +382,7 @@ public class UsuarioService {
 
         usuario.setEstadoVerificacion(nuevoEstado);
 
-        try {
-            emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(), nuevoEstado);
-        } catch (Exception e) {
-            logger.error("Error sending status email to user: " + usuario.getCorreo(), e);
-        }
+        emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(), nuevoEstado);
 
         return usuarioRepository.save(usuario);
     }

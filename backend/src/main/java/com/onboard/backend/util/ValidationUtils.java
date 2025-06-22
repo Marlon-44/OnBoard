@@ -2,8 +2,8 @@ package com.onboard.backend.util;
 
 import java.util.regex.Pattern;
 
-import com.onboard.backend.entity.TipoIdentificacion;
 import com.onboard.backend.exception.InvalidInputException;
+import com.onboard.backend.model.TipoIdentificacion;
 
 import java.time.Year;
 

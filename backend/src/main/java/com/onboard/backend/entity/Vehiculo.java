@@ -2,9 +2,14 @@ package com.onboard.backend.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.onboard.backend.model.Calificacion;
+import com.onboard.backend.model.EstadoOferta;
+import com.onboard.backend.model.EstadoVerificacion;
 
 @Document(collection = "vehiculos")
 public class Vehiculo {
@@ -18,9 +23,9 @@ public class Vehiculo {
     private String modelo;
     private int anio;
     private int capacidadPasajeros;
-    private String soat;
-    private String tecnomecanica;
-    private String antecedentes;
+    private String soat; // pdf url
+    private String tecnomecanica; // pdf url
+    private String antecedentes; // pdf url
     private String tipoTransmision;
     private String combustible;
     private float kilometraje;
@@ -32,6 +37,7 @@ public class Vehiculo {
     private EstadoOferta estadoOferta;
     private float precioPorDia;
     private EstadoVerificacion estadoVerificacion;
+    private Map<String, Calificacion> calificaciones;
 
     public Vehiculo() {
     }
@@ -41,7 +47,8 @@ public class Vehiculo {
             String tipoTransmision, String combustible, float kilometraje, String descripcion,
             String idPropietario, LocalDateTime fechaRegistro, int cantidadAlquiler,
             List<String> fotosUrls, EstadoOferta estadoOferta, float precioPorDia,
-            EstadoVerificacion estadoVerificacion) {
+            EstadoVerificacion estadoVerificacion, Map<String, Calificacion> calificaciones) {
+
         this.placa = placa;
         this.tipoVehiculo = tipoVehiculo;
         this.tipoTerreno = tipoTerreno;
@@ -63,6 +70,7 @@ public class Vehiculo {
         this.estadoOferta = estadoOferta;
         this.precioPorDia = precioPorDia;
         this.estadoVerificacion = estadoVerificacion;
+        this.calificaciones = calificaciones;
     }
 
     public String getPlaca() {
@@ -231,6 +239,31 @@ public class Vehiculo {
 
     public void setEstadoVerificacion(EstadoVerificacion estadoVerificacion) {
         this.estadoVerificacion = estadoVerificacion;
+    }
+
+    public Map<String, Calificacion> getCalificaciones() {
+        return calificaciones;
+    }
+
+    public void setCalificaciones(Map<String, Calificacion> calificaciones) {
+        this.calificaciones = calificaciones;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Vehiculo vehiculo = (Vehiculo) o;
+
+        return placa != null ? placa.equals(vehiculo.placa) : vehiculo.placa == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return placa != null ? placa.hashCode() : 0;
     }
 
 }

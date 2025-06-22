@@ -5,13 +5,17 @@ import jakarta.mail.internet.MimeMessage;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import com.onboard.backend.entity.EstadoVerificacion;
+import com.onboard.backend.model.EstadoOferta;
+import com.onboard.backend.model.EstadoVerificacion;
+
+import java.util.Map;
 
 @Service
 public class EmailService {
@@ -28,107 +32,167 @@ public class EmailService {
         this.templateEngine = templateEngine;
     }
 
+    private void enviarCorreoConTemplate(String toEmail, String subject, String plantilla, Map<String, Object> variables) {
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+
+            helper.setTo(toEmail);
+            helper.setFrom("onboardnotifications@gmail.com");
+            helper.setSubject(subject);
+
+            Context context = new Context();
+            if (variables != null) {
+                variables.forEach(context::setVariable);
+            }
+            context.setVariable("logoUrl", LOGO_URL);
+
+            String contenidoHtml = templateEngine.process(plantilla, context);
+            helper.setText(contenidoHtml, true);
+
+            mailSender.send(mensaje);
+
+        } catch (Exception e) {
+            logger.error("Error sending email to <{}>", toEmail, e);
+        }
+    }
+
     public void enviarCorreoEstadoCuenta(String toEmail, String nombreUsuario, EstadoVerificacion estado) {
-        try {
-            MimeMessage mensaje = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+        String plantilla;
+        String asunto;
 
-            helper.setTo(toEmail);
-            helper.setFrom("onboardnotifications@gmail.com");
-
-            String plantilla;
-            String asunto;
-
-            switch (estado) {
-                case APROBADO -> {
-                    plantilla = "email/aprobado";
-                    asunto = "✅ Your account has been approved!";
-                }
-                case RECHAZADO -> {
-                    plantilla = "email/rechazado";
-                    asunto = "❌ Your account registration was rejected";
-                }
-                case INACTIVO -> {
-                    plantilla = "email/eliminado";
-                    asunto = "🗑️ Your account has been deleted";
-                }
-                case SUSPENDIDO -> {
-                    plantilla = "email/suspendido";
-                    asunto = "⚠️ Your account has been suspended";
-                }
-                default -> {
-                    plantilla = "email/pendiente";
-                    asunto = "🎉 Welcome to OnBoard!";
-                }
+        switch (estado) {
+            case APROBADO -> {
+                plantilla = "email/estado_cuenta_usuario/aprobado";
+                asunto = "✅ Your account has been approved!";
             }
-
-            helper.setSubject(asunto);
-
-            Context context = new Context();
-            context.setVariable("nombre", nombreUsuario);
-            context.setVariable("logoUrl", LOGO_URL);
-
-            String contenidoHtml = templateEngine.process(plantilla, context);
-            helper.setText(contenidoHtml, true);
-
-            mailSender.send(mensaje);
-
-        } catch (Exception e) {
-            logger.error("Error sending {} email to user {} <{}>", estado.name(), nombreUsuario, toEmail, e);
+            case RECHAZADO -> {
+                plantilla = "email/estado_cuenta_usuario/rechazado";
+                asunto = "❌ Your account registration was rejected";
+            }
+            case INACTIVO -> {
+                plantilla = "email/estado_cuenta_usuario/eliminado";
+                asunto = "🗑️ Your account has been deleted";
+            }
+            case SUSPENDIDO -> {
+                plantilla = "email/estado_cuenta_usuario/suspendido";
+                asunto = "⚠️ Your account has been suspended";
+            }
+            default -> {
+                plantilla = "email/estado_cuenta_usuario/pendiente";
+                asunto = "🎉 Welcome to OnBoard!";
+            }
         }
+
+        Map<String, Object> variables = Map.of("nombre", nombreUsuario);
+        enviarCorreoConTemplate(toEmail, asunto, plantilla, variables);
     }
 
-    public void enviarCorreoEstadoVehiculo(String toEmail, String nombreUsuario, String placa,
-            EstadoVerificacion estado) {
-        try {
-            MimeMessage mensaje = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+    public void enviarCorreoEstadoVehiculo(String toEmail, String nombreUsuario, String placa, EstadoVerificacion estado) {
+        String plantilla;
+        String asunto;
 
-            helper.setTo(toEmail);
-            helper.setFrom("onboardnotifications@gmail.com");
-
-            String plantilla;
-            String asunto;
-
-            switch (estado) {
-                case APROBADO -> {
-                    plantilla = "email/vehiculo_aprobado";
-                    asunto = "✅ Your vehicle has been approved!";
-                }
-                case RECHAZADO -> {
-                    plantilla = "email/vehiculo_rechazado";
-                    asunto = "❌ Your vehicle registration was rejected";
-                }
-                case INACTIVO -> {
-                    plantilla = "email/vehiculo_inactivo";
-                    asunto = "🗑️ Your vehicle has been removed or marked inactive";
-                }
-                case SUSPENDIDO -> {
-                    plantilla = "email/vehiculo_suspendido";
-                    asunto = "⚠️ Your vehicle listing has been suspended";
-                }
-                default -> {
-                    plantilla = "email/vehiculo_pendiente";
-                    asunto = "🚗 Your vehicle is pending verification";
-                }
+        switch (estado) {
+            case APROBADO -> {
+                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_aprobado";
+                asunto = "✅ Your vehicle has been approved!";
             }
-
-            helper.setSubject(asunto);
-
-            Context context = new Context();
-            context.setVariable("nombre", nombreUsuario);
-            context.setVariable("placa", placa);
-            context.setVariable("logoUrl", LOGO_URL);
-
-            String contenidoHtml = templateEngine.process(plantilla, context);
-            helper.setText(contenidoHtml, true);
-
-            mailSender.send(mensaje);
-
-        } catch (Exception e) {
-            logger.error("Error sending {} email to user {} <{}> for vehicle {}", estado.name(), nombreUsuario, toEmail,
-                    placa, e);
+            case RECHAZADO -> {
+                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_rechazado";
+                asunto = "❌ Your vehicle registration was rejected";
+            }
+            case INACTIVO -> {
+                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_inactivo";
+                asunto = "🗑️ Your vehicle has been removed or marked inactive";
+            }
+            case SUSPENDIDO -> {
+                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_suspendido";
+                asunto = "⚠️ Your vehicle listing has been suspended";
+            }
+            default -> {
+                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_pendiente";
+                asunto = "🚗 Your vehicle is pending verification";
+            }
         }
+
+        Map<String, Object> variables = Map.of(
+                "nombre", nombreUsuario,
+                "placa", placa
+        );
+
+        enviarCorreoConTemplate(toEmail, asunto, plantilla, variables);
     }
 
+    public void enviarCorreoEstadoOferta(String toEmail, String nombreUsuario, String placa, EstadoOferta estado) {
+        String plantilla;
+        String asunto;
+
+        switch (estado) {
+            case ACTIVA -> {
+                plantilla = "email/estado_oferta/activa";
+                asunto = "✅ Your vehicle offer is now active!";
+            }
+            case FINALIZADA -> {
+                plantilla = "email/estado_oferta/finalizada";
+                asunto = "🏁 Your vehicle offer has been finalized";
+            }
+            case CANCELADA -> {
+                plantilla = "email/estado_oferta/cancelada";
+                asunto = "❌ Your vehicle offer has been canceled";
+            }
+            default -> {
+                plantilla = "email/estado_oferta/inactiva";
+                asunto = "⏳ Your vehicle offer is temporarily inactive";
+            }
+        }
+
+        Map<String, Object> variables = Map.of(
+                "nombre", nombreUsuario,
+                "placa", placa
+        );
+
+        enviarCorreoConTemplate(toEmail, asunto, plantilla, variables);
+    }
+
+    public void enviarContratosPdf(String emailCliente, String nombreCliente, byte[] pdfCliente,
+                                    String emailPropietario, String nombrePropietario, byte[] pdfPropietario) {
+        try {
+            MimeMessage mensajeCliente = mailSender.createMimeMessage();
+            MimeMessageHelper helperCliente = new MimeMessageHelper(mensajeCliente, true, "UTF-8");
+
+            helperCliente.setTo(emailCliente);
+            helperCliente.setFrom("onboardnotifications@gmail.com");
+            helperCliente.setSubject("📄 Rental Details - Client");
+
+            Context contextCliente = new Context();
+            contextCliente.setVariable("nombre", nombreCliente);
+            contextCliente.setVariable("logoUrl", LOGO_URL);
+
+            String contenidoHtmlCliente = templateEngine.process("email/acuerdo_alquiler/contrato_cliente", contextCliente);
+            helperCliente.setText(contenidoHtmlCliente, true);
+            helperCliente.addAttachment("Contrato_Cliente.pdf", new ByteArrayResource(pdfCliente));
+
+            mailSender.send(mensajeCliente);
+
+            MimeMessage mensajePropietario = mailSender.createMimeMessage();
+            MimeMessageHelper helperPropietario = new MimeMessageHelper(mensajePropietario, true, "UTF-8");
+
+            helperPropietario.setTo(emailPropietario);
+            helperPropietario.setFrom("onboardnotifications@gmail.com");
+            helperPropietario.setSubject("📄 Rental Details - Owner");
+
+            Context contextPropietario = new Context();
+            contextPropietario.setVariable("nombre", nombrePropietario);
+            contextPropietario.setVariable("logoUrl", LOGO_URL);
+
+            String contenidoHtmlPropietario = templateEngine.process("email/acuerdo_alquiler/contrato_propietario", contextPropietario);
+            helperPropietario.setText(contenidoHtmlPropietario, true);
+            helperPropietario.addAttachment("Contrato_Propietario.pdf", new ByteArrayResource(pdfPropietario));
+
+            mailSender.send(mensajePropietario);
+
+        } catch (Exception e) {
+            logger.error("Error al enviar contratos PDF a cliente <{}> y propietario <{}>", emailCliente, emailPropietario, e);
+        }
+    }
 }

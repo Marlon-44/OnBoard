@@ -1,7 +1,7 @@
 package com.onboard.backend.repository;
 
 import com.onboard.backend.entity.Alquiler;
-import com.onboard.backend.entity.EstadoAlquiler;
+import com.onboard.backend.model.EstadoAlquiler;
 
 import java.util.List;
 

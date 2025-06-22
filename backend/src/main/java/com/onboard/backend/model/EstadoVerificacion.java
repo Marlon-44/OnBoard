@@ -1,4 +1,4 @@
-package com.onboard.backend.entity;
+package com.onboard.backend.model;
 
 public enum EstadoVerificacion {
     PENDIENTE,

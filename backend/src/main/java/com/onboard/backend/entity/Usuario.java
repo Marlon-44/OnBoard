@@ -3,6 +3,9 @@ package com.onboard.backend.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.onboard.backend.model.EstadoVerificacion;
+import com.onboard.backend.model.TipoIdentificacion;
+
 import java.time.LocalDateTime;
 
 @Document(collection = "usuarios")

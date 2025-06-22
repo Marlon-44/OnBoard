@@ -2,7 +2,9 @@ package com.onboard.backend.controller;
 
 import com.onboard.backend.dto.VehiculoFiltroDTO;
 import com.onboard.backend.entity.Vehiculo;
-
+import com.onboard.backend.model.Calificacion;
+import com.onboard.backend.model.EstadoOferta;
+import com.onboard.backend.model.EstadoVerificacion;
 import com.onboard.backend.service.VehiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -99,4 +101,45 @@ public class VehiculoController {
         List<Vehiculo> vehiculos = vehiculoService.obtenerVehiculosOrdenadosPorFecha();
         return ResponseEntity.ok(vehiculos);
     }
+
+    @PostMapping("/{placa}/calificar/{idUsuario}")
+    public ResponseEntity<Vehiculo> calificarVehiculo(
+            @PathVariable String placa,
+            @PathVariable String idUsuario,
+            @RequestBody Calificacion calificacion) {
+
+        Vehiculo vehiculoCalificado = vehiculoService.calificarVehiculo(placa, idUsuario, calificacion);
+        return ResponseEntity.ok(vehiculoCalificado);
+    }
+
+    @PatchMapping("/{placa}/estado-verificacion")
+    public ResponseEntity<Vehiculo> cambiarEstadoVerificacion(
+            @PathVariable String placa,
+            @RequestParam EstadoVerificacion estado) {
+
+        Vehiculo vehiculoActualizado = vehiculoService.cambiarEstadoVerificacion(placa, estado);
+        return new ResponseEntity<>(vehiculoActualizado, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{placa}/estado-oferta")
+    public ResponseEntity<Vehiculo> cambiarEstadoOferta(
+            @PathVariable String placa,
+            @RequestParam EstadoOferta estado) {
+
+        Vehiculo vehiculoActualizado = vehiculoService.cambiarEstadoOferta(placa, estado);
+        return new ResponseEntity<>(vehiculoActualizado, HttpStatus.OK);
+    }
+
+    @GetMapping("/propietario/{idPropietario}")
+    public ResponseEntity<List<Vehiculo>> obtenerVehiculosPorIdPropietario(@PathVariable String idPropietario) {
+        List<Vehiculo> vehiculos = vehiculoService.obtenerVehiculosPorIdPropietario(idPropietario);
+        return ResponseEntity.ok(vehiculos);
+    }
+
+    @GetMapping("/ofertas/activas")
+    public ResponseEntity<List<Vehiculo>> obtenerVehiculosConOfertaActiva() {
+        List<Vehiculo> vehiculos = vehiculoService.obtenerVehiculosConOfertaActiva();
+        return ResponseEntity.ok(vehiculos);
+    }
+
 }
