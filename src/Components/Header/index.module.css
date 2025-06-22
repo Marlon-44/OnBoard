@@ -53,7 +53,7 @@
 }
 @media screen and (min-width: 900px) {
     .header__container{
-        height: 15vh;
+        height: 8rem;
         
     }
     .header__logo__container{
