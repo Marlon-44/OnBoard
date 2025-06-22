@@ -348,9 +348,9 @@ public class VehiculoService {
     public List<Vehiculo> obtenerVehiculosOrdenadosPorFecha() {
         List<Vehiculo> vehiculos = vehiculoRepository.findAllByOrderByFechaRegistroDesc();
         for (Vehiculo v : vehiculos) {
-            if (!(v.getEstadoOferta() == EstadoOferta.ACTIVA)) {
+            /*if (!(v.getEstadoOferta() == EstadoOferta.ACTIVA)) {
                 vehiculos.remove(v);
-            }
+            }*/
         }
         return vehiculos;
     }
