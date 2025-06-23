@@ -1,12 +1,28 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./index.module.css"
 
 import { useState } from "react";
 
 const VehicleSummay = ({ vehicle }) => {
     const [activePhoto, setActivePhoto] = useState(vehicle.fotosUrls[0]);
-
+    const navigate = useNavigate();
+    const location = useLocation();
     const handleMouseEnter = (url) => {
         setActivePhoto(url);
+    };
+
+    const handleRentClick = () => {
+        const usuario = JSON.parse(localStorage.getItem("usuarioLogueado"));
+
+        if (!usuario) {
+            // Redirigir al login y guardar la URL actual
+            navigate("/login", {
+                state: { from: location.pathname },
+            });
+        } else {
+            // Lógica de alquiler futura
+            console.log("Alquilar vehículo", vehicle);
+        }
     };
 
     return (
@@ -31,8 +47,8 @@ const VehicleSummay = ({ vehicle }) => {
                 <p> ⭐ ⭐ ⭐ ⭐ ⭐   5/5</p>
                 <h2>${vehicle.precioPorDia}/day</h2>
                 <p>{vehicle.descripcion}</p>
-                <button>Rent</button>
-            </div>
+                <button onClick={handleRentClick}>Rent</button>
+            </div> 
         </section>
     );
 };
