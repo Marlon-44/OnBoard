@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Header from "../../Components/Header";
 import styles from "./index.module.css";
 import TextField from "@mui/material/TextField";
 import { Button, Box, Alert } from "@mui/material";
 import { loginUsuario } from "../../api/login";
 import { useLocation, useNavigate } from "react-router-dom";
+import SesionContext from "../../features/sesion/SesionContext";
 
 const Login = () => {
     const [formData, setFormData] = useState({ correo: "", password: "" });
@@ -13,6 +14,7 @@ const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const from = location.state?.from || "/homePage";
+    const {guardarSesion} = useContext(SesionContext);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -57,24 +59,31 @@ const Login = () => {
         return esValido;
     };
 
-     const handleSubmit = async () => {
-        if (!validarTodo()) {
-            setAlerta({ tipo: "error", mensaje: "Corrige los errores." });
-            return;
-        }
+    const handleSubmit = async () => {
+    if (!validarTodo()) {
+        setAlerta({ tipo: "error", mensaje: "Corrige los errores." });
+        return;
+    }
 
-        try {
-            const respuesta = await loginUsuario(formData);
-            localStorage.setItem("usuarioLogueado", JSON.stringify(respuesta));
-            setAlerta({ tipo: "success", mensaje: "Inicio exitoso." });
+    try {
+        const credenciales = {
+            correo: formData.correo,
+            password: formData.password
+        };
 
-            setTimeout(() => {
-                navigate(from, { replace: true });
-            }, 1500); // Tiempo para que se vea el mensaje
-        } catch (error) {
-            setAlerta({ tipo: "error", mensaje: "Credenciales inválidas." });
-        }
-    };
+        console.log("Enviando:", credenciales);
+
+        const respuesta = await loginUsuario(credenciales);
+        guardarSesion(respuesta);
+        setAlerta({ tipo: "success", mensaje: "Inicio exitoso." });
+
+        const destino = location.state?.from || "/homePage";
+        navigate(destino, { replace: true });
+    } catch (error) {
+        console.error("Error en login:", error);
+        setAlerta({ tipo: "error", mensaje: "Credenciales inválidas o error de servidor." });
+    }
+};
 
     return (
         <>

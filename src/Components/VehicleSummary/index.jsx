@@ -21,7 +21,7 @@ const VehicleSummay = ({ vehicle }) => {
             });
         } else {
             // Lógica de alquiler futura
-            console.log("Alquilar vehículo", vehicle);
+            alert("Usuario logueado. Preparando alquiler...");
         }
     };
 
