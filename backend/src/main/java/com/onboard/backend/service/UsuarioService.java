@@ -197,7 +197,7 @@ public class UsuarioService {
                     "The user with ID '" + id
                             + "' was not found in the database while uploading the profile photo");
         }
-        return usuarioRepository.findById(id);
+        return usuarioOpt;
     }
 
     public List<Usuario> getAllUsuarios() {

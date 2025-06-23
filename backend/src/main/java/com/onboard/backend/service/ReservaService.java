@@ -2,9 +2,8 @@ package com.onboard.backend.service;
 
 import com.onboard.backend.entity.Reserva;
 import com.onboard.backend.exception.InvalidInputException;
+import com.onboard.backend.model.EstadoOferta;
 import com.onboard.backend.repository.ReservaRepository;
-import com.onboard.backend.repository.UsuarioRepository;
-import com.onboard.backend.repository.VehiculoRepository;
 import com.onboard.backend.util.ValidationUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +19,16 @@ public class ReservaService {
     private ReservaRepository reservaRepository;
 
     @Autowired
-    private VehiculoRepository vehiculoRepository;
+    private VehiculoService vehiculoService;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioService usuarioService;
 
     public Reserva saveReserva(Reserva reserva) {
 
-        usuarioRepository.findById(reserva.getIdCliente())
-                .orElseThrow(() -> new InvalidInputException(
-                        "Client not found",
-                        "CLIENT_NOT_FOUND",
-                        "No client found with ID: " + reserva.getIdCliente()));
+        usuarioService.getUsuarioById(reserva.getIdCliente()).get();
 
-        vehiculoRepository.findById(reserva.getIdVehiculo())
-                .orElseThrow(() -> new InvalidInputException(
-                        "Vehicle not found",
-                        "VEHICLE_NOT_FOUND",
-                        "No vehicle found with ID: " + reserva.getIdVehiculo()));
+        vehiculoService.getVehiculoById(reserva.getIdVehiculo()).get();
 
         if (reserva.getFechaInicio() == null || reserva.getFechaFin() == null) {
             throw new InvalidInputException("Missing dates", "MISSING_DATES",
@@ -58,6 +49,8 @@ public class ReservaService {
             throw new InvalidInputException("Invalid delivery location", "INVALID_DELIVERY",
                     "The delivery location must be at least 5 characters long");
         }
+
+        reserva.setEstadoReserva(EstadoOferta.ACTIVA);
 
         return reservaRepository.save(reserva);
     }

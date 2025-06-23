@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Header from "../../Components/Header";
-import styles from "./index.module.css";
+import Header from '../../Components/Header';
+import styles from './index.module.css';
 import { Alert } from '@mui/material';
 import {
     TextField,
@@ -13,25 +13,25 @@ import {
     Box,
     OutlinedInput,
     InputAdornment,
-    IconButton
+    IconButton,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { registrarUsuario } from '../../api/registro';
 
 const roles = [
-    { rol: 'company_owner', label: 'Empresa - Dueña' },
-    { rol: 'company_dual', label: 'Empresa - Dueña y Cliente' },
-    { rol: 'company_client', label: 'Empresa - Cliente' },
-    { rol: 'individual_owner', label: 'Particular - Dueño' },
-    { rol: 'individual_client', label: 'Particular - Cliente' },
-    { rol: 'individual_dual', label: 'Particular - Dueño y Cliente' },
+    { idRol: 'company_owner', label: 'Empresa - Dueña' },
+    { idRol: 'company_dual', label: 'Empresa - Dueña y Cliente' },
+    { idRol: 'company_client', label: 'Empresa - Cliente' },
+    { idRol: 'individual_owner', label: 'Particular - Dueño' },
+    { idRol: 'individual_client', label: 'Particular - Cliente' },
+    { idRol: 'individual_dual', label: 'Particular - Dueño y Cliente' },
 ];
 
 const tipoIdLabels = {
     CC: 'Cédula',
     CE: 'Cédula de Extranjería',
     PASAPORTE: 'Pasaporte',
-    NIT: 'NIT'
+    NIT: 'NIT',
 };
 
 const estilosInput = {
@@ -88,25 +88,31 @@ const Register = () => {
                 break;
 
             case 'nombre':
-                if (!/^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/.test(value)) error = 'Solo letras y espacios';
+                if (!/^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/.test(value))
+                    error = 'Solo letras y espacios';
                 break;
 
             case 'correo':
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Correo inválido';
-                else if (value !== formData.confirmarCorreo) error = 'Los correos no coinciden';
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+                    error = 'Correo inválido';
+                else if (value !== formData.confirmarCorreo)
+                    error = 'Los correos no coinciden';
                 break;
 
             case 'confirmarCorreo':
-                if (value !== formData.correo) error = 'Los correos no coinciden';
+                if (value !== formData.correo)
+                    error = 'Los correos no coinciden';
                 break;
 
             case 'password':
                 if (!value) error = 'La contraseña no puede estar vacía';
-                else if (value !== formData.confirmarPassword) error = 'Las contraseñas no coinciden';
+                else if (value !== formData.confirmarPassword)
+                    error = 'Las contraseñas no coinciden';
                 break;
 
             case 'confirmarPassword':
-                if (value !== formData.password) error = 'Las contraseñas no coinciden';
+                if (value !== formData.password)
+                    error = 'Las contraseñas no coinciden';
                 break;
             case 'representante':
             case 'documentoRepresentante':
@@ -115,16 +121,15 @@ const Register = () => {
                 break;
         }
 
-        setErrors(prev => ({
+        setErrors((prev) => ({
             ...prev,
-            [name]: error
+            [name]: error,
         }));
     };
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
         validateField(name, value);
     };
     const validarTodo = () => {
@@ -137,38 +142,44 @@ const Register = () => {
             switch (name) {
                 case 'idUsuario':
                 case 'telefono':
-                    if (!/^\d+$/.test(value)) error = 'Solo se permiten números';
+                    if (!/^\d+$/.test(value))
+                        error = 'Solo se permiten números';
                     break;
                 case 'nombre':
-                    if (!/^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/.test(value)) error = 'Solo letras y espacios';
+                    if (!/^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/.test(value))
+                        error = 'Solo letras y espacios';
                     break;
                 case 'correo':
-                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Correo inválido';
-                    else if (value !== formData.confirmarCorreo) error = 'Los correos no coinciden';
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+                        error = 'Correo inválido';
+                    else if (value !== formData.confirmarCorreo)
+                        error = 'Los correos no coinciden';
                     break;
                 case 'confirmarCorreo':
-                    if (value !== formData.correo) error = 'Los correos no coinciden';
+                    if (value !== formData.correo)
+                        error = 'Los correos no coinciden';
                     break;
                 case 'password':
                     if (!value) error = 'La contraseña no puede estar vacía';
-                    else if (value !== formData.confirmarPassword) error = 'Las contraseñas no coinciden';
+                    else if (value !== formData.confirmarPassword)
+                        error = 'Las contraseñas no coinciden';
                     break;
                 case 'confirmarPassword':
-                    if (value !== formData.password) error = 'Las contraseñas no coinciden';
+                    if (value !== formData.password)
+                        error = 'Las contraseñas no coinciden';
                     break;
                 case 'direccion':
-
                     break;
                 case 'cuentaBancaria':
                     // es opcional, pero si se llena, debe tener formato válido (puedes agregar validación si quieres)
                     break;
                 case 'licenciaConduccion':
-
                     break;
                 case 'representante':
                 case 'documentoRepresentante':
                 case 'tipoDocumentoRepresentante':
-                    if (tipoUsuario === 'empresa' && !value.trim()) error = 'Este campo es obligatorio';
+                    if (tipoUsuario === 'empresa' && !value.trim())
+                        error = 'Este campo es obligatorio';
                     break;
             }
 
@@ -182,17 +193,17 @@ const Register = () => {
         return esValido;
     };
 
-
-
     const handleClickShowPassword = () => setShowPassword((prev) => !prev);
     const handleMouseDownPassword = (e) => e.preventDefault();
-    const handleMouseUpPassword = () => { };
+    const handleMouseUpPassword = () => {};
     const [alerta, setAlerta] = useState({ tipo: '', mensaje: '' });
-
 
     const handleSubmit = async () => {
         if (!validarTodo()) {
-            setAlerta({ tipo: 'error', mensaje: 'Por favor corrige los errores antes de continuar.' });
+            setAlerta({
+                tipo: 'error',
+                mensaje: 'Por favor corrige los errores antes de continuar.',
+            });
             return;
         }
 
@@ -206,25 +217,28 @@ const Register = () => {
                 telefono: formData.telefono,
                 direccion: formData.direccion,
                 cuentaBancaria: formData.cuentaBancaria || undefined,
-                rol: rolSeleccionado
-            }
+                idRol: rolSeleccionado,
+            },
         };
 
         if (tipoUsuario === 'particular') {
             data.particular = {
-                licenciaConduccion: formData.licenciaConduccion
+                licenciaConduccion: formData.licenciaConduccion,
             };
         } else if (tipoUsuario === 'empresa') {
             data.empresa = {
                 representante: formData.representante,
                 documentoRepresentante: formData.documentoRepresentante,
-                tipoDocumentoRepresentante: formData.tipoDocumentoRepresentante
+                tipoDocumentoRepresentante: formData.tipoDocumentoRepresentante,
             };
         }
 
         try {
             await registrarUsuario(data);
-            setAlerta({ tipo: 'success', mensaje: 'Usuario registrado exitosamente.' });
+            setAlerta({
+                tipo: 'success',
+                mensaje: 'Usuario registrado exitosamente.',
+            });
             setFormData({
                 idUsuario: '',
                 tipoIdentificacion: '',
@@ -246,9 +260,12 @@ const Register = () => {
             setRolSeleccionado('');
         } catch (error) {
             console.error('Error al registrar usuario:', error);
-            setAlerta({ tipo: 'error', mensaje: 'Ocurrió un error al registrar el usuario. Inténtalo de nuevo.' });
+            setAlerta({
+                tipo: 'error',
+                mensaje:
+                    'Ocurrió un error al registrar el usuario. Inténtalo de nuevo.',
+            });
             console.error('Error al registrar usuario:', error);
-
         }
     };
 
@@ -256,12 +273,16 @@ const Register = () => {
         <>
             <Header />
             <section className={styles.login__container}>
-                <div className={styles.image__section}>
-
-                </div>
+                <div className={styles.image__section}></div>
 
                 <Box className={styles.form__section} sx={{ maxWidth: 600 }}>
-                    <Typography variant="h4" gutterBottom sx={{ color: 'white' }}>Registro de Usuario</Typography>
+                    <Typography
+                        variant="h4"
+                        gutterBottom
+                        sx={{ color: 'white' }}
+                    >
+                        Registro de Usuario
+                    </Typography>
 
                     <FormControl fullWidth margin="normal" sx={estilosInput}>
                         <InputLabel>Tipo de Usuario</InputLabel>
@@ -269,7 +290,7 @@ const Register = () => {
                             value={tipoUsuario}
                             onChange={(e) => setTipoUsuario(e.target.value)}
                             label="Tipo de Usuario"
-                            sx={{ ...estilosInput, color: 'white' }} 
+                            sx={{ ...estilosInput, color: 'white' }}
                         >
                             <MenuItem value="particular">Particular</MenuItem>
                             <MenuItem value="empresa">Empresa</MenuItem>
@@ -282,10 +303,12 @@ const Register = () => {
                             value={rolSeleccionado}
                             onChange={(e) => setRolSeleccionado(e.target.value)}
                             label="Rol"
-                            sx={{ ...estilosInput, color: 'white' }} 
+                            sx={{ ...estilosInput, color: 'white' }}
                         >
                             {roles.map((rol) => (
-                                <MenuItem key={rol.rol} value={rol.rol}>{rol.label}</MenuItem>
+                                <MenuItem key={rol.idRol} value={rol.idRol}>
+                                    {rol.label}
+                                </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
@@ -298,7 +321,7 @@ const Register = () => {
                             value={formData.tipoIdentificacion}
                             onChange={handleChange}
                             label="Tipo de Identificación"
-                            sx={{ ...estilosInput, color: 'white' }} 
+                            sx={{ ...estilosInput, color: 'white' }}
                         >
                             <MenuItem value="CC">CC</MenuItem>
                             <MenuItem value="CE">CE</MenuItem>
@@ -309,21 +332,25 @@ const Register = () => {
 
                     {/* ID Usuario con label dinámico */}
                     <TextField
-                        label={tipoIdLabels[formData.tipoIdentificacion] || "Identificación"}
+                        label={
+                            tipoIdLabels[formData.tipoIdentificacion] ||
+                            'Identificación'
+                        }
                         name="idUsuario"
                         fullWidth
                         margin="normal"
                         onChange={handleChange}
                         error={!!errors.idUsuario}
                         helperText={errors.idUsuario}
-
                         sx={estilosInput}
                     />
 
                     {/* Resto de campos comunes */}
-                    <TextField label="Nombre"
+                    <TextField
+                        label="Nombre"
                         name="nombre"
-                        fullWidth margin="normal"
+                        fullWidth
+                        margin="normal"
                         onChange={handleChange}
                         sx={estilosInput}
                         error={!!errors.nombre}
@@ -353,8 +380,15 @@ const Register = () => {
                         sx={estilosInput}
                     />
                     {/* Contraseña con visibilidad */}
-                    <FormControl fullWidth margin="normal" variant="outlined" sx={estilosInput}>
-                        <InputLabel htmlFor="outlined-password">Contraseña</InputLabel>
+                    <FormControl
+                        fullWidth
+                        margin="normal"
+                        variant="outlined"
+                        sx={estilosInput}
+                    >
+                        <InputLabel htmlFor="outlined-password">
+                            Contraseña
+                        </InputLabel>
                         <OutlinedInput
                             id="outlined-password"
                             name="password"
@@ -369,19 +403,36 @@ const Register = () => {
                                         onMouseDown={handleMouseDownPassword}
                                         edge="end"
                                     >
-                                        {showPassword ? <VisibilityOff sx={{ color: 'white' }} /> : <Visibility sx={{ color: 'white' }} />}
+                                        {showPassword ? (
+                                            <VisibilityOff
+                                                sx={{ color: 'white' }}
+                                            />
+                                        ) : (
+                                            <Visibility
+                                                sx={{ color: 'white' }}
+                                            />
+                                        )}
                                     </IconButton>
                                 </InputAdornment>
                             }
                             label="Contraseña"
                         />
                         {errors.password && (
-                            <Typography color="error" fontSize="0.75rem">{errors.password}</Typography>
+                            <Typography color="error" fontSize="0.75rem">
+                                {errors.password}
+                            </Typography>
                         )}
                     </FormControl>
 
-                    <FormControl fullWidth margin="normal" variant="outlined" sx={estilosInput}>
-                        <InputLabel htmlFor="confirmar-password">Confirmar Contraseña</InputLabel>
+                    <FormControl
+                        fullWidth
+                        margin="normal"
+                        variant="outlined"
+                        sx={estilosInput}
+                    >
+                        <InputLabel htmlFor="confirmar-password">
+                            Confirmar Contraseña
+                        </InputLabel>
                         <OutlinedInput
                             id="confirmar-password"
                             name="confirmarPassword"
@@ -396,50 +447,103 @@ const Register = () => {
                                         onMouseDown={handleMouseDownPassword}
                                         edge="end"
                                     >
-                                        {showPassword ? <VisibilityOff sx={{ color: 'white' }} /> : <Visibility sx={{ color: 'white' }} />}
+                                        {showPassword ? (
+                                            <VisibilityOff
+                                                sx={{ color: 'white' }}
+                                            />
+                                        ) : (
+                                            <Visibility
+                                                sx={{ color: 'white' }}
+                                            />
+                                        )}
                                     </IconButton>
                                 </InputAdornment>
                             }
                             label="Confirmar Contraseña"
                         />
                         {errors.confirmarPassword && (
-                            <Typography color="error" fontSize="0.75rem">{errors.confirmarPassword}</Typography>
+                            <Typography color="error" fontSize="0.75rem">
+                                {errors.confirmarPassword}
+                            </Typography>
                         )}
                     </FormControl>
 
-                    <TextField label="Teléfono" name="telefono" fullWidth margin="normal" onChange={handleChange} error={!!errors.telefono}
+                    <TextField
+                        label="Teléfono"
+                        name="telefono"
+                        fullWidth
+                        margin="normal"
+                        onChange={handleChange}
+                        error={!!errors.telefono}
                         helperText={errors.telefono}
-                        sx={estilosInput} />
-                    <TextField label="Dirección" name="direccion" fullWidth margin="normal" onChange={handleChange} error={!!errors.direccion}
+                        sx={estilosInput}
+                    />
+                    <TextField
+                        label="Dirección"
+                        name="direccion"
+                        fullWidth
+                        margin="normal"
+                        onChange={handleChange}
+                        error={!!errors.direccion}
                         helperText={errors.direccion}
-                        sx={estilosInput} />
-                    <TextField label="Cuenta Bancaria (opcional)" name="cuentaBancaria" fullWidth margin="normal" onChange={handleChange} error={!!errors.cuentaBancaria}
+                        sx={estilosInput}
+                    />
+                    <TextField
+                        label="Cuenta Bancaria (opcional)"
+                        name="cuentaBancaria"
+                        fullWidth
+                        margin="normal"
+                        onChange={handleChange}
+                        error={!!errors.cuentaBancaria}
                         helperText={errors.cuentaBancaria}
-
-                        sx={estilosInput} />
+                        sx={estilosInput}
+                    />
 
                     {tipoUsuario === 'particular' && (
-                        <TextField label="Licencia de Conducción" name="licenciaConduccion" fullWidth margin="normal" onChange={handleChange} error={!!errors.licenciaConduccion}
+                        <TextField
+                            label="Licencia de Conducción"
+                            name="licenciaConduccion"
+                            fullWidth
+                            margin="normal"
+                            onChange={handleChange}
+                            error={!!errors.licenciaConduccion}
                             helperText={errors.licenciaConduccion}
-
-                            sx={estilosInput} />
+                            sx={estilosInput}
+                        />
                     )}
 
                     {tipoUsuario === 'empresa' && (
                         <>
-                            <TextField label="Representante Legal" name="representante" fullWidth margin="normal" onChange={handleChange} error={!!errors.representante}
+                            <TextField
+                                label="Representante Legal"
+                                name="representante"
+                                fullWidth
+                                margin="normal"
+                                onChange={handleChange}
+                                error={!!errors.representante}
                                 helperText={errors.representante}
-
-                                sx={estilosInput} />
-                            <TextField label="Tipo de Documento del Representante" name="tipoDocumentoRepresentante" fullWidth margin="normal" onChange={handleChange} error={!!errors.tipoDocumentoRepresentante}
+                                sx={estilosInput}
+                            />
+                            <TextField
+                                label="Tipo de Documento del Representante"
+                                name="tipoDocumentoRepresentante"
+                                fullWidth
+                                margin="normal"
+                                onChange={handleChange}
+                                error={!!errors.tipoDocumentoRepresentante}
                                 helperText={errors.tipoDocumentoRepresentante}
-
-                                sx={estilosInput} />
-                            <TextField label="Documento del Representante" name="documentoRepresentante" fullWidth margin="normal" onChange={handleChange} error={!!errors.documentoRepresentante}
+                                sx={estilosInput}
+                            />
+                            <TextField
+                                label="Documento del Representante"
+                                name="documentoRepresentante"
+                                fullWidth
+                                margin="normal"
+                                onChange={handleChange}
+                                error={!!errors.documentoRepresentante}
                                 helperText={errors.documentoRepresentante}
-
-                                sx={estilosInput} />
-
+                                sx={estilosInput}
+                            />
                         </>
                     )}
                     {alerta.mensaje && (
@@ -448,7 +552,10 @@ const Register = () => {
                         </Alert>
                     )}
 
-                    <button className={styles.login__button} onClick={handleSubmit}>
+                    <button
+                        className={styles.login__button}
+                        onClick={handleSubmit}
+                    >
                         Registrar
                     </button>
                 </Box>
