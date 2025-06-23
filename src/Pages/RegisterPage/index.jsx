@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Header from "../../Components/Header";
 import styles from "./index.module.css";
+import { Alert } from '@mui/material';
 import {
     TextField,
     Button,
@@ -100,16 +101,13 @@ const Register = () => {
                 break;
 
             case 'password':
-                if (value !== formData.confirmarPassword) error = 'Las contraseñas no coinciden';
+                if (!value) error = 'La contraseña no puede estar vacía';
+                else if (value !== formData.confirmarPassword) error = 'Las contraseñas no coinciden';
                 break;
 
             case 'confirmarPassword':
                 if (value !== formData.password) error = 'Las contraseñas no coinciden';
                 break;
-
-            case 'direccion':
-            case 'cuentaBancaria':
-            case 'licenciaConduccion':
             case 'representante':
             case 'documentoRepresentante':
             case 'tipoDocumentoRepresentante':
@@ -117,20 +115,87 @@ const Register = () => {
                 break;
         }
 
-        setErrors((prev) => ({ ...prev, [name]: error }));
+        setErrors(prev => ({
+            ...prev,
+            [name]: error
+        }));
     };
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+        validateField(name, value);
     };
+    const validarTodo = () => {
+        let esValido = true;
+        const nuevosErrores = {};
+
+        for (const [name, value] of Object.entries(formData)) {
+            let error = '';
+
+            switch (name) {
+                case 'idUsuario':
+                case 'telefono':
+                    if (!/^\d+$/.test(value)) error = 'Solo se permiten números';
+                    break;
+                case 'nombre':
+                    if (!/^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/.test(value)) error = 'Solo letras y espacios';
+                    break;
+                case 'correo':
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Correo inválido';
+                    else if (value !== formData.confirmarCorreo) error = 'Los correos no coinciden';
+                    break;
+                case 'confirmarCorreo':
+                    if (value !== formData.correo) error = 'Los correos no coinciden';
+                    break;
+                case 'password':
+                    if (!value) error = 'La contraseña no puede estar vacía';
+                    else if (value !== formData.confirmarPassword) error = 'Las contraseñas no coinciden';
+                    break;
+                case 'confirmarPassword':
+                    if (value !== formData.password) error = 'Las contraseñas no coinciden';
+                    break;
+                case 'direccion':
+
+                    break;
+                case 'cuentaBancaria':
+                    // es opcional, pero si se llena, debe tener formato válido (puedes agregar validación si quieres)
+                    break;
+                case 'licenciaConduccion':
+
+                    break;
+                case 'representante':
+                case 'documentoRepresentante':
+                case 'tipoDocumentoRepresentante':
+                    if (tipoUsuario === 'empresa' && !value.trim()) error = 'Este campo es obligatorio';
+                    break;
+            }
+
+            if (error) {
+                nuevosErrores[name] = error;
+                esValido = false;
+            }
+        }
+
+        setErrors(nuevosErrores);
+        return esValido;
+    };
+
+
 
     const handleClickShowPassword = () => setShowPassword((prev) => !prev);
     const handleMouseDownPassword = (e) => e.preventDefault();
     const handleMouseUpPassword = () => { };
+    const [alerta, setAlerta] = useState({ tipo: '', mensaje: '' });
 
-    const handleSubmit = () => {
-        // Construimos el JSON como si lo fueras a enviar
+
+    const handleSubmit = async () => {
+        if (!validarTodo()) {
+            setAlerta({ tipo: 'error', mensaje: 'Por favor corrige los errores antes de continuar.' });
+            return;
+        }
+
         const data = {
             usuario: {
                 idUsuario: formData.idUsuario,
@@ -157,11 +222,35 @@ const Register = () => {
             };
         }
 
-        // Mostramos el JSON en consola en lugar de enviarlo
-        console.log('JSON generado para prueba:', JSON.stringify(data, null, 2));
-        alert('Formulario simulado enviado. Revisa la consola.');
-    };
+        try {
+            await registrarUsuario(data);
+            setAlerta({ tipo: 'success', mensaje: 'Usuario registrado exitosamente.' });
+            setFormData({
+                idUsuario: '',
+                tipoIdentificacion: '',
+                nombre: '',
+                correo: '',
+                confirmarCorreo: '',
+                password: '',
+                confirmarPassword: '',
+                telefono: '',
+                direccion: '',
+                cuentaBancaria: '',
+                licenciaConduccion: '',
+                representante: '',
+                documentoRepresentante: '',
+                tipoDocumentoRepresentante: '',
+            });
+            setErrors({});
+            setTipoUsuario('');
+            setRolSeleccionado('');
+        } catch (error) {
+            console.error('Error al registrar usuario:', error);
+            setAlerta({ tipo: 'error', mensaje: 'Ocurrió un error al registrar el usuario. Inténtalo de nuevo.' });
+            console.error('Error al registrar usuario:', error);
 
+        }
+    };
 
     return (
         <>
@@ -180,6 +269,7 @@ const Register = () => {
                             value={tipoUsuario}
                             onChange={(e) => setTipoUsuario(e.target.value)}
                             label="Tipo de Usuario"
+                            sx={{ ...estilosInput, color: 'white' }} 
                         >
                             <MenuItem value="particular">Particular</MenuItem>
                             <MenuItem value="empresa">Empresa</MenuItem>
@@ -192,6 +282,7 @@ const Register = () => {
                             value={rolSeleccionado}
                             onChange={(e) => setRolSeleccionado(e.target.value)}
                             label="Rol"
+                            sx={{ ...estilosInput, color: 'white' }} 
                         >
                             {roles.map((rol) => (
                                 <MenuItem key={rol.rol} value={rol.rol}>{rol.label}</MenuItem>
@@ -207,6 +298,7 @@ const Register = () => {
                             value={formData.tipoIdentificacion}
                             onChange={handleChange}
                             label="Tipo de Identificación"
+                            sx={{ ...estilosInput, color: 'white' }} 
                         >
                             <MenuItem value="CC">CC</MenuItem>
                             <MenuItem value="CE">CE</MenuItem>
@@ -222,11 +314,21 @@ const Register = () => {
                         fullWidth
                         margin="normal"
                         onChange={handleChange}
+                        error={!!errors.idUsuario}
+                        helperText={errors.idUsuario}
+
                         sx={estilosInput}
                     />
 
                     {/* Resto de campos comunes */}
-                    <TextField label="Nombre" name="nombre" fullWidth margin="normal" onChange={handleChange} sx={estilosInput} />
+                    <TextField label="Nombre"
+                        name="nombre"
+                        fullWidth margin="normal"
+                        onChange={handleChange}
+                        sx={estilosInput}
+                        error={!!errors.nombre}
+                        helperText={errors.nombre}
+                    />
                     <TextField
                         label="Correo"
                         name="correo"
@@ -305,25 +407,50 @@ const Register = () => {
                         )}
                     </FormControl>
 
-                    <TextField label="Teléfono" name="telefono" fullWidth margin="normal" onChange={handleChange} sx={estilosInput} />
-                    <TextField label="Dirección" name="direccion" fullWidth margin="normal" onChange={handleChange} sx={estilosInput} />
-                    <TextField label="Cuenta Bancaria (opcional)" name="cuentaBancaria" fullWidth margin="normal" onChange={handleChange} sx={estilosInput} />
+                    <TextField label="Teléfono" name="telefono" fullWidth margin="normal" onChange={handleChange} error={!!errors.telefono}
+                        helperText={errors.telefono}
+                        sx={estilosInput} />
+                    <TextField label="Dirección" name="direccion" fullWidth margin="normal" onChange={handleChange} error={!!errors.direccion}
+                        helperText={errors.direccion}
+                        sx={estilosInput} />
+                    <TextField label="Cuenta Bancaria (opcional)" name="cuentaBancaria" fullWidth margin="normal" onChange={handleChange} error={!!errors.cuentaBancaria}
+                        helperText={errors.cuentaBancaria}
+
+                        sx={estilosInput} />
 
                     {tipoUsuario === 'particular' && (
-                        <TextField label="Licencia de Conducción" name="licenciaConduccion" fullWidth margin="normal" onChange={handleChange} sx={estilosInput} />
+                        <TextField label="Licencia de Conducción" name="licenciaConduccion" fullWidth margin="normal" onChange={handleChange} error={!!errors.licenciaConduccion}
+                            helperText={errors.licenciaConduccion}
+
+                            sx={estilosInput} />
                     )}
 
                     {tipoUsuario === 'empresa' && (
                         <>
-                            <TextField label="Representante Legal" name="representante" fullWidth margin="normal" onChange={handleChange} sx={estilosInput} />
-                            <TextField label="Documento del Representante" name="documentoRepresentante" fullWidth margin="normal" onChange={handleChange} sx={estilosInput} />
-                            <TextField label="Tipo de Documento del Representante" name="tipoDocumentoRepresentante" fullWidth margin="normal" onChange={handleChange} sx={estilosInput} />
+                            <TextField label="Representante Legal" name="representante" fullWidth margin="normal" onChange={handleChange} error={!!errors.representante}
+                                helperText={errors.representante}
+
+                                sx={estilosInput} />
+                            <TextField label="Tipo de Documento del Representante" name="tipoDocumentoRepresentante" fullWidth margin="normal" onChange={handleChange} error={!!errors.tipoDocumentoRepresentante}
+                                helperText={errors.tipoDocumentoRepresentante}
+
+                                sx={estilosInput} />
+                            <TextField label="Documento del Representante" name="documentoRepresentante" fullWidth margin="normal" onChange={handleChange} error={!!errors.documentoRepresentante}
+                                helperText={errors.documentoRepresentante}
+
+                                sx={estilosInput} />
+
                         </>
                     )}
+                    {alerta.mensaje && (
+                        <Alert severity={alerta.tipo} sx={{ mt: 2 }}>
+                            {alerta.mensaje}
+                        </Alert>
+                    )}
 
-                    <Button variant="contained" color="primary" fullWidth sx={{ mt: 3 }} onClick={handleSubmit}>
+                    <button className={styles.login__button} onClick={handleSubmit}>
                         Registrar
-                    </Button>
+                    </button>
                 </Box>
             </section>
         </>

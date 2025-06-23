@@ -7,6 +7,7 @@
     display: flex;
     justify-content: space-around;
     padding-top: 10rem;
+    padding-bottom: 2rem;
 }
 .image__section{
     min-height: 900px;
@@ -31,23 +32,23 @@
     padding: 0;
     margin: 0;
 }
-.login__button { 
+.login__button{ 
     height: 50px;
     width: 98%;
     border: none;
-    color: #fff;
+    color: #ffffff;
     border-radius: 5px;
     font-weight: 500;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    background-color: rgba(255, 255, 255, 0.103);
+    background-color: rgba(255, 255, 255, 0.192);
     transition: background-color 0.3s ease; /* <- ESTA es la línea clave */
     margin-top: 2%;
     width: 100%;
 }
 
 .login__button:hover {
-    background-color: rgba(255, 255, 255, 0.144);
+    background-color: rgba(255, 255, 255, 0.397);
     
 }
 .form__section h1{

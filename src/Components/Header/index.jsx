@@ -1,7 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./index.module.css"
 import { motion } from "framer-motion";
 const Header =()=>{
+    const navigate = useNavigate();
+    const handleClickLogin=()=>{
+        
+        navigate(`/login`)
+    }
+    const handleClickRegister=()=>{
+        
+        navigate(`/register`)
+    }
     return(
         <motion.header 
             initial={{y:-50 , opacity: 0}}
@@ -14,8 +23,8 @@ const Header =()=>{
                     <img src="assets/logo__op1.png" alt="" />
                 </Link>
                 <div className={styles.header__buttons__container}>
-                    <button>Login</button>
-                    <button>Register</button>
+                    <button onClick={handleClickLogin}>Login</button>
+                    <button onClick={handleClickRegister}>Register</button>
                 </div>
         </motion.header>
     )
