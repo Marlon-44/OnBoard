@@ -29,7 +29,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.apache.commons.lang3.StringUtils;
 
-
 @Service
 public class UsuarioService {
     private static final Logger logger = LoggerFactory.getLogger(UsuarioService.class);
@@ -135,17 +134,17 @@ public class UsuarioService {
         String hashedPass = passwordEncoder.encode(usuario.getPassword());
         usuario.setPassword(hashedPass);
         usuario.setFechaRegistro(LocalDateTime.now());
-        if(StringUtils.isNotBlank(usuario.getCuentaBancaria())){
+        if (StringUtils.isNotBlank(usuario.getCuentaBancaria())) {
             try {
-            String cuentaEncriptada = EncriptadorAESGCM.encriptar(usuario.getCuentaBancaria());
-            usuario.setCuentaBancaria(cuentaEncriptada);
-        } catch (Exception e) {
-            logger.error("Error encrypting bank account for user with ID: " + usuario.getIdUsuario() + "\n", e);
-            throw new InvalidInputException(
-                    "Unable to encrypt bank account",
-                    "BANK_ACCOUNT_ENCRYPTION_ERROR",
-                    "An internal error occurred while encrypting the bank account information. Please contact the administrator.");
-        }
+                String cuentaEncriptada = EncriptadorAESGCM.encriptar(usuario.getCuentaBancaria());
+                usuario.setCuentaBancaria(cuentaEncriptada);
+            } catch (Exception e) {
+                logger.error("Error encrypting bank account for user with ID: " + usuario.getIdUsuario() + "\n", e);
+                throw new InvalidInputException(
+                        "Unable to encrypt bank account",
+                        "BANK_ACCOUNT_ENCRYPTION_ERROR",
+                        "An internal error occurred while encrypting the bank account information. Please contact the administrator.");
+            }
         }
         usuario.setFechaRegistro(LocalDateTime.now());
         try {
@@ -176,11 +175,12 @@ public class UsuarioService {
             }
 
             usuario.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
-   
-                emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(),
-                        usuario.getEstadoVerificacion());
 
+            emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(),
+                    usuario.getEstadoVerificacion());
 
+            usuario.setFotoPerfilUrl(
+                    "https://lklfmpejhtqwuhlyhpud.supabase.co/storage/v1/object/public/resources/profile_photo/default_photo.jpg");
             return usuarioRepository.save(usuario);
 
         } catch (Exception e) {
@@ -262,7 +262,8 @@ public class UsuarioService {
         }
 
         Usuario usuario = usuarioOpt.get();
-        if (usuario.getFotoPerfilUrl() != null) {
+        if (usuario.getFotoPerfilUrl() != null && !usuario.getFotoPerfilUrl().toString().equals(
+                "https://lklfmpejhtqwuhlyhpud.supabase.co/storage/v1/object/public/resources/profile_photo/default_photo.jpg")) {
             fileUploadService.deletePhotoByUrl(usuario.getFotoPerfilUrl());
         }
         usuario.setFotoPerfilUrl(fileUrl);
