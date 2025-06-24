@@ -2,7 +2,6 @@
 import { useContext } from "react";
 import { VehicleContext } from "../../features/vehicles/VehicleContext";
 import styles from "./index.module.css"
-import { section } from "framer-motion/client";
 
 const TablaVehiculosRegistrados = () => {
     const { vehicles, loading, error } = useContext(VehicleContext);
@@ -17,7 +16,7 @@ const TablaVehiculosRegistrados = () => {
                 <table className={`table table-borderless ${styles.table}`}>
                     <thead className={styles.th}>
                         <tr>
-                            <th></th>
+                            <th>{""}</th>
                             <th>Placa</th>
                             <th>Marca</th>
                             <th>Modelo</th>
@@ -25,7 +24,7 @@ const TablaVehiculosRegistrados = () => {
                             <th>Tipo</th>
                             <th>Precio</th>
                             <th>Estado</th>
-                            <th></th> {/* Para botón "ver más" */}
+                            <th>{""}</th> 
                         </tr>
                     </thead>
                     <tbody>

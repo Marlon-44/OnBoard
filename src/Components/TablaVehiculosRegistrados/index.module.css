@@ -5,6 +5,7 @@
     max-height: 58vh;
     overflow-y: scroll;
     margin-top: 1rem;
+    font-size: 0.9rem;
 }
 .table{
     background-color: #fff;

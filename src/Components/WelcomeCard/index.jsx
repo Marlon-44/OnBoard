@@ -18,7 +18,7 @@ const WelcomeCard = () => {
 
             <div>
                 <h1>Buen día, {usuario.nombre}</h1>
-                <p>Aquí puedes gestionar usuarios, vehículos y más.</p>
+                <h6>Aquí puedes gestionar usuarios, vehículos y más.</h6>
             </div>
 
         </div>

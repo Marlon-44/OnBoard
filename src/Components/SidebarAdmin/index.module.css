@@ -3,29 +3,52 @@
     flex-direction: column;
     width: 20%;
     height: 100vh;
-    background-color: #6100bd;
+    background: linear-gradient(-45deg, #6100bd, #360094, #6100bd, #360094);
+    background-size: 400% 400%;
+    animation: gradientMove 8s ease infinite;
     color: #fff;
     border-radius: 0 0.2rem 0.2rem 0;
     position: absolute;
     top: 0;
 }
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
 .logo{
     width: 100%;
     display: flex;
     justify-content: center;
-    height: 80px;
+    height: 10vh;
 }
 .logo h2{
     align-self: center;
     font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+}
+.logo h2:hover{
+    cursor: pointer;
 }
 .sidebar__menu{
+    display: flex;
+    flex-direction: column;
     list-style: none;
     width: 95%;
     align-self: center;
+    gap: 0.5rem;
 }
 .menu__option{
     display: flex;
+    font-size: 0.9rem;
     padding: 1rem ;
     gap: 1rem;
     border-radius: 1rem;

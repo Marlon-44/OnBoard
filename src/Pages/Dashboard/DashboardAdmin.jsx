@@ -7,15 +7,16 @@ import SidebarAdmin from "../../Components/SidebarAdmin";
 import ProfileSection from "../../Components/ProfileSection";
 import TablaVehiculosRegistrados from "../../Components/TablaVehiculosRegistrados/TablaVehiculosRegistrados";
 import VehicleRequestTable from "../../Components/VehicleRequestTable";
+import UserRequestTable from "../../Components/UserRequestTable";
 
 const DashboardAdmin = () => {
     const { usuario } = useContext(SesionContext);
-    const [opcionSeleccionada, setOpcionSeleccionada] = useState("usuarios_registrados");
+    const [opcionSeleccionada, setOpcionSeleccionada] = useState("solicitudes_usuario");
 
     const renderContenido = () => {
         switch (opcionSeleccionada) {
             case "solicitudes_usuario":
-                return <p>Aquí iría el contenido de solicitudes de usuario</p>;
+                return <UserRequestTable/>
             case "solicitudes_vehiculo":
                 return <VehicleRequestTable/>;
             case "usuarios_registrados":

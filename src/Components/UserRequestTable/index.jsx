@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { VehicleRequestContext } from "../../features/vehicleRequests/VehicleRequestContext";
 import styles from "./index.module.css"
-const VehicleRequestTable = () => {
-    const { requestedVehicles, loadingRequests, errorRequests } = useContext(VehicleRequestContext);
+import { UserRequestContext } from "../../features/UserRequests/UserRequestContext";
+const UserRequestTable = () => {
+    const { requestedUsers, loadingRequests, errorRequests } = useContext(UserRequestContext);
 
     if (loadingRequests) return <p>Cargando vehículos pendientes...</p>;
     if (errorRequests) return <p>Error al cargar los vehículos: {errorRequests.message}</p>;
-    if (!requestedVehicles.length) return <p>No hay vehículos pendientes de verificación.</p>;
+    if (!requestedUsers.length) return <p>No hay vehículos pendientes de verificación.</p>;
 
     return (
         <section className={styles.table__container}>
@@ -14,24 +14,24 @@ const VehicleRequestTable = () => {
                 <table className={`table table-borderless ${styles.table}`}>
                     <thead className={styles.th}>
                         <tr>
-                            <th>{""}</th>
-                            <th>Placa</th>
-                            <th>Marca</th>
-                            <th>Modelo</th>
-                            <th>Tipo</th>
+                            <th></th>
+                            <th>Cedula</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Telefono</th>
                             <th>Estado</th>
-                            <th>{""}</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {requestedVehicles.map((vehiculo, index) => (
-                            <tr key={vehiculo.placa}>
+                        {requestedUsers.map((user, index) => (
+                            <tr key={user.idUsuario}>
                                 <th scope="row">{index + 1}</th>
-                                <td className={styles.row}>{vehiculo.placa}</td>
-                                <td>{vehiculo.marca}</td>
-                                <td>{vehiculo.modelo}</td>
-                                <td>{vehiculo.tipoVehiculo}</td>
-                                <td>{vehiculo.estadoOferta.toLowerCase()}</td>
+                                <td>{user.idUsuario}</td>
+                                <td>{user.nombre}</td>
+                                <td>{user.correo}</td>
+                                <td>{user.telefono}</td>
+                                <td>{user.estadoVerificacion.toLowerCase()}</td>
                                 <td className={`${styles.actions} `}>
                                     <button className={styles.view__button}>
                                         <img src="/assets/eye__icon.png" alt="" />
@@ -52,4 +52,4 @@ const VehicleRequestTable = () => {
     );
 };
 
-export default VehicleRequestTable;
+export default UserRequestTable;
