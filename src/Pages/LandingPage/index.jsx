@@ -1,4 +1,5 @@
 import Banner from "../../Components/Banner";
+import Footer from "../../Components/Footer";
 import Header from "../../Components/Header";
 import HighlightSection from "../../Components/HighlightSection";
 import SearchBox from "../../Components/SearchBox";
