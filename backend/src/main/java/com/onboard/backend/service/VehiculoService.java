@@ -369,4 +369,11 @@ public class VehiculoService {
                 .toList();
     }
 
+     public List<Vehiculo> obtenerVehiculosConEstadoPendiente() {
+        return vehiculoRepository.findAll().stream()
+                .filter(v -> v.getEstadoVerificacion() == EstadoVerificacion.PENDIENTE)
+                .distinct()
+                .toList();
+    }
+
 }

@@ -67,4 +67,8 @@ public class ReservaService {
         reservaRepository.deleteById(idReserva);
     }
 
+    public List<Reserva> getAllReservasByIdCliente(String idCliente){
+        return reservaRepository.findAllByIdCliente(idCliente);
+    }
+
 }

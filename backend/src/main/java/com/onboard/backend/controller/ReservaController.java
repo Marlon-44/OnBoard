@@ -26,13 +26,18 @@ public class ReservaController {
     public ResponseEntity<Reserva> getReservaById(@PathVariable String id) {
         Optional<Reserva> reserva = reservaService.getReservaById(id);
         return reserva.map(ResponseEntity::ok)
-                      .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
     public ResponseEntity<List<Reserva>> getAllReservas() {
         List<Reserva> reservas = reservaService.getAllReservas();
         return ResponseEntity.ok(reservas);
+    }
+
+    @GetMapping("/reservas/{id}")
+    public ResponseEntity<List<Reserva>> getAllReservasByIdUsuario(@PathVariable("id") String id) {
+        return ResponseEntity.ok(reservaService.getAllReservasByIdCliente(id));
     }
 
     @DeleteMapping("/{id}")

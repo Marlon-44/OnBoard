@@ -205,16 +205,8 @@ public class UsuarioService {
     }
 
     public ResponseEntity<String> deleteUsuarioById(String id) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
 
-        if (usuarioOpt.isEmpty()) {
-            throw new InvalidInputException(
-                    "User not found",
-                    "USER_NOT_FOUND",
-                    "The user with ID '" + id + "' was not found in the database");
-        }
-
-        Usuario usuario = usuarioOpt.get();
+        Usuario usuario = getUsuarioById(id).get();
 
         if (usuario.getEstadoVerificacion() == EstadoVerificacion.INACTIVO) {
             logger.info("User with ID '{}' is already inactive. No changes were made.", id);
@@ -226,7 +218,6 @@ public class UsuarioService {
 
         emailService.enviarCorreoEstadoCuenta(usuario.getCorreo(), usuario.getNombre(),
                 usuario.getEstadoVerificacion());
-
         return ResponseEntity.ok("User deactivated successfully.");
     }
 
@@ -391,4 +382,5 @@ public class UsuarioService {
     public List<Usuario> getUsuariosPendientes() {
         return usuarioRepository.findByEstadoVerificacion("PENDIENTE");
     }
+
 }

@@ -142,4 +142,9 @@ public class VehiculoController {
         return ResponseEntity.ok(vehiculos);
     }
 
+    @GetMapping("/estado/pendientes")
+    public ResponseEntity<List<Vehiculo>> obtenerVehiculosConEstadoPendiente() {
+        List<Vehiculo> vehiculos = vehiculoService.obtenerVehiculosConEstadoPendiente();
+        return ResponseEntity.ok(vehiculos);
+    }
 }
