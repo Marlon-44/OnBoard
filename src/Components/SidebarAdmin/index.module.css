@@ -1,9 +1,9 @@
-.sidebar__container{
+.sidebar__container {
     display: flex;
     flex-direction: column;
     width: 20%;
     height: 100vh;
-    background: linear-gradient(-45deg, #6100bd, #360094, #6100bd, #360094);
+    background: linear-gradient(-45deg,#22005c, #7000da,  #22005c, #7000da);
     background-size: 400% 400%;
     animation: gradientMove 8s ease infinite;
     color: #fff;
@@ -11,6 +11,7 @@
     position: absolute;
     top: 0;
 }
+
 @keyframes gradientMove {
     0% {
         background-position: 0% 50%;
@@ -24,21 +25,25 @@
         background-position: 0% 50%;
     }
 }
-.logo{
+
+.logo {
     width: 100%;
     display: flex;
     justify-content: center;
     height: 10vh;
 }
-.logo h2{
+
+.logo h2 {
     align-self: center;
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
 }
-.logo h2:hover{
+
+.logo h2:hover {
     cursor: pointer;
 }
-.sidebar__menu{
+
+.sidebar__menu {
     display: flex;
     flex-direction: column;
     list-style: none;
@@ -46,34 +51,39 @@
     align-self: center;
     gap: 0.5rem;
 }
-.menu__option{
+
+.menu__option {
     display: flex;
     font-size: 0.9rem;
-    padding: 1rem ;
+    padding: 1rem;
     gap: 1rem;
     border-radius: 1rem;
 
 }
-.menu__option:hover{
+
+.menu__option:hover {
     background-color: #1a0047;
     cursor: pointer;
 }
-.menu__option img{
+
+.menu__option img {
     width: 10%;
 }
+
 .active {
     background-color: #eeeeee;
     color: black;
     width: 105%;
     border-radius: 1rem 0 0 1rem;
     z-index: 1;
-    
+
 }
+
 .active:hover {
     background-color: #eeeeee;
     color: black;
     width: 105%;
     border-radius: 1rem 0 0 1rem;
     z-index: 1;
-    
+
 }

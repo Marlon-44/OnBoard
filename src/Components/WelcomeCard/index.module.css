@@ -1,6 +1,6 @@
 .welcome__card{
     padding: 1rem;
-    background: linear-gradient(-45deg, #6100bd, #360094, #6100bd, #360094);
+    background: linear-gradient(-45deg, #7000da, #22005c, #7000da, #22005c);
     background-size: 400% 400%;
     animation: gradientMove 8s ease infinite;
     border-radius: 1rem;
