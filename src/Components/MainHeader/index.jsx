@@ -32,7 +32,7 @@ const MainHeader = () => {
 
     const handleVerPerfil = () => {
         handleClose();
-        navigate("/profile"); // Asegúrate de tener esta ruta configurada
+        navigate("/dashboard");
     };
 
     const handleLogin = () => {
