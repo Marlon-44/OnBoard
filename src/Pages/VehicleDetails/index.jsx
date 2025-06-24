@@ -22,6 +22,7 @@ const VehicleDetails = () => {
             <VehicleSummay vehicle={vehicle}/>
             <DetailSection vehicle={vehicle}/>
             <ReviewSection/>
+            <Footer/>
         </>
     );
 };

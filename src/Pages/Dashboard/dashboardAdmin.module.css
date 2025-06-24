@@ -1,0 +1,11 @@
+.dashboard__admin__container{
+    width: 80%;
+    display: flex;
+    margin-left: 20%;
+    padding: 1rem;
+    gap: 1rem;
+}
+.variable__content{
+    width: 70%;
+    
+}

@@ -1,0 +1,23 @@
+.welcome__card{
+    padding: 1rem;
+    background-color: #6100bd;
+    border-radius: 1rem;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 25vh;
+}
+.date__container{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+}
+.date__container h6{
+    margin: 0;
+}
+.date__container img{
+    width: 3%;
+
+}

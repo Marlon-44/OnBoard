@@ -11,6 +11,7 @@ const Landing =()=>{
             <Banner/>
             <TerrenoSection/>
             <HighlightSection/>
+            <Footer/>
         </div>
     )
 }

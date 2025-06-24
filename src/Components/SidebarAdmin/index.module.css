@@ -1,0 +1,56 @@
+.sidebar__container{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    height: 100vh;
+    background-color: #6100bd;
+    color: #fff;
+    border-radius: 0 0.2rem 0.2rem 0;
+    position: absolute;
+    top: 0;
+}
+.logo{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 80px;
+}
+.logo h2{
+    align-self: center;
+    font-family: "Montserrat", sans-serif;
+}
+.sidebar__menu{
+    list-style: none;
+    width: 95%;
+    align-self: center;
+}
+.menu__option{
+    display: flex;
+    padding: 1rem ;
+    gap: 1rem;
+    border-radius: 1rem;
+
+}
+.menu__option:hover{
+    background-color: #1a0047;
+    cursor: pointer;
+}
+.menu__option img{
+    width: 10%;
+}
+.active {
+    background-color: #eeeeee;
+    color: black;
+    width: 105%;
+    border-radius: 1rem 0 0 1rem;
+    z-index: 1;
+    
+}
+.active:hover {
+    background-color: #eeeeee;
+    color: black;
+    width: 105%;
+    border-radius: 1rem 0 0 1rem;
+    z-index: 1;
+    
+}

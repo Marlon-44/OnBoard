@@ -89,6 +89,7 @@ const Home = () => {
                     {ofertas.length > vehiclesPerPage && renderPagination()}
                 </section>
             </section>
+            <Footer/>
         </>
 
     );

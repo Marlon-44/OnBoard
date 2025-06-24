@@ -6,10 +6,12 @@ import { FeaturedVehicleProvider } from './features/featuredVehicles/FeaturedVeh
 import OfertasProvider from './features/ofertas/OfertasProvider'
 import { ReviewsProvider } from './features/reviews/ReviewsProvider'
 import { SesionProvider } from './features/sesion/SesionContext'
+import { VehicleRequestProvider } from './features/vehicleRequests/VehicleRequestProvider'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <SesionProvider>
+      <VehicleRequestProvider>
       <ReviewsProvider>
         <OfertasProvider>
           <FeaturedVehicleProvider>
@@ -20,6 +22,7 @@ createRoot(document.getElementById('root')).render(
           </FeaturedVehicleProvider>
         </OfertasProvider>
       </ReviewsProvider>
+      </VehicleRequestProvider>
     </SesionProvider>
-  </StrictMode >,
+  </StrictMode>
 )
