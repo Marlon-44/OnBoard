@@ -6,6 +6,7 @@ import VehicleFilterForm from "../../Components/VehicleFilterForm";
 import styles from "./index.module.css";
 import OfertasContext from "../../features/ofertas/OfertasContext";
 import VehicleCard from "../../Components/VehicleCard";
+import Footer from "../../Components/Footer";
 
 const Home = () => {
     const { ofertas, loading } = useContext(OfertasContext);
