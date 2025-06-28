@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import styles from "./index.module.css"
-import { UserRequestContext } from "../../features/UserRequests/UserRequestContext";
+import { UserRequestContext } from "../../features/userRequests/UserRequestContext";
 const UserRequestTable = () => {
     const { requestedUsers, loadingRequests, errorRequests } = useContext(UserRequestContext);
 
