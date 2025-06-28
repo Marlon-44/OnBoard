@@ -1,13 +1,17 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import styles from "./index.module.css"
 import { UserRequestContext } from "../../features/userRequests/UserRequestContext";
+import UserDetailModal from "../UserDetailModal";
 const UserRequestTable = () => {
     const { requestedUsers, loadingRequests, errorRequests } = useContext(UserRequestContext);
-
+    const [selectedUser, setSelectedUser] = useState(null);
     if (loadingRequests) return <p>Cargando vehículos pendientes...</p>;
     if (errorRequests) return <p>Error al cargar los vehículos: {errorRequests.message}</p>;
     if (!requestedUsers.length) return <p>No hay vehículos pendientes de verificación.</p>;
 
+    const handleVerDetalles = (user) =>{
+        setSelectedUser(user)
+    }
     return (
         <section className={styles.table__container}>
             <div className="table-responsive">
@@ -33,7 +37,8 @@ const UserRequestTable = () => {
                                 <td>{user.telefono}</td>
                                 <td>{user.estadoVerificacion.toLowerCase()}</td>
                                 <td className={`${styles.actions} `}>
-                                    <button className={styles.view__button}>
+                                    <button className={styles.view__button}
+                                        onClick={()=> handleVerDetalles(user)}>
                                         <img src="/assets/eye__icon.png" alt="" />
                                     </button>
                                     <button className={styles.x__button}>
@@ -48,6 +53,8 @@ const UserRequestTable = () => {
                     </tbody>
                 </table>
             </div>
+            {/* Modal de detalles */}
+            <UserDetailModal user={selectedUser} />
         </section>
     );
 };

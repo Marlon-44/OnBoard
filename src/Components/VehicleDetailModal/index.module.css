@@ -1,0 +1,67 @@
+.modal__body{
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+
+}
+.modal__body img{
+    max-width: 50%;
+    height: 50vh;
+    border-radius: 1rem;
+}
+.vehicle__datalist{
+    list-style: none;
+    max-width: 40%;
+}
+.vehicle__datalist li {
+    margin-bottom: 0.2rem;
+    box-sizing: border-box;
+    width: 100%;
+    word-wrap: break-word;
+}
+.modal__body__down{
+    width: 100%;
+}
+.vehicle__datalist__down{
+    list-style: none;
+    max-width: 90%;
+}
+.vehicle__datalist__down li{
+    margin-bottom: 0.2rem;
+    box-sizing: border-box;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.vehicle__details{
+    background-color: rgb(255, 255, 255);
+    width: 90%;
+    min-height: 30px;
+    box-sizing: border-box;
+    margin: auto;
+    overflow-x: scroll;
+    
+}
+
+.table{
+    background-color: #fff;
+    overflow: scroll;
+}
+.th{
+    background-color: #fff;
+}
+
+.row{
+    height: 5rem;
+    background-color: rgb(255, 255, 255);
+    
+}
+.row td{
+    max-width: 40%;
+    padding-left: 1rem;
+}
+.row th{
+        padding-left: 1rem;
+
+}
+
