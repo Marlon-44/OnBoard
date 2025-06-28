@@ -50,7 +50,7 @@ public class ReservaService {
                     "The delivery location must be at least 5 characters long");
         }
 
-        reserva.setEstadoReserva(EstadoOferta.ACTIVA);
+        reserva.setEstadoReserva(EstadoOferta.PENDIENTE);
 
         return reservaRepository.save(reserva);
     }

@@ -4,5 +4,6 @@ public enum EstadoOferta {
     ACTIVA,
     INACTIVA,
     FINALIZADA,
-    CANCELADA
+    CANCELADA,
+    PENDIENTE
 }
