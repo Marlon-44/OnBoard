@@ -5,10 +5,10 @@ import DashboardLayout from "../../Components/DashboardLayout";
 import styles from "./dashboardAdmin.module.css";
 import SidebarAdmin from "../../Components/SidebarAdmin";
 import ProfileSection from "../../Components/ProfileSection";
-import TablaVehiculosRegistrados from "../../Components/TablaVehiculosRegistrados/TablaVehiculosRegistrados";
 import VehicleRequestTable from "../../Components/VehicleRequestTable";
 import UserRequestTable from "../../Components/UserRequestTable";
 import RegisteredUsersTable from "../../Components/RegisteredUsersTable";
+import TablaVehiculosRegistrados from "../../Components/TablaVehiculosRegistrados/TablaVehiculosRegistrados";
 
 const DashboardAdmin = () => {
     const { usuario } = useContext(SesionContext);

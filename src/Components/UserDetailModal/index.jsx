@@ -1,9 +1,42 @@
-// src/Components/ModalDetalleVehiculo.jsx
 import { useEffect } from "react";
-import styles from "./index.module.css"
-const UserDetailModal = ({ user, id = "userModal" }) => {
+import styles from "./index.module.css";
+
+import {
+    styled,
+    Table,
+    TableBody,
+    TableCell,
+    tableCellClasses,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Button,
+} from "@mui/material";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.grey[900],
+        color: theme.palette.common.white,
+        fontWeight: "bold",
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+        wordBreak: "break-word",
+    },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+        backgroundColor: theme.palette.action.hover,
+    },
+    "&:last-child td, &:last-child th": {
+        border: 0,
+    },
+}));
+
+const UserDetailModal = ({ user, id = "userModal", onActualizarEstado, onCerrar }) => {
     useEffect(() => {
-        // Reinicializa el modal cada vez que cambia el vehículo
         if (user) {
             const modal = new window.bootstrap.Modal(document.getElementById(id));
             modal.show();
@@ -12,97 +45,94 @@ const UserDetailModal = ({ user, id = "userModal" }) => {
 
     if (!user) return null;
 
+    const userDetails = [
+        { label: "ID Usuario", value: user.idUsuario },
+        { label: "Tipo de identificación", value: user.tipoIdentificacion },
+        { label: "Nombre", value: user.nombre },
+        { label: "Correo", value: user.correo },
+        { label: "Teléfono", value: user.telefono },
+        { label: "Dirección", value: user.direccion },
+        { label: "Fecha de registro", value: new Date(user.fechaRegistro).toLocaleDateString() },
+        { label: "Cuenta bancaria", value: user.cuentaBancaria },
+        { label: "Rol", value: user.idRol },
+        { label: "Estado de verificación", value: user.estadoVerificacion },
+    ];
+
+    const handleActualizar = (estado) => {
+        if (onActualizarEstado) {
+            onActualizarEstado(user.idUsuario, estado);
+        }
+    };
+
     return (
         <div className="modal fade" id={id} tabIndex="-1" aria-hidden="true">
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">Detalles del Usuario</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <button
+                            type="button"
+                            className="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Cerrar"
+                            onClick={onCerrar}
+                        ></button>
                     </div>
+
                     <div className={`modal-body ${styles.modal__body}`}>
-                        <img src={user.fotoPerfilUrl} alt="" />
-                        <ul className={styles.vehicle__datalist}>
-                            <h2>{user.nombre}</h2>
-                            <li><strong>ID Usuario:</strong> {user.idUsuario}</li>
-                            <li><strong>Tipo de identificación:</strong> {user.tipoIdentificacion}</li>
-                            <li><strong>Correo:</strong> {user.correo}</li>
-                            <li><strong>Teléfono:</strong> {user.telefono}</li>
-                            <li><strong>Dirección:</strong> {user.direccion}</li>
-                            <li><strong>Fecha de registro:</strong> {new Date(user.fechaRegistro).toLocaleDateString()}</li>
-                            <li><strong>Cuenta bancaria:</strong> {user.cuentaBancaria}</li>
-                            <li><strong>Rol:</strong> {user.idRol}</li>
-                            <li><strong>Estado de verificación:</strong> {user.estadoVerificacion}</li>
-                        </ul>
+                        {user.fotoPerfilUrl && (
+                            <img src={user.fotoPerfilUrl} alt="Foto de perfil" className="img-fluid mb-3" />
+                        )}
 
-
+                        <TableContainer component={Paper} sx={{ width: "60%" }}>
+                            <Table sx={{ width: "100%" }} aria-label="User Details Table">
+                                <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell>Atributo</StyledTableCell>
+                                        <StyledTableCell>Valor</StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {userDetails.map((detail) => (
+                                        <StyledTableRow key={detail.label}>
+                                            <StyledTableCell component="th" scope="row">
+                                                {detail.label}
+                                            </StyledTableCell>
+                                            <StyledTableCell>{detail.value}</StyledTableCell>
+                                        </StyledTableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </div>
-                    <section className={styles.vehicle__details}>
-                        <table className={`${styles.table}`}>
-                            <thead className={styles.th}>
-                                <tr className={styles.row}>
-                                    <th scope="col">Atributo</th>
-                                    <th scope="col">Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr className={styles.row}>
-                                    <td>ID Usuario</td>
-                                    <td>{user.idUsuario}</td>
-                                </tr>
-                                <tr className={styles.row}>
-                                    <td>Tipo de identificación</td>
-                                    <td>{user.tipoIdentificacion}</td>
-                                </tr>
-                                <tr className={styles.row}>
-                                    <td>Nombre</td>
-                                    <td>{user.nombre}</td>
-                                </tr>
-                                <tr className={styles.row}>
-                                    <td>Correo</td>
-                                    <td className={styles.short__text}>{user.correo}</td>
-                                </tr>
-                                <tr className={styles.row}>
-                                    <td>Teléfono</td>
-                                    <td>{user.telefono}</td>
-                                </tr>
-                                <tr className={styles.row}>
-                                    <td>Dirección</td>
-                                    <td>{user.direccion}</td>
-                                </tr>
-                                <tr className={styles.row}>
-                                    <td>Fecha de registro</td>
-                                    <td>{new Date(user.fechaRegistro).toLocaleDateString()}</td>
-                                </tr>
-                                <tr className={styles.row}>
-                                    <td>Cuenta bancaria</td>
-                                    <td className={styles.short__text}>{user.cuentaBancaria}</td>
-                                </tr>
-                                <tr className={styles.row}>
-                                    <td>Rol</td>
-                                    <td>{user.idRol}</td> {/* Puedes mapear el ID a nombre si lo deseas */}
-                                </tr>
-                                <tr className={styles.row}>
-                                    <td>Estado de verificación</td>
-                                    <td>{user.estadoVerificacion}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                    </section>
-
-
 
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            data-bs-dismiss="modal"
+                            onClick={onCerrar}
+                        >
                             Cerrar
-                        </button>
-                        <button type="button" className="btn btn-danger">
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => handleActualizar("rechazado")}
+                            sx={{ ml: 1 }}
+                        >
                             Rechazar
-                        </button>
-                        <button type="button" className="btn btn-success">
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            color="success"
+                            onClick={() => handleActualizar("aprobado")}
+                            sx={{ ml: 1 }}
+                        >
                             Aceptar
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>

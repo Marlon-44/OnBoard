@@ -31,12 +31,39 @@
         background-position: 0% 50%;
     }
 }
+.profile__section h5{
+    position: relative;
+    top: -2rem;
+    text-align: center;
+    width: 100%;
+}
 
 .profile__section img {
     width: 30%;
     border-radius: 100%;
     align-self: center;
     position: relative;
-    top: -40px;
-    border: 0.5rem #fff solid;
+    top: -2.5rem;
+    border: 0.3rem #fff solid;
+}
+.profile__info{
+    width: 100%;
+}
+.info__row{
+    display: flex;
+}
+.info__row h6, p{
+    font-size: 0.8rem;
+}
+.info__row h6{
+    font-weight: 600;
+    width: 40%;
+}
+.info__row p {
+  font-weight: 200;
+  max-width: 55%;
+  word-break: break-word;     /* Rompe palabras largas */
+  overflow-wrap: break-word;  /* Alternativa moderna y más estandarizada */
+  white-space: normal; 
+  text-align: left;       /* Asegura que no esté en una sola línea */
 }

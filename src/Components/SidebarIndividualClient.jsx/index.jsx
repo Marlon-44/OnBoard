@@ -14,29 +14,24 @@ const SidebarIndividualClient = ({ onSeleccionarOpcion, opcionSeleccionada }) =>
             </div>
             <ul className={styles.sidebar__menu}>
                 <li
-                    className={`${styles.menu__option} ${opcionSeleccionada === "solicitudes_usuario" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("solicitudes_usuario")} >
+                    className={`${styles.menu__option} ${opcionSeleccionada === "reservas" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("reservas")} >
                     <img src="/assets/icon__user__white.png" alt="" />
                     Reservas
                 </li>
                 <li
-                    className={`${styles.menu__option} ${opcionSeleccionada === "solicitudes_vehiculo" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("solicitudes_vehiculo")} >
+                    className={`${styles.menu__option} ${opcionSeleccionada === "historial_alquileres" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("historial_alquileres")} >
                     <img src="/assets/icon__car__white.png" alt="" />
                     Historial de alquileres
                 </li>
                 <li
-                    className={`${styles.menu__option} ${opcionSeleccionada === "usuarios_registrados" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("usuarios_registrados")}>
+                    className={`${styles.menu__option} ${opcionSeleccionada === "alquileres" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("alquileres")}>
                     <img src="/assets/icon__user__white.png" alt="" />
                     Alquileres
                 </li>
-                <li
-                    className={`${styles.menu__option} ${opcionSeleccionada === "vehiculos_registrados" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("vehiculos_registrados")}>
-                    <img src="/assets/icon__car__white.png" alt="" />
-                    Vehículos registrados
-                </li>
+                
             </ul>
         </aside>
     )

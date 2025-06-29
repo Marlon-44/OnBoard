@@ -1,26 +1,29 @@
-.table__container{
-    background-color: #fff;
-    padding: 1rem;
+.table__container {
     border-radius: 1rem;
-    max-height: 58vh;
-    overflow-y: scroll;
-    margin-top: 1rem;
-    font-size: 0.9rem;
 }
-.table{
+
+.table {
+    background-color: #fff;
+
+}
+
+.th {
     background-color: #fff;
 }
-.th{
-    background-color: #fff;
+.header__fixed{
+    position: sticky;
+    top: 0;z-index: 1;
 }
-.view__button{
-    background-color: blueviolet;
+
+.view__button {
+    background-color: #6100bd;
     border: none;
     width: 100%;
     padding: 0.1rem 0.5rem;
     border-radius: 5px;
 }
-.row{
+
+.row {
     height: 5rem;
     background-color: rgb(255, 255, 255);
 }
