@@ -4,7 +4,6 @@ import com.onboard.backend.dto.VehiculoFiltroDTO;
 import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.model.Calificacion;
 import com.onboard.backend.model.EstadoOferta;
-import com.onboard.backend.model.EstadoVerificacion;
 import com.onboard.backend.service.VehiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -112,14 +111,14 @@ public class VehiculoController {
         return ResponseEntity.ok(vehiculoCalificado);
     }
 
-    @PatchMapping("/{placa}/estado-verificacion")
+    /*@PatchMapping("/{placa}/estado-verificacion")
     public ResponseEntity<Vehiculo> cambiarEstadoVerificacion(
             @PathVariable String placa,
             @RequestParam EstadoVerificacion estado) {
 
         Vehiculo vehiculoActualizado = vehiculoService.cambiarEstadoVerificacion(placa, estado);
         return new ResponseEntity<>(vehiculoActualizado, HttpStatus.OK);
-    }
+    }*/
 
     @PatchMapping("/{placa}/estado-oferta")
     public ResponseEntity<Vehiculo> cambiarEstadoOferta(

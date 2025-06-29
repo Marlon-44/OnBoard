@@ -6,7 +6,6 @@ import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.model.Calificacion;
 import com.onboard.backend.model.EstadoOferta;
-import com.onboard.backend.model.EstadoVerificacion;
 import com.onboard.backend.repository.VehiculoFiltroRepository;
 import com.onboard.backend.repository.VehiculoRepository;
 import com.onboard.backend.util.ValidationUtils;
@@ -180,11 +179,11 @@ public class VehiculoService {
         }
         vehiculo.getFotosUrls().addAll(urls);
 
-        vehiculo.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
+        /*vehiculo.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
         emailService.enviarCorreoEstadoVehiculo(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
-                vehiculo.getEstadoVerificacion());
+                vehiculo.getEstadoVerificacion());*/
 
-        vehiculo.setEstadoOferta(EstadoOferta.INACTIVA);
+        vehiculo.setEstadoOferta(EstadoOferta.PENDIENTE);
         emailService.enviarCorreoEstadoOferta(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
                 vehiculo.getEstadoOferta());
 
@@ -209,11 +208,10 @@ public class VehiculoService {
 
     public void deleteVehiculoById(String id) {
         Vehiculo vehiculo = getVehiculoById(id).get();
-        vehiculo.setEstadoVerificacion(EstadoVerificacion.INACTIVO);
-        vehiculo.setEstadoOferta(EstadoOferta.FINALIZADA);
+        vehiculo.setEstadoOferta(EstadoOferta.INACTIVA);
         Usuario usuario = usuarioService.getUsuarioById(vehiculo.getIdPropietario()).get();
-        emailService.enviarCorreoEstadoVehiculo(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
-                vehiculo.getEstadoVerificacion());
+        emailService.enviarCorreoEstadoOferta(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
+                vehiculo.getEstadoOferta());
     }
 
     public List<String> subirFotosVehiculo(String vehiculoId, MultipartFile[] files) throws IOException {
@@ -249,7 +247,7 @@ public class VehiculoService {
         return vehiculoRepository.save(vehiculoExistente);
     }
 
-    public Vehiculo cambiarEstadoVerificacion(String placa, EstadoVerificacion estadoVerificacion) {
+    /*public Vehiculo cambiarEstadoVerificacion(String placa, EstadoVerificacion estadoVerificacion) {
         Vehiculo vehiculo = getVehiculoById(placa).get();
         Usuario usuario = usuarioService.getUsuarioById(vehiculo.getIdPropietario()).get();
 
@@ -265,7 +263,7 @@ public class VehiculoService {
                 vehiculo.getEstadoVerificacion());
 
         return vehiculoRepository.save(vehiculo);
-    }
+    }*/
 
     public Vehiculo cambiarEstadoOferta(String placa, EstadoOferta estadoOferta) {
         Vehiculo vehiculo = getVehiculoById(placa).get();
@@ -371,7 +369,7 @@ public class VehiculoService {
 
      public List<Vehiculo> obtenerVehiculosConEstadoPendiente() {
         return vehiculoRepository.findAll().stream()
-                .filter(v -> v.getEstadoVerificacion() == EstadoVerificacion.PENDIENTE)
+                .filter(v -> v.getEstadoOferta() == EstadoOferta.PENDIENTE)
                 .distinct()
                 .toList();
     }

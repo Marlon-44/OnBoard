@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <body style="font-family: Arial, sans-serif; color: #333">
-        <h2 style="color: #9e9e9e">
-            Offer Canceled, <span th:text="${nombre}">Usuario</span>
+        <h2 style="color: #ff9800">
+            Offer Suspended, <span th:text="${nombre}">Usuario</span>
         </h2>
 
         <p>
-            Your offer for the vehicle with license plate
+            The offer for your vehicle with license plate
             <strong th:text="${placa}">XXX000</strong> has been
-            <strong>canceled</strong>.
+            <strong>suspended</strong> by our team.
         </p>
 
         <p>
-            If this was a mistake or you wish to reactivate the offer, please
-            visit your dashboard.
+            This means your vehicle is currently not visible on the platform and
+            cannot receive rental requests.
         </p>
 
         <img
             th:src="${logoUrl}"
-            alt="Logo"
+            alt="Platform Logo"
             style="width: 300px; margin-top: 20px"
         />
 
         <p>
-            If you have any questions or need assistance, feel free to contact
-            us anytime.
+            If you believe this was a mistake or wish to resolve any issues,
+            please contact our support team as soon as possible.
         </p>
 
         <p style="font-size: 0.9em; color: gray">

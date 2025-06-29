@@ -32,7 +32,8 @@ public class EmailService {
         this.templateEngine = templateEngine;
     }
 
-    private void enviarCorreoConTemplate(String toEmail, String subject, String plantilla, Map<String, Object> variables) {
+    private void enviarCorreoConTemplate(String toEmail, String subject, String plantilla,
+            Map<String, Object> variables) {
         try {
             MimeMessage mensaje = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
@@ -88,40 +89,43 @@ public class EmailService {
         enviarCorreoConTemplate(toEmail, asunto, plantilla, variables);
     }
 
-    public void enviarCorreoEstadoVehiculo(String toEmail, String nombreUsuario, String placa, EstadoVerificacion estado) {
-        String plantilla;
-        String asunto;
-
-        switch (estado) {
-            case APROBADO -> {
-                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_aprobado";
-                asunto = "✅ Your vehicle has been approved!";
-            }
-            case RECHAZADO -> {
-                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_rechazado";
-                asunto = "❌ Your vehicle registration was rejected";
-            }
-            case INACTIVO -> {
-                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_inactivo";
-                asunto = "🗑️ Your vehicle has been removed or marked inactive";
-            }
-            case SUSPENDIDO -> {
-                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_suspendido";
-                asunto = "⚠️ Your vehicle listing has been suspended";
-            }
-            default -> {
-                plantilla = "email/estado_aprobacion_vehiculo/vehiculo_pendiente";
-                asunto = "🚗 Your vehicle is pending verification";
-            }
-        }
-
-        Map<String, Object> variables = Map.of(
-                "nombre", nombreUsuario,
-                "placa", placa
-        );
-
-        enviarCorreoConTemplate(toEmail, asunto, plantilla, variables);
-    }
+    /*
+     * public void enviarCorreoEstadoVehiculo(String toEmail, String nombreUsuario,
+     * String placa, EstadoVerificacion estado) {
+     * String plantilla;
+     * String asunto;
+     * 
+     * switch (estado) {
+     * case APROBADO -> {
+     * plantilla = "email/estado_aprobacion_vehiculo/vehiculo_aprobado";
+     * asunto = "✅ Your vehicle has been approved!";
+     * }
+     * case RECHAZADO -> {
+     * plantilla = "email/estado_aprobacion_vehiculo/vehiculo_rechazado";
+     * asunto = "❌ Your vehicle registration was rejected";
+     * }
+     * case INACTIVO -> {
+     * plantilla = "email/estado_aprobacion_vehiculo/vehiculo_inactivo";
+     * asunto = "🗑️ Your vehicle has been removed or marked inactive";
+     * }
+     * case SUSPENDIDO -> {
+     * plantilla = "email/estado_aprobacion_vehiculo/vehiculo_suspendido";
+     * asunto = "⚠️ Your vehicle listing has been suspended";
+     * }
+     * default -> {
+     * plantilla = "email/estado_aprobacion_vehiculo/vehiculo_pendiente";
+     * asunto = "🚗 Your vehicle is pending verification";
+     * }
+     * }
+     * 
+     * Map<String, Object> variables = Map.of(
+     * "nombre", nombreUsuario,
+     * "placa", placa
+     * );
+     * 
+     * enviarCorreoConTemplate(toEmail, asunto, plantilla, variables);
+     * }
+     */
 
     public void enviarCorreoEstadoOferta(String toEmail, String nombreUsuario, String placa, EstadoOferta estado) {
         String plantilla;
@@ -132,30 +136,41 @@ public class EmailService {
                 plantilla = "email/estado_oferta/activa";
                 asunto = "✅ Your vehicle offer is now active!";
             }
-            case FINALIZADA -> {
-                plantilla = "email/estado_oferta/finalizada";
-                asunto = "🏁 Your vehicle offer has been finalized";
+            case INACTIVA -> {
+                plantilla = "email/estado_oferta/inactiva";
+                asunto = "❌ Your vehicle offer has been removed";
             }
-            case CANCELADA -> {
-                plantilla = "email/estado_oferta/cancelada";
-                asunto = "❌ Your vehicle offer has been canceled";
+            case EN_MANTENIMIENTO -> {
+                plantilla = "email/estado_oferta/en_mantenimiento";
+                asunto = "🔧 Your vehicle is under maintenance";
+            }
+            case FUERA_DE_SERVICIO -> {
+                plantilla = "email/estado_oferta/fuera_de_servicio";
+                asunto = "🚫 Your vehicle is out of service";
+            }
+            case SUSPENDIDO -> {
+                plantilla = "email/estado_oferta/suspendido";
+                asunto = "⚠️ Your vehicle offer has been suspended";
+            }
+            case RECHAZADA -> {
+                plantilla = "email/estado_oferta/rechazada";
+                asunto = "❗ Your vehicle offer has been rejected";
             }
             default -> {
-                plantilla = "email/estado_oferta/inactiva";
-                asunto = "⏳ Your vehicle offer is temporarily inactive";
+                plantilla = "email/estado_oferta/pendiente";
+                asunto = "⏳ Your vehicle offer is pending approval";
             }
         }
 
         Map<String, Object> variables = Map.of(
                 "nombre", nombreUsuario,
-                "placa", placa
-        );
+                "placa", placa);
 
         enviarCorreoConTemplate(toEmail, asunto, plantilla, variables);
     }
 
     public void enviarContratosPdf(String emailCliente, String nombreCliente, byte[] pdfCliente,
-                                    String emailPropietario, String nombrePropietario, byte[] pdfPropietario) {
+            String emailPropietario, String nombrePropietario, byte[] pdfPropietario) {
         try {
             MimeMessage mensajeCliente = mailSender.createMimeMessage();
             MimeMessageHelper helperCliente = new MimeMessageHelper(mensajeCliente, true, "UTF-8");
@@ -168,7 +183,8 @@ public class EmailService {
             contextCliente.setVariable("nombre", nombreCliente);
             contextCliente.setVariable("logoUrl", LOGO_URL);
 
-            String contenidoHtmlCliente = templateEngine.process("email/acuerdo_alquiler/contrato_cliente", contextCliente);
+            String contenidoHtmlCliente = templateEngine.process("email/acuerdo_alquiler/contrato_cliente",
+                    contextCliente);
             helperCliente.setText(contenidoHtmlCliente, true);
             helperCliente.addAttachment("Contrato_Cliente.pdf", new ByteArrayResource(pdfCliente));
 
@@ -185,14 +201,16 @@ public class EmailService {
             contextPropietario.setVariable("nombre", nombrePropietario);
             contextPropietario.setVariable("logoUrl", LOGO_URL);
 
-            String contenidoHtmlPropietario = templateEngine.process("email/acuerdo_alquiler/contrato_propietario", contextPropietario);
+            String contenidoHtmlPropietario = templateEngine.process("email/acuerdo_alquiler/contrato_propietario",
+                    contextPropietario);
             helperPropietario.setText(contenidoHtmlPropietario, true);
             helperPropietario.addAttachment("Contrato_Propietario.pdf", new ByteArrayResource(pdfPropietario));
 
             mailSender.send(mensajePropietario);
 
         } catch (Exception e) {
-            logger.error("Error al enviar contratos PDF a cliente <{}> y propietario <{}>", emailCliente, emailPropietario, e);
+            logger.error("Error al enviar contratos PDF a cliente <{}> y propietario <{}>", emailCliente,
+                    emailPropietario, e);
         }
     }
 }

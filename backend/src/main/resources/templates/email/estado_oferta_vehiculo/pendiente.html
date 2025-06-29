@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <body style="font-family: Arial, sans-serif; color: #333">
-        <h2 style="color: #f44336">
-            Offer Finalized, <span th:text="${nombre}">Usuario</span>
+        <h2 style="color: #03a9f4">
+            Offer Submitted, <span th:text="${nombre}">Usuario</span>
         </h2>
 
         <p>
             Your offer for the vehicle with license plate
             <strong th:text="${placa}">XXX000</strong> has been
-            <strong>finalized</strong>.
+            <strong>successfully uploaded</strong> to our platform.
         </p>
 
-        <p>This means the rental process has been completed.</p>
+        <p>
+            At this moment, we are reviewing and validating the information you
+            provided. Your offer will be approved within the next few days.
+        </p>
 
         <img
             th:src="${logoUrl}"
-            alt="Logo"
+            alt="Platform Logo"
             style="width: 300px; margin-top: 20px"
         />
 
-        <p>Thank you for using our platform. We hope to see you again soon!</p>
+        <p>
+            We’ll notify you as soon as the offer is approved and visible to
+            users. Thank you for your patience.
+        </p>
 
         <p style="font-size: 0.9em; color: gray">
             This is an automated message — please do not reply.

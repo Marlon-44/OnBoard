@@ -36,7 +36,7 @@ public class Vehiculo {
     private List<String> fotosUrls;
     private EstadoOferta estadoOferta;
     private float precioPorDia;
-    private EstadoVerificacion estadoVerificacion;
+    //private EstadoVerificacion estadoVerificacion;
     private Map<String, Calificacion> calificaciones;
 
     public Vehiculo() {
@@ -69,7 +69,7 @@ public class Vehiculo {
         this.fotosUrls = fotosUrls;
         this.estadoOferta = estadoOferta;
         this.precioPorDia = precioPorDia;
-        this.estadoVerificacion = estadoVerificacion;
+        //this.estadoVerificacion = estadoVerificacion;
         this.calificaciones = calificaciones;
     }
 
@@ -233,13 +233,13 @@ public class Vehiculo {
         return precioPorDia;
     }
 
-    public EstadoVerificacion getEstadoVerificacion() {
+    /*public EstadoVerificacion getEstadoVerificacion() {
         return estadoVerificacion;
     }
 
     public void setEstadoVerificacion(EstadoVerificacion estadoVerificacion) {
         this.estadoVerificacion = estadoVerificacion;
-    }
+    }*/
 
     public Map<String, Calificacion> getCalificaciones() {
         return calificaciones;
