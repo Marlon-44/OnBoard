@@ -13,14 +13,12 @@ const DashboardIndividualClient = () => {
 
     const renderContenido = () => {
         switch (opcionSeleccionada) {
-            case "solicitudes_usuario":
-                return <p>opciooon 1</p>
-            case "solicitudes_vehiculo":
-                return <p>opciooon 2</p>;
-            case "usuarios_registrados":
-                return <p>opciooon 3</p>;
-            case "vehiculos_registrados":
-                return <p>opciooon 4</p>
+            case "reservas":
+                return <p>Lista de Reservas</p>
+            case "historial_alquileres":
+                return <p>Historial de Alquileres</p>;
+            case "alquileres":
+                return <p>Alquileres en Proceso</p>;
             default:
                 return <p>Selecciona una opción del menú.</p>;
         }

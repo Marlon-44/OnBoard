@@ -4,7 +4,7 @@ import styles from "./index.module.css";
 import TextField from "@mui/material/TextField";
 import { Button, Box, Alert } from "@mui/material";
 import { loginUsuario } from "../../api/login";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SesionContext from "../../features/sesion/SesionContext";
 import { UserContext } from "../../features/users/UserContext";
 
@@ -96,7 +96,7 @@ const Login = () => {
                 <div className={styles.form__section}>
                     <h1>Log In</h1>
                     <p>
-                        Don't Have an Account? <a href="#">Register</a>
+                        Don't Have an Account? <Link to="/register" >Register</Link>
                     </p>
 
                     {alerta && (

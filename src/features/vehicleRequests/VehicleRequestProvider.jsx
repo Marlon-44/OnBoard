@@ -23,7 +23,12 @@ export function VehicleRequestProvider({ children }) {
     }, []);
 
     return (
-        <VehicleRequestContext.Provider value={{ requestedVehicles, loadingRequests, errorRequests }}>
+        <VehicleRequestContext.Provider 
+            value={{ 
+                requestedVehicles, 
+                loadingRequests, 
+                errorRequests,
+                setRequestedVehicles}}>
             {children}
         </VehicleRequestContext.Provider>
     );

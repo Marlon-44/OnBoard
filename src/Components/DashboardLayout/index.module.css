@@ -21,7 +21,7 @@
     padding-right: 2%;
 }
 .dashboard__header p{
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     margin: 0;
 }
 .dashboard__header button{
@@ -32,8 +32,8 @@
     background-color: #6100bd;
     color: #fff;
     border-radius: 10px;
-    padding: 0 1%;
-    font-size: 0.9rem;
+    padding: 0 1.5% ;
+    font-size: 0.8rem;
 }
 
 .dashboard__header button:hover{

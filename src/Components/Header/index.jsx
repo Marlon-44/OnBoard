@@ -9,7 +9,7 @@ const Header =()=>{
     }
     const handleClickRegister=()=>{
         
-        navigate(`/homePage`)
+        navigate(`/register`)
     }
     return(
         <motion.header 
