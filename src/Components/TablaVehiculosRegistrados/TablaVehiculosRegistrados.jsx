@@ -10,7 +10,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import styles from "./index.module.css"
 
 const RegisteredVehiclesColumns = [
     { id: "placa", label: "Placa", minWidth: 100 },

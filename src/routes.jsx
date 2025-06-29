@@ -8,6 +8,7 @@ import Login from "./Pages/LoginPage";
 import Register from "./Pages/RegisterPage";
 import Profile from "./Pages/Profile";
 import Dashboard from "./Pages/Dashboard/Dashboard";
+import ReservaForm from "./Pages/ReservaForm";
 const AppRoutes = () =>{
     
     return(
@@ -21,6 +22,7 @@ const AppRoutes = () =>{
                     <Route path="/register" element={<Register/>}></Route>
                     <Route path="/profile" element={<Profile/>}></Route>
                     <Route path="/dashboard" element={<Dashboard/>}></Route>
+                    <Route path="/reserva-form" element={<ReservaForm/>}></Route>
                 </Routes>
             
             </BrowserRouter>

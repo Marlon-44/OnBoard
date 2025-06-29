@@ -73,7 +73,7 @@ const UserRequestTable = () => {
                 setUsers(nuevosRegistrados);
             }
 
-            setMensajeExito(`Usuario ${nuevoEstado === "aprobado" ? "aprobado" : "rechazado"} con éxito`);
+            setMensajeExito(`Usuario ${nuevoEstado === "APROBADO" ? "aprobado" : "rechazado"} con éxito`);
             setTimeout(() => setMensajeExito(""), 4000);
 
             setUsuarioAActualizar(null);
@@ -166,8 +166,8 @@ const UserRequestTable = () => {
             />
             {usuarioAActualizar && (
                 <ConfirmationModal
-                    titulo={`¿Confirmar ${accion === "aprobado" ? "aprobación" : "rechazo"}?`}
-                    mensaje={`¿Estás seguro de que deseas ${accion} al usuario ${usuarioAActualizar.nombre}?`}
+                    titulo={`¿Confirmar ${accion === "APROBADO" ? "aprobación" : "rechazo"}?`}
+                    mensaje={`¿Estás seguro de que deseas cambiar el estado del usuario ${usuarioAActualizar.nombre} a ${accion.toLowerCase()}?`}
                     onConfirmar={async () =>
                         await handleActualizarEstado(usuarioAActualizar.idUsuario, accion)
                     }
