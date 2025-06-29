@@ -8,6 +8,7 @@ import ProfileSection from "../../Components/ProfileSection";
 import TablaVehiculosRegistrados from "../../Components/TablaVehiculosRegistrados/TablaVehiculosRegistrados";
 import VehicleRequestTable from "../../Components/VehicleRequestTable";
 import UserRequestTable from "../../Components/UserRequestTable";
+import RegisteredUsersTable from "../../Components/RegisteredUsersTable";
 
 const DashboardAdmin = () => {
     const { usuario } = useContext(SesionContext);
@@ -20,7 +21,7 @@ const DashboardAdmin = () => {
             case "solicitudes_vehiculo":
                 return <VehicleRequestTable/>;
             case "usuarios_registrados":
-                return <p>Listado de usuarios registrados</p>;
+                return <RegisteredUsersTable/>;
             case "vehiculos_registrados":
                 return <TablaVehiculosRegistrados/>
             default:
@@ -38,7 +39,7 @@ const DashboardAdmin = () => {
             <div className={styles.dashboard__admin__container}>
 
                 <section className={styles.variable__content}>
-                    <WelcomeCard />
+                    <WelcomeCard message="Aquí puedes gestionar usuarios, vehículos y más."/>
                     <section className={styles.option__section}>
                         {renderContenido()}
                     </section>

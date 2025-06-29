@@ -7,6 +7,7 @@ import VehicleSummay from "../../Components/VehicleSummary";
 import DetailSection from "../../Components/DetailSection";
 import { Reviews } from "@mui/icons-material";
 import ReviewSection from "../../Components/ReviewSection";
+import Footer from "../../Components/Footer";
 
 const VehicleDetails = () => {
     const { placa } = useParams();

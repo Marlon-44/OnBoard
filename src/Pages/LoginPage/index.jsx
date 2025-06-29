@@ -6,6 +6,7 @@ import { Button, Box, Alert } from "@mui/material";
 import { loginUsuario } from "../../api/login";
 import { useLocation, useNavigate } from "react-router-dom";
 import SesionContext from "../../features/sesion/SesionContext";
+import { UserContext } from "../../features/users/UserContext";
 
 const Login = () => {
     const [formData, setFormData] = useState({ correo: "", password: "" });
@@ -14,7 +15,8 @@ const Login = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const from = location.state?.from || "/homePage";
-    const {guardarSesion} = useContext(SesionContext);
+    const { guardarSesion } = useContext(SesionContext);
+    const { users } = useContext(UserContext)
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -60,30 +62,30 @@ const Login = () => {
     };
 
     const handleSubmit = async () => {
-    if (!validarTodo()) {
-        setAlerta({ tipo: "error", mensaje: "Corrige los errores." });
-        return;
-    }
+        if (!validarTodo()) {
+            setAlerta({ tipo: "error", mensaje: "Corrige los errores." });
+            return;
+        }
 
-    try {
-        const credenciales = {
-            correo: formData.correo,
-            password: formData.password
-        };
+        try {
+            const credenciales = {
+                correo: formData.correo,
+                password: formData.password
+            };
 
-        console.log("Enviando:", credenciales);
+            console.log("Enviando:", credenciales);
 
-        const respuesta = await loginUsuario(credenciales);
-        guardarSesion(respuesta);
-        setAlerta({ tipo: "success", mensaje: "Inicio exitoso." });
+            const respuesta = await loginUsuario(credenciales);
+            guardarSesion(respuesta);
+            setAlerta({ tipo: "success", mensaje: "Inicio exitoso." });
 
-        const destino = location.state?.from || "/homePage";
-        navigate(destino, { replace: true });
-    } catch (error) {
-        console.error("Error en login:", error);
-        setAlerta({ tipo: "error", mensaje: "Credenciales inválidas o error de servidor." });
-    }
-};
+            const destino = location.state?.from || "/homePage";
+            navigate(destino, { replace: true });
+        } catch (error) {
+            console.error("Error en login:", error);
+            setAlerta({ tipo: "error", mensaje: "Credenciales inválidas o error de servidor." });
+        }
+    };
 
     return (
         <>

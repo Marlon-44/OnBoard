@@ -51,7 +51,9 @@ const MainHeader = () => {
                 <div className={styles.logo__account__box}>
                     <h2>OnBoard</h2>
 
-                    {/* Avatar + menú */}
+                    {/* Avatar + menú */} 
+                    <Search />
+                    
                     <Avatar
                         src={usuario?.fotoPerfilUrl || "/assets/icon__user__black.png"}
                         alt="Usuario"
@@ -82,7 +84,7 @@ const MainHeader = () => {
                     </Menu>
                 </div>
 
-                <Search />
+               
             </div>
 
             <div className={styles.header__down__section}>

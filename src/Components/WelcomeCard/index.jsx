@@ -2,7 +2,7 @@ import styles from "./index.module.css";
 import { useContext } from "react";
 import SesionContext from "../../features/sesion/SesionContext";
 
-const WelcomeCard = () => {
+const WelcomeCard = ({message}) => {
     const { usuario } = useContext(SesionContext);
     const date = new Date();
 
@@ -18,7 +18,7 @@ const WelcomeCard = () => {
 
             <div>
                 <h1>Buen día, {usuario.nombre}</h1>
-                <h6>Aquí puedes gestionar usuarios, vehículos y más.</h6>
+                <h6>{message}</h6>
             </div>
 
         </div>

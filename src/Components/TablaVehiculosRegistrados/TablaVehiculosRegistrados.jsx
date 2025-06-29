@@ -43,7 +43,7 @@ const TablaVehiculosRegistrados = () => {
                                     <td>{vehiculo.anio}</td>
                                     <td>{vehiculo.tipoVehiculo}</td>
                                     <td>${vehiculo.precioPorDia.toLocaleString()}</td>
-                                    <td>{vehiculo.estadoOferta.toLowerCase()}</td>
+                                    <td>{vehiculo?.estadoVerificacion ? vehiculo.estadoVerificacion.toLowerCase() : "waos"}</td>
                                     <td>
                                         <button
                                             className={styles.view__button}

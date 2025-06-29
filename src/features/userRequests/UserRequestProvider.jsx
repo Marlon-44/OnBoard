@@ -22,9 +22,18 @@ export function UserRequestProvider({ children }) {
         fetchRequestedUsers();
     }, []);
 
+    // src/features/userRequests/UserRequestProvider.jsx
     return (
-        <UserRequestContext.Provider value={{ requestedUsers, loadingRequests, errorRequests }}>
+        <UserRequestContext.Provider
+            value={{
+                requestedUsers,
+                setRequestedUsers, 
+                loadingRequests,
+                errorRequests,
+            }}
+        >
             {children}
         </UserRequestContext.Provider>
     );
+
 }

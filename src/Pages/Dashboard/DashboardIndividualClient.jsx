@@ -1,18 +1,49 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import SesionContext from "../../features/sesion/SesionContext";
 import DashboardLayout from "../../Components/DashboardLayout";
+import SidebarIndividualClient from "../../Components/SidebarIndividualClient.jsx";
+import styles from "./dashboardIndividualClient.module.css"
+import WelcomeCard from "../../Components/WelcomeCard";
+import ProfileSection from "../../Components/ProfileSection";
 
-// src/Pages/Dashboard/DashboardParticularCliente.jsx
+
 const DashboardIndividualClient = () => {
+    const { usuario } = useContext(SesionContext);
+    const [opcionSeleccionada, setOpcionSeleccionada] = useState("solicitudes_usuario");
 
-    const {usuario}= useContext(SesionContext)
+    const renderContenido = () => {
+        switch (opcionSeleccionada) {
+            case "solicitudes_usuario":
+                return <p>opciooon 1</p>
+            case "solicitudes_vehiculo":
+                return <p>opciooon 2</p>;
+            case "usuarios_registrados":
+                return <p>opciooon 3</p>;
+            case "vehiculos_registrados":
+                return <p>opciooon 4</p>
+            default:
+                return <p>Selecciona una opción del menú.</p>;
+        }
+    };
+
     return (
-        <DashboardLayout>
-            <h1>Bienvenido {usuario.nombre}</h1>
-            <p>Tu rol: Particular</p>
-            <p>Aquí puedes ver tus alquileres, historial y más.</p>
-            {/* Agrega más funcionalidades específicas del cliente */}
-        </DashboardLayout>
+        <>  
+            <SidebarIndividualClient
+                onSeleccionarOpcion={setOpcionSeleccionada}
+                opcionSeleccionada={opcionSeleccionada}
+            />
+            <div className={styles.dashboard__admin__container}>
+
+                <section className={styles.variable__content}>
+                    <WelcomeCard message="Aquí puedes gestionar tus alquileres, solicitudes y más."/>
+                    <section className={styles.option__section}>
+                        {renderContenido()}
+                    </section>
+                </section>
+                <ProfileSection usuario={usuario} />
+
+            </div>
+        </>
         
     );
 };

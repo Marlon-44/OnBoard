@@ -8,24 +8,27 @@ import { ReviewsProvider } from './features/reviews/ReviewsProvider'
 import { SesionProvider } from './features/sesion/SesionContext'
 import { VehicleRequestProvider } from './features/vehicleRequests/VehicleRequestProvider'
 import { UserRequestProvider } from './features/userRequests/UserRequestProvider'
+import { UsersProvider } from './features/users/UsersProvider'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <SesionProvider>
-      <UserRequestProvider>
-        <VehicleRequestProvider>
-          <ReviewsProvider>
-            <OfertasProvider>
-              <FeaturedVehicleProvider>
-                <VehicleProvider>
-                  <AppRoutes>
-                  </AppRoutes>
-                </VehicleProvider>
-              </FeaturedVehicleProvider>
-            </OfertasProvider>
-          </ReviewsProvider>
-        </VehicleRequestProvider>
-      </UserRequestProvider>
+      <UsersProvider>
+        <UserRequestProvider>
+          <VehicleRequestProvider>
+            <ReviewsProvider>
+              <OfertasProvider>
+                <FeaturedVehicleProvider>
+                  <VehicleProvider>
+                    <AppRoutes>
+                    </AppRoutes>
+                  </VehicleProvider>
+                </FeaturedVehicleProvider>
+              </OfertasProvider>
+            </ReviewsProvider>
+          </VehicleRequestProvider>
+        </UserRequestProvider>
+      </UsersProvider>
     </SesionProvider>
   </StrictMode>
 )
