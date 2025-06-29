@@ -47,6 +47,7 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String correo, @RequestParam String password) {
         ResultadoLogin resultado = usuarioService.validarLogin(correo, password);
+
         switch (resultado) {
             case USUARIO_NO_ENCONTRADO:
                 throw new InvalidInputException(
@@ -59,6 +60,30 @@ public class UsuarioController {
                         "Incorrect password",
                         "INVALID_PASSWORD",
                         "The password provided for the user with email " + correo + " is incorrect");
+
+            case USUARIO_PENDIENTE:
+                throw new InvalidInputException(
+                        "Account pending verification",
+                        "ACCOUNT_PENDING",
+                        "The account with email " + correo + " is pending verification");
+
+            case USUARIO_RECHAZADO:
+                throw new InvalidInputException(
+                        "Account rejected",
+                        "ACCOUNT_REJECTED",
+                        "The account with email " + correo + " has been rejected");
+
+            case USUARIO_SUSPENDIDO:
+                throw new InvalidInputException(
+                        "Account suspended",
+                        "ACCOUNT_SUSPENDED",
+                        "The account with email " + correo + " is currently suspended");
+
+            case USUARIO_INACTIVO:
+                throw new InvalidInputException(
+                        "Account inactive",
+                        "ACCOUNT_INACTIVE",
+                        "The account with email " + correo + " is inactive");
 
             case EXITO:
                 Usuario usuario = usuarioService.obtenerUsuarioPorCorreo(correo);

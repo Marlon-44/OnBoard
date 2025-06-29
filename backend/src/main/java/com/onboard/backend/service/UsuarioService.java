@@ -36,7 +36,12 @@ public class UsuarioService {
     public enum ResultadoLogin {
         EXITO,
         USUARIO_NO_ENCONTRADO,
-        CONTRASENA_INCORRECTA
+        CONTRASENA_INCORRECTA,
+        USUARIO_PENDIENTE,
+        USUARIO_RECHAZADO,
+        USUARIO_SUSPENDIDO,
+        USUARIO_INACTIVO,
+        ERROR_DESCONOCIDO
     }
 
     @Autowired
@@ -226,6 +231,21 @@ public class UsuarioService {
 
         if (usuario == null) {
             return ResultadoLogin.USUARIO_NO_ENCONTRADO;
+        }
+
+        if (usuario.getEstadoVerificacion() != EstadoVerificacion.APROBADO) {
+            switch (usuario.getEstadoVerificacion()) {
+                case PENDIENTE:
+                    return ResultadoLogin.USUARIO_PENDIENTE;
+                case RECHAZADO:
+                    return ResultadoLogin.USUARIO_RECHAZADO;
+                case SUSPENDIDO:
+                    return ResultadoLogin.USUARIO_SUSPENDIDO;
+                case INACTIVO:
+                    return ResultadoLogin.USUARIO_INACTIVO;
+                default:
+                    return ResultadoLogin.ERROR_DESCONOCIDO;
+            }
         }
 
         if (!passwordEncoder.matches(password, usuario.getPassword())) {

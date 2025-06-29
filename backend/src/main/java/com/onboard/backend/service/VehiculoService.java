@@ -179,9 +179,12 @@ public class VehiculoService {
         }
         vehiculo.getFotosUrls().addAll(urls);
 
-        /*vehiculo.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
-        emailService.enviarCorreoEstadoVehiculo(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
-                vehiculo.getEstadoVerificacion());*/
+        /*
+         * vehiculo.setEstadoVerificacion(EstadoVerificacion.PENDIENTE);
+         * emailService.enviarCorreoEstadoVehiculo(usuario.getCorreo(),
+         * usuario.getNombre(), vehiculo.getPlaca(),
+         * vehiculo.getEstadoVerificacion());
+         */
 
         vehiculo.setEstadoOferta(EstadoOferta.PENDIENTE);
         emailService.enviarCorreoEstadoOferta(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
@@ -243,27 +246,34 @@ public class VehiculoService {
         vehiculoExistente.setDescripcion(vehiculoActualizado.getDescripcion());
         vehiculoExistente.setEstadoOferta(vehiculoActualizado.getEstadoOferta());
         vehiculoExistente.setPrecioPorDia(vehiculoActualizado.getPrecioPorDia());
-
+        vehiculoExistente.setCalificaciones(vehiculoActualizado.getCalificaciones());
         return vehiculoRepository.save(vehiculoExistente);
     }
 
-    /*public Vehiculo cambiarEstadoVerificacion(String placa, EstadoVerificacion estadoVerificacion) {
-        Vehiculo vehiculo = getVehiculoById(placa).get();
-        Usuario usuario = usuarioService.getUsuarioById(vehiculo.getIdPropietario()).get();
-
-        if (estadoVerificacion.name().equals(vehiculo.getEstadoVerificacion().name())) {
-            throw new InvalidInputException(
-                    "Verification status unchanged",
-                    "VERIFICATION_STATUS_UNCHANGED",
-                    "The vehicle already has the specified verification status. No changes were made.");
-        }
-        vehiculo.setEstadoVerificacion(estadoVerificacion);
-
-        emailService.enviarCorreoEstadoVehiculo(usuario.getCorreo(), usuario.getNombre(), vehiculo.getPlaca(),
-                vehiculo.getEstadoVerificacion());
-
-        return vehiculoRepository.save(vehiculo);
-    }*/
+    /*
+     * public Vehiculo cambiarEstadoVerificacion(String placa, EstadoVerificacion
+     * estadoVerificacion) {
+     * Vehiculo vehiculo = getVehiculoById(placa).get();
+     * Usuario usuario =
+     * usuarioService.getUsuarioById(vehiculo.getIdPropietario()).get();
+     * 
+     * if
+     * (estadoVerificacion.name().equals(vehiculo.getEstadoVerificacion().name())) {
+     * throw new InvalidInputException(
+     * "Verification status unchanged",
+     * "VERIFICATION_STATUS_UNCHANGED",
+     * "The vehicle already has the specified verification status. No changes were made."
+     * );
+     * }
+     * vehiculo.setEstadoVerificacion(estadoVerificacion);
+     * 
+     * emailService.enviarCorreoEstadoVehiculo(usuario.getCorreo(),
+     * usuario.getNombre(), vehiculo.getPlaca(),
+     * vehiculo.getEstadoVerificacion());
+     * 
+     * return vehiculoRepository.save(vehiculo);
+     * }
+     */
 
     public Vehiculo cambiarEstadoOferta(String placa, EstadoOferta estadoOferta) {
         Vehiculo vehiculo = getVehiculoById(placa).get();
@@ -345,11 +355,13 @@ public class VehiculoService {
 
     public List<Vehiculo> obtenerVehiculosOrdenadosPorFecha() {
         List<Vehiculo> vehiculos = vehiculoRepository.findAllByOrderByFechaRegistroDesc();
-        /*for (Vehiculo v : vehiculos) {
-            if (!(v.getEstadoOferta() == EstadoOferta.ACTIVA)) {
-                vehiculos.remove(v);
-            }
-        }*/
+        /*
+         * for (Vehiculo v : vehiculos) {
+         * if (!(v.getEstadoOferta() == EstadoOferta.ACTIVA)) {
+         * vehiculos.remove(v);
+         * }
+         * }
+         */
         return vehiculos;
     }
 
@@ -367,7 +379,7 @@ public class VehiculoService {
                 .toList();
     }
 
-     public List<Vehiculo> obtenerVehiculosConEstadoPendiente() {
+    public List<Vehiculo> obtenerVehiculosConEstadoPendiente() {
         return vehiculoRepository.findAll().stream()
                 .filter(v -> v.getEstadoOferta() == EstadoOferta.PENDIENTE)
                 .distinct()
