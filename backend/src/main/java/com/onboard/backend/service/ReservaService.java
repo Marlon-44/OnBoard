@@ -9,6 +9,7 @@ import com.onboard.backend.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,23 +41,23 @@ public class ReservaService {
                     "The end date cannot be earlier than the start date");
         }
 
-        if (!ValidationUtils.isValidDireccion(reserva.getLugarRecogida())) {
-            throw new InvalidInputException("Invalid pickup location", "INVALID_PICKUP",
-                    "The pickup location must be at least 5 characters long");
-        }
-
-        if (!ValidationUtils.isValidDireccion(reserva.getLugarEntrega())) {
-            throw new InvalidInputException("Invalid delivery location", "INVALID_DELIVERY",
-                    "The delivery location must be at least 5 characters long");
-        }
+        ValidationUtils.validarCoordenadasCartagena(reserva.getLugarEntregaYRecogida());
 
         reserva.setEstadoReserva(EstadoOferta.PENDIENTE);
 
         return reservaRepository.save(reserva);
+
     }
 
     public Optional<Reserva> getReservaById(String idReserva) {
-        return reservaRepository.findById(idReserva);
+        Optional<Reserva> reserva = reservaRepository.findById(idReserva);
+        if (reserva.isEmpty()) {
+            throw new InvalidInputException(
+                    "Reserva not found",
+                    "RESERVA_NOT_FOUND",
+                    "No reservation was found with the provided ID: " + idReserva);
+        }
+        return reserva;
     }
 
     public List<Reserva> getAllReservas() {
@@ -67,8 +68,22 @@ public class ReservaService {
         reservaRepository.deleteById(idReserva);
     }
 
-    public List<Reserva> getAllReservasByIdCliente(String idCliente){
+    public List<Reserva> getAllReservasByIdCliente(String idCliente) {
         return reservaRepository.findAllByIdCliente(idCliente);
+    }
+
+    public List<String> getFechasReservadasPorVehiculo(String idVehiculo) {
+        List<Reserva> reservas = reservaRepository.findAllByIdVehiculo(idVehiculo);
+
+        return reservas.stream()
+                .flatMap(reserva -> {
+                    LocalDate start = reserva.getFechaInicio().toLocalDate();
+                    LocalDate end = reserva.getFechaFin().toLocalDate();
+                    return start.datesUntil(end.plusDays(1))
+                            .map(LocalDate::toString);
+                })
+                .distinct()
+                .toList();
     }
 
 }

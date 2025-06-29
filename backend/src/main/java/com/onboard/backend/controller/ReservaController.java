@@ -45,4 +45,10 @@ public class ReservaController {
         reservaService.deleteReservaById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/fechas-reservadas")
+    public ResponseEntity<List<String>> getFechasReservadas(@RequestParam String idVehiculo) {
+        List<String> fechas = reservaService.getFechasReservadasPorVehiculo(idVehiculo);
+        return ResponseEntity.ok(fechas);
+    }
 }

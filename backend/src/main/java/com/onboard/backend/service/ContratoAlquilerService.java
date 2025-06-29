@@ -135,8 +135,8 @@ public class ContratoAlquilerService {
 
         html = html.replace("${fechaInicio}", reserva.getFechaInicio().toLocalDate().format(formatter));
         html = html.replace("${fechaFin}", reserva.getFechaFin().toLocalDate().format(formatter));
-        html = html.replace("${lugarRecogida}", reserva.getLugarRecogida());
-        html = html.replace("${lugarEntrega}", reserva.getLugarEntrega());
+        html = html.replace("${lugarRecogida}", reserva.getLugarEntregaYRecogida());
+        html = html.replace("${lugarEntrega}", reserva.getLugarEntregaYRecogida());
         html = html.replace("${precioPorDia}", String.format("%.2f", vehiculo.getPrecioPorDia()));
         html = html.replace("${total}", String.format("%.2f", total));
 

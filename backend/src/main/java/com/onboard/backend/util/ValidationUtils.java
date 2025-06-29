@@ -170,4 +170,40 @@ public class ValidationUtils {
         return licencia != null && LICENCIA_CONDUCCION_PATTERN.matcher(licencia.trim()).matches();
     }
 
+    public static void validarCoordenadasCartagena(String coordenadas) {
+        if (coordenadas == null || !coordenadas.contains(",")) {
+            throw new InvalidInputException(
+                    "Invalid coordinate format",
+                    "INVALID_COORDINATE_FORMAT",
+                    "Coordinates must be in the format 'latitude,longitude'. Example: 10.4,-75.5");
+        }
+
+        String[] partes = coordenadas.split(",");
+        if (partes.length != 2) {
+            throw new InvalidInputException(
+                    "Invalid coordinate parts",
+                    "INVALID_COORDINATE_PARTS",
+                    "Coordinates must contain latitude and longitude.");
+        }
+
+        try {
+            double lat = Double.parseDouble(partes[0].trim());
+            double lon = Double.parseDouble(partes[1].trim());
+
+
+            if (lat < 10.3 || lat > 10.5 || lon < -75.6 || lon > -75.4) {
+                throw new InvalidInputException(
+                        "Coordinates outside Cartagena",
+                        "OUT_OF_CARTAGENA",
+                        "The coordinates must be located within Cartagena, Bolívar.");
+            }
+
+        } catch (NumberFormatException e) {
+            throw new InvalidInputException(
+                    "Coordinates must be numeric",
+                    "NON_NUMERIC_COORDINATES",
+                    "Latitude and longitude must be numeric values.");
+        }
+    }
+
 }

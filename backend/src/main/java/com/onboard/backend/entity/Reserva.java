@@ -16,22 +16,20 @@ public class Reserva {
     private String idVehiculo;
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
-    private String lugarRecogida;
-    private String lugarEntrega;
+    private String lugarEntregaYRecogida;
     private EstadoOferta estadoReserva;
 
     public Reserva() {
     }
 
     public Reserva(String idReserva, String idCliente, String idVehiculo, LocalDateTime fechaInicio,
-            LocalDateTime fechaFin, String lugarRecogida, String lugarEntrega, EstadoOferta estadoReserva) {
+                   LocalDateTime fechaFin, String lugarEntregaYRecogida, EstadoOferta estadoReserva) {
         this.idReserva = idReserva;
         this.idCliente = idCliente;
         this.idVehiculo = idVehiculo;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.lugarRecogida = lugarRecogida;
-        this.lugarEntrega = lugarEntrega;
+        this.lugarEntregaYRecogida = lugarEntregaYRecogida;
         this.estadoReserva = estadoReserva;
     }
 
@@ -75,20 +73,12 @@ public class Reserva {
         this.fechaFin = fechaFin;
     }
 
-    public String getLugarRecogida() {
-        return lugarRecogida;
+    public String getLugarEntregaYRecogida() {
+        return lugarEntregaYRecogida;
     }
 
-    public void setLugarRecogida(String lugarRecogida) {
-        this.lugarRecogida = lugarRecogida;
-    }
-
-    public String getLugarEntrega() {
-        return lugarEntrega;
-    }
-
-    public void setLugarEntrega(String lugarEntrega) {
-        this.lugarEntrega = lugarEntrega;
+    public void setLugarEntregaYRecogida(String lugarEntregaYRecogida) {
+        this.lugarEntregaYRecogida = lugarEntregaYRecogida;
     }
 
     public EstadoOferta getEstadoReserva() {
