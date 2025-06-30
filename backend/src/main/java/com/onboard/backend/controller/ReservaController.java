@@ -1,5 +1,6 @@
 package com.onboard.backend.controller;
 
+import com.onboard.backend.entity.Factura;
 import com.onboard.backend.entity.Reserva;
 import com.onboard.backend.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,4 +52,11 @@ public class ReservaController {
         List<String> fechas = reservaService.getFechasReservadasPorVehiculo(idVehiculo);
         return ResponseEntity.ok(fechas);
     }
+
+    @GetMapping("/{idReserva}/factura")
+    public ResponseEntity<Factura> getFacturaDeReserva(@PathVariable String idReserva) {
+        Factura factura = reservaService.getFactura(idReserva);
+        return ResponseEntity.ok(factura);
+    }
+
 }

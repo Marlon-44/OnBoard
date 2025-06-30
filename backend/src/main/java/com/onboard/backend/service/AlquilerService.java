@@ -2,7 +2,7 @@ package com.onboard.backend.service;
 
 import com.onboard.backend.entity.Alquiler;
 import com.onboard.backend.entity.Reserva;
-import com.onboard.backend.entity.Vehiculo;
+
 import com.onboard.backend.model.EstadoAlquiler;
 import com.onboard.backend.repository.AlquilerRepository;
 import com.onboard.backend.repository.ReservaRepository;
@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,23 +28,13 @@ public class AlquilerService {
     @Autowired
     private AlquilerRepository alquilerRepository;
 
-    @Autowired
-    private ReservaService reservaService;
-
-    @Autowired
-    private VehiculoService vehiculoService;
 
     private static final Logger schedulerLogger = LoggerFactory.getLogger(AlquilerService.class);
 
     public Alquiler saveAlquiler(Alquiler alquiler) {
-        Reserva reserva = reservaService.getReservaById(alquiler.getIdReserva()).get();
-        Vehiculo vehiculo = vehiculoService.getVehiculoById(reserva.getIdVehiculo()).get();
+       
 
-        long horas = ChronoUnit.HOURS.between(reserva.getFechaInicio(), reserva.getFechaFin());
-        float precioPorHora = vehiculo.getPrecioPorDia() / 24f;
-        double total = horas * precioPorHora * 1.10;
 
-        alquiler.setPrecioTotal(total);
         return alquilerRepository.save(alquiler);
     }
 

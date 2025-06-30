@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.onboard.backend.entity.Factura;
 import com.onboard.backend.model.EstadoOferta;
 import com.onboard.backend.model.EstadoReserva;
 import com.onboard.backend.model.EstadoVerificacion;
@@ -26,6 +27,8 @@ public class EmailService {
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     private static final String LOGO_URL = "https://static.vecteezy.com/system/resources/previews/048/525/793/non_2x/realistic-sport-car-isolated-on-background-3d-rendering-illustration-png.png";
+    @Autowired
+    private PdfService pdfService;
 
     @Autowired
     public EmailService(JavaMailSender mailSender, TemplateEngine templateEngine) {
@@ -240,4 +243,32 @@ public class EmailService {
                     emailPropietario, e);
         }
     }
+
+    public void enviarFacturaPorEmail(Factura factura, String nombreCliente, String correoCliente, String metodoPago) {
+        try {
+            MimeMessage mensaje = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
+
+            helper.setTo(correoCliente);
+            helper.setFrom("onboardnotifications@gmail.com");
+            helper.setSubject("🧾 Tu Factura Electrónica - OnBoard");
+
+            Context context = new Context();
+            context.setVariable("nombre", nombreCliente);
+            context.setVariable("logoUrl", LOGO_URL);
+            context.setVariable("total", factura.getTotal());
+            context.setVariable("fecha", factura.getFechaEmision());
+
+            String contenidoHtml = templateEngine.process("email/factura/factura_cliente", context);
+            helper.setText(contenidoHtml, true);
+
+            byte[] pdfFactura = pdfService.generarFacturaPdf(factura, nombreCliente, correoCliente, metodoPago);
+            helper.addAttachment("Factura_OnBoard.pdf", new ByteArrayResource(pdfFactura));
+
+            mailSender.send(mensaje);
+        } catch (Exception e) {
+            logger.error("Error al enviar la factura por email a <{}>", correoCliente, e);
+        }
+    }
+
 }

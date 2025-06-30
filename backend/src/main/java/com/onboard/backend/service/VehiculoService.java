@@ -111,6 +111,9 @@ public class VehiculoService {
                     "The daily rental price must be greater than zero.");
         }
 
+        vehiculo.setPrecioPorDia(vehiculo.getPrecioPorDia() * 1.10f);
+
+
         if (!ValidationUtils.isValidKilometraje(vehiculo.getKilometraje())) {
             throw new InvalidInputException("Invalid mileage", "INVALID_MILEAGE",
                     "Must be a non-negative number.");

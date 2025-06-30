@@ -29,4 +29,8 @@ public class FacturaService {
     public void deleteFacturaById(String idFactura) {
         facturaRepository.deleteById(idFactura);
     }
+
+    public Factura getFacturaByIdReserva(String idReserva) {
+        return facturaRepository.findByIdReserva(idReserva).get();
+    }
 }

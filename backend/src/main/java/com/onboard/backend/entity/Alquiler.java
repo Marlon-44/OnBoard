@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.onboard.backend.model.EstadoAlquiler;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Document(collection = "alquileres")
@@ -15,12 +16,12 @@ public class Alquiler {
     private String idReserva;
     private EstadoAlquiler estado;
     private LocalDateTime fechaNovedad; 
-    private double precioTotal;
+    private BigDecimal precioTotal;
 
     public Alquiler() {
     }
 
-    public Alquiler(String idAlquiler, String idReserva, EstadoAlquiler estado, LocalDateTime fechaNovedad, double precioTotal) {
+    public Alquiler(String idAlquiler, String idReserva, EstadoAlquiler estado, LocalDateTime fechaNovedad, BigDecimal precioTotal) {
         this.idAlquiler = idAlquiler;
         this.idReserva = idReserva;
         this.estado = estado;
@@ -60,11 +61,11 @@ public class Alquiler {
         this.fechaNovedad = fechaNovedad;
     }
 
-    public double getPrecioTotal() {
+    public BigDecimal getPrecioTotal() {
         return precioTotal;
     }
 
-    public void setPrecioTotal(double precioTotal) {
+    public void setPrecioTotal(BigDecimal precioTotal) {
         this.precioTotal = precioTotal;
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Document(collection = "facturas")
@@ -15,8 +16,10 @@ public class Factura {
     private BigDecimal total;
     private LocalDate fechaEmision;
     private String razon;
+    private BigDecimal impuesto;
 
-    public Factura() {}
+    public Factura() {
+    }
 
     public Factura(String idFactura, String idReserva, BigDecimal total, LocalDate fechaEmision, String razon) {
         this.idFactura = idFactura;
@@ -47,7 +50,8 @@ public class Factura {
     }
 
     public void setTotal(BigDecimal total) {
-        this.total = total;
+        this.total = total.setScale(2, RoundingMode.HALF_UP);
+        this.impuesto = total.multiply(new BigDecimal("0.004")).setScale(2, RoundingMode.HALF_UP);
     }
 
     public LocalDate getFechaEmision() {
@@ -64,5 +68,9 @@ public class Factura {
 
     public void setRazon(String razon) {
         this.razon = razon;
+    }
+
+    public BigDecimal getImpuesto() {
+        return impuesto;
     }
 }

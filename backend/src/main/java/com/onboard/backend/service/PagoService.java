@@ -25,10 +25,16 @@ public class PagoService {
     private PagoRepository pagoRepository;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private FacturaRepository facturaRepository;
 
     @Autowired
     private PayPalHttpClient payPalClient;
+
+    public static final String exitoso = "http://localhost:5173/pago/cancelado";
+    public static final String cancelado = "http://localhost:5173/pago/exitoso";
 
     public String crearPago(String idFactura) throws Exception {
         Optional<Factura> facturaOpt = facturaRepository.findById(idFactura);
@@ -44,8 +50,8 @@ public class PagoService {
         orderRequest.checkoutPaymentIntent("CAPTURE");
 
         ApplicationContext applicationContext = new ApplicationContext()
-                .returnUrl("https://tuapp.com/pago-exitoso")
-                .cancelUrl("https://tuapp.com/pago-cancelado")
+                .returnUrl(exitoso)
+                .cancelUrl(cancelado)
                 .brandName("OnBoard")
                 .landingPage("LOGIN")
                 .userAction("PAY_NOW");
@@ -95,18 +101,35 @@ public class PagoService {
         try {
             HttpResponse<Order> response = payPalClient.execute(request);
             Order orden = response.result();
+            Capture capture = orden.purchaseUnits().get(0)
+                    .payments().captures().get(0);
+
+            String transactionId = capture.id();
+
+            String status = capture.status();
+            String payerEmail = orden.payer().email();
+            String payerName = orden.payer().name().givenName() + " " + orden.payer().name().surname();
 
             Optional<Pago> pagoOpt = pagoRepository.findById(orderId);
             if (pagoOpt.isPresent()) {
                 Pago pago = pagoOpt.get();
-                pago.setEstadoPago(orden.status());
-                pago.setDetalle("Pago capturado con PayPal");
+                pago.setEstadoPago(status);
+                pago.setDetalle("Pago capturado: ID transacción " + transactionId);
                 pagoRepository.save(pago);
+
+                Optional<Factura> facturaOpt = facturaRepository.findById(pago.getIdFactura());
+                if (facturaOpt.isPresent()) {
+                    Factura factura = facturaOpt.get();
+
+                    emailService.enviarFacturaPorEmail(factura, payerName, payerEmail, "PayPal");
+                }
             }
 
-            return "Pago capturado exitosamente con ID: " + orden.id();
+            return "Pago capturado exitosamente. Transacción: " + transactionId;
+
         } catch (HttpException e) {
             throw new RuntimeException("Error al capturar orden: " + e.getMessage());
         }
     }
+
 }

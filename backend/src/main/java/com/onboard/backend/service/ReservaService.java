@@ -1,6 +1,8 @@
 package com.onboard.backend.service;
 
+import com.onboard.backend.entity.Factura;
 import com.onboard.backend.entity.Reserva;
+import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.model.EstadoReserva;
 import com.onboard.backend.repository.ReservaRepository;
@@ -8,7 +10,10 @@ import com.onboard.backend.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +28,9 @@ public class ReservaService {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private FacturaService facturaService;
 
     public Reserva saveReserva(Reserva reserva) {
 
@@ -53,9 +61,23 @@ public class ReservaService {
                     "One or more selected dates are already reserved for this vehicle.");
         }
 
-
         reserva.setEstadoReserva(EstadoReserva.PENDIENTE);
+        Vehiculo vehiculo = vehiculoService.getVehiculoById(reserva.getIdVehiculo()).get();
 
+        long horas = ChronoUnit.HOURS.between(reserva.getFechaInicio(), reserva.getFechaFin());
+        float precioPorHora = vehiculo.getPrecioPorDia() / 24f;
+
+        BigDecimal horasBD = BigDecimal.valueOf(horas);
+        BigDecimal precioPorHoraBD = BigDecimal.valueOf(precioPorHora);
+
+        BigDecimal total = horasBD.multiply(precioPorHoraBD).setScale(2, RoundingMode.HALF_UP);
+
+        Factura factura = new Factura();
+        factura.setFechaEmision(LocalDate.now());
+        factura.setIdReserva(reserva.getIdReserva());
+        factura.setRazon("Pago Alquiler Vehiculo: " + vehiculo.getPlaca());
+        factura.setTotal(total);
+        facturaService.saveFactura(factura);
         return reservaRepository.save(reserva);
     }
 
@@ -86,8 +108,6 @@ public class ReservaService {
         List<Reserva> reservas = reservaRepository.findAllByIdVehiculo(idVehiculo);
         LocalDate hoy = LocalDate.now();
 
-        
-        
         return reservas.stream()
                 .flatMap(reserva -> {
                     LocalDate start = reserva.getFechaInicio().toLocalDate();
@@ -98,6 +118,11 @@ public class ReservaService {
                 })
                 .distinct()
                 .toList();
+    }
+
+    public Factura getFactura(String idReserva) {
+        getReservaById(idReserva);
+        return facturaService.getFacturaByIdReserva(idReserva);
     }
 
 }
