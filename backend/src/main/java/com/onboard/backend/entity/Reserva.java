@@ -1,11 +1,11 @@
 package com.onboard.backend.entity;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.onboard.backend.model.EstadoOferta;
-
-import java.time.LocalDateTime;
 
 @Document(collection = "reservas")
 public class Reserva {
@@ -23,7 +23,7 @@ public class Reserva {
     }
 
     public Reserva(String idReserva, String idCliente, String idVehiculo, LocalDateTime fechaInicio,
-                   LocalDateTime fechaFin, String lugarEntregaYRecogida, EstadoOferta estadoReserva) {
+                LocalDateTime fechaFin, String lugarEntregaYRecogida, EstadoOferta estadoReserva) {
         this.idReserva = idReserva;
         this.idCliente = idCliente;
         this.idVehiculo = idVehiculo;

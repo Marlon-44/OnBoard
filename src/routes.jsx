@@ -9,6 +9,9 @@ import Register from "./Pages/RegisterPage";
 import Profile from "./Pages/Profile";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import ReservaForm from "./Pages/ReservaForm";
+import Pago from "./Pages/Pago";
+import PagoExitoso from "./Pages/Pago/PagoExitoso";
+import PagoCancelado from "./Pages/Pago/PagoCancelado";
 const AppRoutes = () =>{
     
     return(
@@ -23,6 +26,9 @@ const AppRoutes = () =>{
                     <Route path="/profile" element={<Profile/>}></Route>
                     <Route path="/dashboard" element={<Dashboard/>}></Route>
                     <Route path="/reserva-form" element={<ReservaForm/>}></Route>
+                    <Route path="/pago/:idFactura" element={<Pago/>}></Route>
+                    <Route path="/pago-exitoso" element={<PagoExitoso/>}></Route>
+                    <Route path="/pago-cancelado" element={<PagoCancelado/>}></Route>
                 </Routes>
             
             </BrowserRouter>

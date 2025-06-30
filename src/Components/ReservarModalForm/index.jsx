@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
     Dialog,
     DialogTitle,
@@ -23,6 +23,13 @@ import {
 import Alert from "@mui/material/Alert";
 import mapboxgl from "mapbox-gl";
 import dayjs from "dayjs";
+import { crearReserva } from "../../api/reserva";
+import { crearFactura } from "../../api/factura";
+import FacturaResumen from "../FacturaResumen";
+import { useNavigate } from "react-router-dom";
+import ReservaContext from "../../features/reserva/ReservaContext";
+import FacturaContext from "../../features/factura/FacturaContext";
+import { crearSesionPagoStripe } from "../../api/stripe";
 
 mapboxgl.accessToken = "pk.eyJ1IjoiZGFsbWF0YSIsImEiOiJjbWNpM2VkdDUxMjFzMnlwdGg5eGh4N2xoIn0.DUiFxWzL75SniPLlWoilRg";
 
@@ -36,11 +43,15 @@ const ReservarModalForm = ({
     ocultarBotonReserva,
     resetFechasDisponibilidad
 }) => {
+
+
     const [direccion, setDireccion] = useState("");
     const [aceptaTerminos, setAceptaTerminos] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const mapContainerRef = useRef(null);
     const markerRef = useRef(null);
+    const { agregarReserva } = useContext(ReservaContext);
+    const { agregarFactura } = useContext(FacturaContext);
 
     const diasTotales = Math.ceil(
         (dayjs(fechaHoraEntrega).diff(dayjs(fechaHoraRecogida), 'hour')) / 24
@@ -49,6 +60,7 @@ const ReservarModalForm = ({
     const subtotal = diasTotales * precioPorDia;
     const impuesto4x1000 = subtotal * 0.004;
     const total = subtotal + impuesto4x1000;
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!open) return;
@@ -85,39 +97,61 @@ const ReservarModalForm = ({
         return () => clearTimeout(timeout);
     }, [open]);
 
-    const handleConfirmar = () => {
-        if (!aceptaTerminos) {
-            alert("Debe aceptar los términos y condiciones para continuar.");
-            return;
+    const handleConfirmar = async () => {
+    if (!aceptaTerminos) {
+        alert("Debe aceptar los términos y condiciones para continuar.");
+        return;
+    }
+
+    if (!direccion) {
+        alert("Debe seleccionar una dirección en el mapa.");
+        return;
+    }
+
+    try {
+        // 1. Crear reserva
+        const reservaResponse = await crearReserva({
+            idCliente: usuario.idUsuario,
+            idVehiculo: vehicle.idVehiculo,
+            fechaInicio: fechaHoraRecogida,
+            fechaFin: fechaHoraEntrega,
+            lugarEntregaYRecogida: direccion,
+            estadoReserva: "PENDIENTE"
+        });
+
+        const reserva = reservaResponse.data;
+        agregarReserva(reserva); // opcional, por si usas el contexto
+
+        // 2. Crear factura
+        const facturaResponse = await crearFactura({
+            idReserva: reserva.idReserva,
+            total,
+            fechaEmision: dayjs().format("YYYY-MM-DD"),
+            razon: `Reserva de vehículo por ${diasTotales} días`
+        });
+
+        const factura = facturaResponse.data;
+        agregarFactura(factura); // opcional, por si usas el contexto
+
+        // 3. Crear sesión de pago en Stripe
+        const stripeResult = await crearSesionPagoStripe({
+            idFactura: factura.idFactura,
+            razon: factura.razon,
+            total
+        });
+
+        if (stripeResult.url) {
+            window.location.href = stripeResult.url;
+        } else {
+            throw new Error("No se recibió una URL válida desde Stripe");
         }
+    } catch (error) {
+        console.error("Error en el proceso de reserva y pago:", error);
+        alert("Ocurrió un error. Intenta más tarde.");
+    }
+};
 
-        alert("Redirigiendo a la zona transaccional para completar el pago...");
 
-        // 🔒 Lógica futura (una vez completado el pago exitoso)
-        /*
-        const reserva = {
-            usuarioId: usuario.idUsuario,
-            nombre: usuario.nombre,
-            correo: usuario.correo,
-            telefono: usuario.telefono,
-            marca: vehicle.marca,
-            modelo: vehicle.modelo,
-            placa: vehicle.placa,
-            tipoVehiculo: vehicle.tipoVehiculo,
-            anio: vehicle.anio,
-            fechaRecogida: fechaHoraRecogida,
-            fechaEntrega: fechaHoraEntrega,
-            lugarEntregaRecogida: direccion,
-            totalReserva: total
-        };
-
-        alert("Reserva generada:\n" + JSON.stringify(reserva, null, 2));
-        if (ocultarBotonReserva) ocultarBotonReserva();
-        if (resetFechasDisponibilidad) resetFechasDisponibilidad();
-        onClose();
-        setSnackbarOpen(true);
-        */
-    };
 
     const handleSnackbarClose = (event, reason) => {
         if (reason === "clickaway") return;
@@ -154,37 +188,7 @@ const ReservarModalForm = ({
                         <TextField label="Cantidad de días" value={diasTotales} slotProps={{ input: { readOnly: true } }} />
                     </Box>
 
-                    <Box mt={2}>
-                        <Typography variant="h6" mb={1}>Zona de Facturación</Typography>
-                        <TableContainer component={Paper}>
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Descripción</TableCell>
-                                        <TableCell align="right">Cantidad</TableCell>
-                                        <TableCell align="right">Valor Unitario</TableCell>
-                                        <TableCell align="right">Subtotal</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell>Alquiler por días</TableCell>
-                                        <TableCell align="right">{diasTotales}</TableCell>
-                                        <TableCell align="right">${precioPorDia.toFixed(2)}</TableCell>
-                                        <TableCell align="right">${subtotal.toFixed(2)}</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell colSpan={3}>Impuesto 4x1000</TableCell>
-                                        <TableCell align="right">${impuesto4x1000.toFixed(2)}</TableCell>
-                                    </TableRow>
-                                    <TableRow>
-                                        <TableCell colSpan={3}><strong>Total</strong></TableCell>
-                                        <TableCell align="right"><strong>${total.toFixed(2)}</strong></TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Box>
+                    <FacturaResumen diasTotales={diasTotales} precioPorDia={precioPorDia} />
 
                     <Box mt={4}>
                         <Typography mb={1}>Selecciona el lugar de entrega y recogida:</Typography>

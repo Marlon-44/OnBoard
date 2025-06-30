@@ -9,25 +9,31 @@ import { SesionProvider } from './features/sesion/SesionContext'
 import { VehicleRequestProvider } from './features/vehicleRequests/VehicleRequestProvider'
 import { UserRequestProvider } from './features/userRequests/UserRequestProvider'
 import { UsersProvider } from './features/users/UsersProvider'
+import { ReservaProvider } from './features/reserva/ReservaProvider'
+import { FacturaProvider } from './features/factura/FacturaProvider'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <SesionProvider>
       <UsersProvider>
-        <UserRequestProvider>
-          <VehicleRequestProvider>
-            <ReviewsProvider>
-              <OfertasProvider>
-                <FeaturedVehicleProvider>
-                  <VehicleProvider>
-                    <AppRoutes>
-                    </AppRoutes>
-                  </VehicleProvider>
-                </FeaturedVehicleProvider>
-              </OfertasProvider>
-            </ReviewsProvider>
-          </VehicleRequestProvider>
-        </UserRequestProvider>
+        <ReservaProvider>
+          <FacturaProvider>
+            <UserRequestProvider>
+              <VehicleRequestProvider>
+                <ReviewsProvider>
+                  <OfertasProvider>
+                    <FeaturedVehicleProvider>
+                      <VehicleProvider>
+                        <AppRoutes>
+                        </AppRoutes>
+                      </VehicleProvider>
+                    </FeaturedVehicleProvider>
+                  </OfertasProvider>
+                </ReviewsProvider>
+              </VehicleRequestProvider>
+            </UserRequestProvider>
+          </FacturaProvider>
+        </ReservaProvider>
       </UsersProvider>
     </SesionProvider>
   </StrictMode>
