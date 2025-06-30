@@ -72,13 +72,16 @@ public class ReservaService {
 
         BigDecimal total = horasBD.multiply(precioPorHoraBD).setScale(2, RoundingMode.HALF_UP);
 
+        Reserva savedReserva = reservaRepository.save(reserva); 
+
         Factura factura = new Factura();
         factura.setFechaEmision(LocalDate.now());
-        factura.setIdReserva(reserva.getIdReserva());
+        factura.setIdReserva(savedReserva.getIdReserva()); 
         factura.setRazon("Pago Alquiler Vehiculo: " + vehiculo.getPlaca());
         factura.setTotal(total);
         facturaService.saveFactura(factura);
-        return reservaRepository.save(reserva);
+
+        return savedReserva;
     }
 
     public Optional<Reserva> getReservaById(String idReserva) {
