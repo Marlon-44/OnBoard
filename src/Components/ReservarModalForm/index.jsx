@@ -115,9 +115,10 @@ const ReservarModalForm = ({
                 idVehiculo: vehicle.placa,
                 fechaInicio: fechaHoraRecogida,
                 fechaFin: fechaHoraEntrega,
-                lugarEntregaYRecogida: direccion,
+                lugarEntregaYRecogida: direccion.toString(),
                 estadoReserva: "PENDIENTE"
             };
+            console.log("Tipo de dirección:", typeof direccion, direccion);
 
             alert("Datos enviados a crearReserva:\n" + JSON.stringify(datosReserva, null, 2));
             const reservaResponse = await crearReserva(datosReserva);
