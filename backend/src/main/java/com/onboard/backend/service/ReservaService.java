@@ -87,6 +87,7 @@ public class ReservaService {
         LocalDate hoy = LocalDate.now();
 
         
+        
         return reservas.stream()
                 .flatMap(reserva -> {
                     LocalDate start = reserva.getFechaInicio().toLocalDate();
