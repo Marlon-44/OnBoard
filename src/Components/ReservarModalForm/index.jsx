@@ -117,14 +117,16 @@ const ReservarModalForm = ({
                 idVehiculo: vehicle.placa,
                 fechaInicio: fechaHoraRecogida,
                 fechaFin: fechaHoraEntrega,
-                lugarRecogida: direccion.toString(),
-                lugarEntrega: direccion.toString(),
+                lugarEntregaYRecogida: direccion,
                 estadoReserva: "PENDIENTE"
             };
 
             alert("Datos enviados a crearReserva:\n" + JSON.stringify(datosReserva, null, 2));
+            
             const reservaResponse = await crearReserva(datosReserva);
+            
             const reserva = reservaResponse.data;
+            console.log("RESERRVA EN EL TRY, ID RESERVA: ", reserva.idReserva)
             agregarReserva(reserva);
 
             // 2. Obtener la factura automáticamente generada por el backend

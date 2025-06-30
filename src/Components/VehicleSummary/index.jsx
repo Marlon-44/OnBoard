@@ -2,7 +2,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./index.module.css";
 import { useContext, useEffect, useState } from "react";
 
+
+
 import dayjs from "dayjs";
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -12,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import ReservarModalForm from "../ReservarModalForm";
 import SesionContext from "../../features/sesion/SesionContext";
+import { confirmarDisponibilidad } from "../../api/reserva";
 
 const VehicleSummary = ({ vehicle }) => {
     const [activePhoto, setActivePhoto] = useState(vehicle.fotosUrls[0]);
@@ -63,6 +67,8 @@ const VehicleSummary = ({ vehicle }) => {
         setFechaHoraEntrega(null);
     };
 
+
+
     const handleCheckAvailability = async () => {
         if (!fechaHoraRecogida || !fechaHoraEntrega) {
             setAlerta({
@@ -73,10 +79,13 @@ const VehicleSummary = ({ vehicle }) => {
         }
 
         const ahora = dayjs();
-        const esHoy = fechaHoraRecogida.isSame(ahora, 'day');
+        const recogida = dayjs(fechaHoraRecogida);
+        const entrega = dayjs(fechaHoraEntrega);
+
+        const esHoy = recogida.isSame(ahora, 'day');
         const dosHorasDespues = ahora.add(2, "hour");
 
-        if (esHoy && fechaHoraRecogida.isBefore(dosHorasDespues)) {
+        if (esHoy && recogida.isBefore(dosHorasDespues)) {
             setAlerta({
                 tipo: "warning",
                 mensaje: "Si reservas para hoy, la hora de recogida debe ser al menos 2 horas después de la actual.",
@@ -84,8 +93,8 @@ const VehicleSummary = ({ vehicle }) => {
             return;
         }
 
-        const doceHorasAntesEntrega = fechaHoraEntrega.subtract(12, "hour");
-        if (fechaHoraRecogida.isAfter(doceHorasAntesEntrega)) {
+        const doceHorasAntesEntrega = entrega.subtract(12, "hour");
+        if (recogida.isAfter(doceHorasAntesEntrega)) {
             setAlerta({
                 tipo: "warning",
                 mensaje: "La fecha de recogida debe ser al menos 12 horas antes de la fecha de entrega.",
@@ -103,25 +112,56 @@ const VehicleSummary = ({ vehicle }) => {
             mensaje: "Verificando disponibilidad del vehículo...",
         });
 
-        setTimeout(() => {
-            const disponibilidadSimulada = true;
-            if (disponibilidadSimulada) {
-                setDisponible(true);
-                setMostrarBotonReserva(true);
-                localStorage.setItem("mostrarBotonReserva", "true");
-                setAlerta({
-                    tipo: "success",
-                    mensaje: "¡Vehículo disponible! Ahora puedes solicitar la reserva.",
-                });
-            } else {
+        try {
+            console.log("PLACA> ", vehicle.placa)
+            const fechasOcupadas = await confirmarDisponibilidad(vehicle.placa);
+            console.log("Fechas ocupadas:", fechasOcupadas);
+
+            // Generar fechas solicitadas
+            const fechasSolicitadas = [];
+            let fechaActual = dayjs(recogida).startOf("day");
+            dayjs.extend(isSameOrBefore);
+            while (fechaActual.isSameOrBefore(entrega.startOf("day"))) {
+                fechasSolicitadas.push(fechaActual.format("YYYY-MM-DD"));
+                fechaActual = fechaActual.add(1, "day");
+            }
+
+            console.log("Fechas solicitadas:", fechasSolicitadas);
+
+            const hayConflicto = fechasSolicitadas.some(fecha =>
+                fechasOcupadas.includes(fecha)
+            );
+
+            if (hayConflicto) {
                 setDisponible(false);
                 setAlerta({
                     tipo: "error",
                     mensaje: "No hay disponibilidad para las fechas seleccionadas.",
                 });
+                setMostrarBotonReserva(false);
+                localStorage.removeItem("mostrarBotonReserva");
+            } else {
+                setDisponible(true);
+                setAlerta({
+                    tipo: "success",
+                    mensaje: "¡Vehículo disponible! Ahora puedes solicitar la reserva.",
+                });
+                setMostrarBotonReserva(true);
+                localStorage.setItem("mostrarBotonReserva", "true");
             }
-        }, 1500);
+        } catch (error) {
+            console.error("Error al verificar disponibilidad:", error);
+            setAlerta({
+                tipo: "error",
+                mensaje: "No se pudo verificar la disponibilidad. Intenta más tarde.",
+            });
+        }
     };
+
+
+
+
+
 
     const handleReservarClick = () => {
         if (!usuario) {
