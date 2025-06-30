@@ -115,8 +115,7 @@ const ReservarModalForm = ({
                 idVehiculo: vehicle.placa,
                 fechaInicio: fechaHoraRecogida,
                 fechaFin: fechaHoraEntrega,
-                lugarRecogida: direccion,
-                lugarEntrega: direccion,
+                lugarEntregaYRecogida: direccion,
                 estadoReserva: "PENDIENTE"
             };
 
