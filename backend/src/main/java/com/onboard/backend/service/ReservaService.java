@@ -72,11 +72,11 @@ public class ReservaService {
 
         BigDecimal total = horasBD.multiply(precioPorHoraBD).setScale(2, RoundingMode.HALF_UP);
 
-        Reserva savedReserva = reservaRepository.save(reserva); 
+        Reserva savedReserva = reservaRepository.save(reserva);
 
         Factura factura = new Factura();
         factura.setFechaEmision(LocalDate.now());
-        factura.setIdReserva(savedReserva.getIdReserva()); 
+        factura.setIdReserva(savedReserva.getIdReserva());
         factura.setRazon("Pago Alquiler Vehiculo: " + vehiculo.getPlaca());
         factura.setTotal(total);
         facturaService.saveFactura(factura);
@@ -109,18 +109,18 @@ public class ReservaService {
 
     public List<String> getFechasReservadasPorVehiculo(String idVehiculo) {
         List<Reserva> reservas = reservaRepository.findAllByIdVehiculo(idVehiculo);
-        LocalDate hoy = LocalDate.now();
 
         return reservas.stream()
+                .filter(reserva -> reserva.getFechaInicio() != null && reserva.getFechaFin() != null)
                 .flatMap(reserva -> {
                     LocalDate start = reserva.getFechaInicio().toLocalDate();
                     LocalDate end = reserva.getFechaFin().toLocalDate();
                     return start.datesUntil(end.plusDays(1))
-                            .filter(fecha -> fecha.isAfter(hoy))
                             .map(LocalDate::toString);
                 })
                 .distinct()
                 .toList();
+
     }
 
     public Factura getFactura(String idReserva) {
