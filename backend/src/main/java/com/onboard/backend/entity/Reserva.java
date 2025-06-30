@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.onboard.backend.model.EstadoReserva;
+
 
 @Document(collection = "reservas")
 public class Reserva {
@@ -18,9 +20,11 @@ public class Reserva {
     private String lugarEntregaYRecogida;
     private EstadoReserva estadoReserva;
 
-    public Reserva(String idReserva, String idCliente, String idVehiculo,
-            LocalDateTime fechaInicio, LocalDateTime fechaFin,
-            String lugarEntregaYRecogida, EstadoReserva estadoReserva) {
+    public Reserva() {
+    }
+
+    public Reserva(String idReserva, String idCliente, String idVehiculo, LocalDateTime fechaInicio,
+                   LocalDateTime fechaFin, String lugarEntregaYRecogida, EstadoReserva estadoReserva) {
         this.idReserva = idReserva;
         this.idCliente = idCliente;
         this.idVehiculo = idVehiculo;
@@ -28,9 +32,6 @@ public class Reserva {
         this.fechaFin = fechaFin;
         this.lugarEntregaYRecogida = lugarEntregaYRecogida;
         this.estadoReserva = estadoReserva;
-    }
-
-    public Reserva() {
     }
 
     public String getIdReserva() {
