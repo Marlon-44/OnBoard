@@ -29,7 +29,7 @@ import FacturaResumen from "../FacturaResumen";
 import { useNavigate } from "react-router-dom";
 import ReservaContext from "../../features/reserva/ReservaContext";
 import FacturaContext from "../../features/factura/FacturaContext";
-import { crearSesionPagoStripe } from "../../api/stripe";
+import { crearOrdenPaypal } from "../../api/paypal";
 
 mapboxgl.accessToken = "pk.eyJ1IjoiZGFsbWF0YSIsImEiOiJjbWNpM2VkdDUxMjFzMnlwdGg5eGh4N2xoIn0.DUiFxWzL75SniPLlWoilRg";
 
@@ -98,58 +98,56 @@ const ReservarModalForm = ({
     }, [open]);
 
     const handleConfirmar = async () => {
-    if (!aceptaTerminos) {
-        alert("Debe aceptar los términos y condiciones para continuar.");
-        return;
-    }
-
-    if (!direccion) {
-        alert("Debe seleccionar una dirección en el mapa.");
-        return;
-    }
-
-    try {
-        // 1. Crear reserva
-        const reservaResponse = await crearReserva({
-            idCliente: usuario.idUsuario,
-            idVehiculo: vehicle.idVehiculo,
-            fechaInicio: fechaHoraRecogida,
-            fechaFin: fechaHoraEntrega,
-            lugarEntregaYRecogida: direccion,
-            estadoReserva: "PENDIENTE"
-        });
-
-        const reserva = reservaResponse.data;
-        agregarReserva(reserva); // opcional, por si usas el contexto
-
-        // 2. Crear factura
-        const facturaResponse = await crearFactura({
-            idReserva: reserva.idReserva,
-            total,
-            fechaEmision: dayjs().format("YYYY-MM-DD"),
-            razon: `Reserva de vehículo por ${diasTotales} días`
-        });
-
-        const factura = facturaResponse.data;
-        agregarFactura(factura); // opcional, por si usas el contexto
-
-        // 3. Crear sesión de pago en Stripe
-        const stripeResult = await crearSesionPagoStripe({
-            idFactura: factura.idFactura,
-            razon: factura.razon,
-            total
-        });
-
-        if (stripeResult.url) {
-            window.location.href = stripeResult.url;
-        } else {
-            throw new Error("No se recibió una URL válida desde Stripe");
+        if (!aceptaTerminos) {
+            alert("Debe aceptar los términos y condiciones para continuar.");
+            return;
         }
-    } catch (error) {
-        console.error("Error en el proceso de reserva y pago:", error);
-        alert("Ocurrió un error. Intenta más tarde.");
-    }
-};
+
+        if (!direccion) {
+            alert("Debe seleccionar una dirección en el mapa.");
+            return;
+        }
+
+        try {
+            // 1. Datos para crear reserva
+            const datosReserva = {
+                idCliente: usuario.idUsuario,
+                idVehiculo: vehicle.placa,
+                fechaInicio: fechaHoraRecogida,
+                fechaFin: fechaHoraEntrega,
+                lugarRecogida: direccion,
+                lugarEntrega: direccion,
+                estadoReserva: "PENDIENTE"
+            };
+
+            alert("Datos enviados a crearReserva:\n" + JSON.stringify(datosReserva, null, 2));
+            const reservaResponse = await crearReserva(datosReserva);
+            const reserva = reservaResponse.data;
+            agregarReserva(reserva);
+
+            // 2. Crear factura con solo el idReserva
+            const facturaId = reserva.idFactura || reserva.idReserva;
+
+            alert("ID enviado a crearFactura:\n" + facturaId);
+            const facturaResponse = await crearFactura(facturaId);
+            const factura = facturaResponse;
+            agregarFactura(factura);
+
+            // 3. Redirigir a PayPal
+            if (factura.url) {
+                alert("Redirigiendo a URL de PayPal:\n" + factura.url);
+                window.location.href = factura.url;
+            } else {
+                throw new Error("No se recibió una URL válida desde PayPal");
+            }
+
+        } catch (error) {
+            console.error("Error en el proceso de reserva y pago:", error);
+            alert("Ocurrió un error. Intenta más tarde.");
+        }
+    };
+
+
 
 
 
