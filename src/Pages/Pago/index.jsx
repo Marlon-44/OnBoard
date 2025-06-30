@@ -42,8 +42,9 @@ const Pago = () => {
     }, [idFactura]);
 
     console.log("Factura> ", factura)
+
     useEffect(() => {
-        if (factura && factura.estado === "PENDIENTE" && window.paypal) {
+        if (factura && factura.estadoPago === "CREATED" && window.paypal) {
             window.paypal.Buttons({
                 createOrder: async () => {
                     const res = await fetch(`http://localhost:8080/api/pagos/crear?idFactura=${factura.idFactura}`, {
@@ -63,7 +64,7 @@ const Pago = () => {
 
                         if (result.status === "COMPLETED") {
                             setPagoExitoso(true);
-                            setFactura((prev) => ({ ...prev, estado: "PAGADA" }));
+                            setFactura((prev) => ({ ...prev, estadoPago: "COMPLETED" }));
                         } else if (result.status === "APPROVED") {
                             setError("El pago fue aprobado pero aún no capturado.");
                         } else if (result.status === "VOIDED") {
@@ -134,13 +135,13 @@ const Pago = () => {
                     </Table>
                 </TableContainer>
 
-                {factura.estado === "PENDIENTE" && (
+                {factura.estadoPago === "CREATED" && (
                     <Box textAlign="center" mt={4}>
                         <div id="paypal-button-container" />
                     </Box>
                 )}
 
-                {factura.estado === "PAGADA" && (
+                {factura.estadoPago === "COMPLETED" && (
                     <Box textAlign="center" mt={3}>
                         <Alert severity="success">Esta factura ya ha sido pagada.</Alert>
                     </Box>
