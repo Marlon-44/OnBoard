@@ -86,6 +86,7 @@ public class ReservaService {
         List<Reserva> reservas = reservaRepository.findAllByIdVehiculo(idVehiculo);
         LocalDate hoy = LocalDate.now();
 
+        
         return reservas.stream()
                 .flatMap(reserva -> {
                     LocalDate start = reserva.getFechaInicio().toLocalDate();
