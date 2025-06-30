@@ -13,6 +13,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.onboard.backend.model.EstadoOferta;
+import com.onboard.backend.model.EstadoReserva;
 import com.onboard.backend.model.EstadoVerificacion;
 
 import java.util.Map;
@@ -86,6 +87,32 @@ public class EmailService {
         }
 
         Map<String, Object> variables = Map.of("nombre", nombreUsuario);
+        enviarCorreoConTemplate(toEmail, asunto, plantilla, variables);
+    }
+
+    public void enviarCorreoEstadoReserva(String toEmail, String nombreUsuario, String placa, EstadoReserva estado) {
+        String plantilla;
+        String asunto;
+
+        switch (estado) {
+            case ACTIVA -> {
+                plantilla = "email/estado_reserva/activa";
+                asunto = "✅ Your reservation is now active!";
+            }
+            case CANCELADA -> {
+                plantilla = "email/estado_reserva/cancelada";
+                asunto = "❌ Your reservation has been cancelled";
+            }
+            default -> {
+                plantilla = "email/estado_reserva/pendiente";
+                asunto = "⏳ Your reservation request is pending";
+            }
+        }
+
+        Map<String, Object> variables = Map.of(
+                "nombre", nombreUsuario,
+                "placa", placa);
+
         enviarCorreoConTemplate(toEmail, asunto, plantilla, variables);
     }
 

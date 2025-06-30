@@ -2,9 +2,8 @@ package com.onboard.backend.service;
 
 import com.onboard.backend.entity.Reserva;
 import com.onboard.backend.exception.InvalidInputException;
-import com.onboard.backend.model.EstadoOferta;
+import com.onboard.backend.model.EstadoReserva;
 import com.onboard.backend.repository.ReservaRepository;
-import com.onboard.backend.util.ValidationUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,12 +40,23 @@ public class ReservaService {
                     "The end date cannot be earlier than the start date");
         }
 
-        ValidationUtils.validarCoordenadasCartagena(reserva.getLugarEntregaYRecogida());
+        List<String> fechasReservadas = getFechasReservadasPorVehiculo(reserva.getIdVehiculo());
+        LocalDate fechaInicio = reserva.getFechaInicio().toLocalDate();
+        LocalDate fechaFin = reserva.getFechaFin().toLocalDate();
 
-        reserva.setEstadoReserva(EstadoOferta.PENDIENTE);
+        boolean existeCruce = fechaInicio.datesUntil(fechaFin.plusDays(1))
+                .map(LocalDate::toString)
+                .anyMatch(fechasReservadas::contains);
+
+        if (existeCruce) {
+            throw new InvalidInputException("Fecha ocupada", "DATE_CONFLICT",
+                    "One or more selected dates are already reserved for this vehicle.");
+        }
+
+
+        reserva.setEstadoReserva(EstadoReserva.PENDIENTE);
 
         return reservaRepository.save(reserva);
-
     }
 
     public Optional<Reserva> getReservaById(String idReserva) {
@@ -74,12 +84,14 @@ public class ReservaService {
 
     public List<String> getFechasReservadasPorVehiculo(String idVehiculo) {
         List<Reserva> reservas = reservaRepository.findAllByIdVehiculo(idVehiculo);
+        LocalDate hoy = LocalDate.now();
 
         return reservas.stream()
                 .flatMap(reserva -> {
                     LocalDate start = reserva.getFechaInicio().toLocalDate();
                     LocalDate end = reserva.getFechaFin().toLocalDate();
                     return start.datesUntil(end.plusDays(1))
+                            .filter(fecha -> fecha.isAfter(hoy))
                             .map(LocalDate::toString);
                 })
                 .distinct()

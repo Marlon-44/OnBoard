@@ -2,8 +2,7 @@ package com.onboard.backend.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.onboard.backend.model.EstadoOferta;
+import com.onboard.backend.model.EstadoReserva;
 
 import java.time.LocalDateTime;
 
@@ -17,13 +16,13 @@ public class Reserva {
     private LocalDateTime fechaInicio;
     private LocalDateTime fechaFin;
     private String lugarEntregaYRecogida;
-    private EstadoOferta estadoReserva;
+    private EstadoReserva estadoReserva;
 
     public Reserva() {
     }
 
     public Reserva(String idReserva, String idCliente, String idVehiculo, LocalDateTime fechaInicio,
-                   LocalDateTime fechaFin, String lugarEntregaYRecogida, EstadoOferta estadoReserva) {
+                   LocalDateTime fechaFin, String lugarEntregaYRecogida, EstadoReserva estadoReserva) {
         this.idReserva = idReserva;
         this.idCliente = idCliente;
         this.idVehiculo = idVehiculo;
@@ -81,11 +80,11 @@ public class Reserva {
         this.lugarEntregaYRecogida = lugarEntregaYRecogida;
     }
 
-    public EstadoOferta getEstadoReserva() {
+    public EstadoReserva getEstadoReserva() {
         return estadoReserva;
     }
 
-    public void setEstadoReserva(EstadoOferta estadoReserva) {
+    public void setEstadoReserva(EstadoReserva estadoReserva) {
         this.estadoReserva = estadoReserva;
     }
 }
