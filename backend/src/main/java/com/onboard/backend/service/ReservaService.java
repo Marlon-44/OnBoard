@@ -78,6 +78,7 @@ public class ReservaService {
         factura.setFechaEmision(LocalDate.now());
         factura.setIdReserva(savedReserva.getIdReserva());
         factura.setRazon("Pago Alquiler Vehiculo: " + vehiculo.getPlaca());
+        factura.setEstadoPago("CREATED");
         factura.setTotal(total);
         facturaService.saveFactura(factura);
 

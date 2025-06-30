@@ -84,6 +84,7 @@ public class PagoService {
             pago.setIdFactura(idFactura);
             pago.setFechaPago(LocalDate.now());
             pago.setEstadoPago(order.status());
+            factura.setEstadoPago(order.status());
             pago.setDetalle("Orden PayPal creada");
             pagoRepository.save(pago);
 
@@ -105,25 +106,32 @@ public class PagoService {
                     .payments().captures().get(0);
 
             String transactionId = capture.id();
-
             String status = capture.status();
             String payerEmail = orden.payer().email();
             String payerName = orden.payer().name().givenName() + " " + orden.payer().name().surname();
 
             Optional<Pago> pagoOpt = pagoRepository.findById(orderId);
-            if (pagoOpt.isPresent()) {
-                Pago pago = pagoOpt.get();
-                pago.setEstadoPago(status);
-                pago.setDetalle("Pago capturado: ID transacción " + transactionId);
-                pagoRepository.save(pago);
-
-                Optional<Factura> facturaOpt = facturaRepository.findById(pago.getIdFactura());
-                if (facturaOpt.isPresent()) {
-                    Factura factura = facturaOpt.get();
-
-                    emailService.enviarFacturaPorEmail(factura, payerName, payerEmail, "PayPal");
-                }
+            if (pagoOpt.isEmpty()) {
+                throw new RuntimeException("No se encontró el pago con ID: " + orderId);
             }
+
+            Pago pago = pagoOpt.get(); 
+            Optional<Factura> facturaOpt = facturaRepository.findById(pago.getIdFactura());
+            if (facturaOpt.isEmpty()) {
+                throw new RuntimeException("No se encontró la factura con ID: " + pago.getIdFactura());
+            }
+
+            Factura factura = facturaOpt.get();
+
+            pago.setEstadoPago(status);
+            pago.setDetalle("Pago capturado: ID transacción " + transactionId);
+            factura.setEstadoPago(status);
+
+
+            pagoRepository.save(pago);
+            facturaRepository.save(factura);
+
+            emailService.enviarFacturaPorEmail(factura, payerName, payerEmail, "PayPal");
 
             return "Pago capturado exitosamente. Transacción: " + transactionId;
 
