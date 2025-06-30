@@ -41,7 +41,7 @@ const Pago = () => {
         fetchFactura();
     }, [idFactura]);
 
-
+    console.log("Factura> ", factura)
     useEffect(() => {
         if (factura && factura.estado === "PENDIENTE" && window.paypal) {
             window.paypal.Buttons({
@@ -49,23 +49,35 @@ const Pago = () => {
                     const res = await fetch(`http://localhost:8080/api/pagos/crear?idFactura=${factura.idFactura}`, {
                         method: "POST"
                     });
-                    const data = await res.text(); // ⚠️ El backend devuelve un string
-                    return data; // debe ser el orderId
-                }
-                ,
+                    const data = await res.text(); // Backend debe devolver el orderId
+                    return data;
+                },
                 onApprove: async (data) => {
-                    const res = await fetch(`http://localhost:8080/api/pagos/capturar?orderId=${data.orderID}`, {
-                        method: "POST"
-                    });
-                    const result = await res.text(); // ⚠️ también devuelve texto
-                    if (result === "COMPLETED") {
-                        setPagoExitoso(true);
-                        setFactura((prev) => ({ ...prev, estado: "PAGADA" }));
-                    } else {
-                        setError("Error al procesar el pago.");
+                    try {
+                        const res = await fetch(`http://localhost:8080/api/pagos/capturar?orderId=${data.orderID}`, {
+                            method: "POST"
+                        });
+                        const result = await res.json(); // ⚠️ backend debe devolver JSON con estado
+
+                        console.log("Resultado de PayPal:", result);
+
+                        if (result.status === "COMPLETED") {
+                            setPagoExitoso(true);
+                            setFactura((prev) => ({ ...prev, estado: "PAGADA" }));
+                        } else if (result.status === "APPROVED") {
+                            setError("El pago fue aprobado pero aún no capturado.");
+                        } else if (result.status === "VOIDED") {
+                            setError("La orden fue anulada.");
+                        } else if (result.status === "PAYER_ACTION_REQUIRED") {
+                            setError("Se requiere una acción adicional del usuario para completar el pago.");
+                        } else {
+                            setError(`Estado inesperado: ${result.status}`);
+                        }
+                    } catch (err) {
+                        console.error("Error al capturar el pago:", err);
+                        setError("Ocurrió un error al capturar el pago.");
                     }
-                }
-                ,
+                },
                 onError: (err) => {
                     console.error("Error en PayPal:", err);
                     setError("Ocurrió un error con PayPal.");
@@ -73,6 +85,7 @@ const Pago = () => {
             }).render("#paypal-button-container");
         }
     }, [factura]);
+
 
     if (loading) {
         return (
