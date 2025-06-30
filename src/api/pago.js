@@ -1,18 +1,13 @@
-const API = "http://localhost:8080/api/pagos";
 
-export const crearFactura = async (idFactura) => {
+import axios from "axios";
+
+
+export const obtenerPagoPorFactura = async (idFactura) => {
     try {
-        const response = await fetch(`${API}/crear?idFactura=${idFactura}`, {
-            method: "POST"
-        });
-
-        if (!response.ok) {
-            throw new Error("Error al crear la factura");
-        }
-
-        return response.json(); // Se espera que esto devuelva una URL de redirección o resultado
+        const response = await axios.get("");
+        return response.data; // puede devolver null si no hay pago aún
     } catch (error) {
-        console.error("Error creando factura:", error);
-        throw error;
+        console.error("Error al obtener el pago:", error);
+        return null; // manejar como no pagado
     }
 };
