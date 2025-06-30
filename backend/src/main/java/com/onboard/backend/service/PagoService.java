@@ -82,7 +82,7 @@ public class PagoService {
             pago.setDetalle("Orden PayPal creada");
             pagoRepository.save(pago);
 
-            // ✅ Devolver JSON con el orderId
+
             return "{\"orderId\": \"" + order.id() + "\"}";
 
         } catch (HttpException e) {
