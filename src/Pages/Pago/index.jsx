@@ -4,98 +4,75 @@ import {
     Typography,
     CircularProgress,
     Paper,
-    Button,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Snackbar,
+    Snackbar
 } from "@mui/material";
 import Alert from "@mui/material/Alert";
-import { useParams, useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
+import { useParams } from "react-router-dom";
 
 const Pago = () => {
     const { idFactura } = useParams();
-    const navigate = useNavigate();
     const [factura, setFactura] = useState(null);
     const [loading, setLoading] = useState(true);
     const [pagoExitoso, setPagoExitoso] = useState(false);
     const [error, setError] = useState(null);
 
-    // Simular carga de factura desde backend
     useEffect(() => {
-        setTimeout(() => {
-            // Simulación de fetch
-            if (idFactura === "mock-id-999") {
-                setFactura({
-                    idFactura: "mock-id-123",
-                    idReserva: "reserva-xyz",
-                    total: 321280,
-                    fechaEmision: "2025-06-29",
-                    razon: "Reserva de vehículo por 2 días",
-                    estado: "PENDIENTE"
-                });
-                setLoading(false);
-            } else {
-                setError("Factura no encontrada");
+        const fetchFactura = async () => {
+            try {
+                const res = await fetch(`http://localhost:8080/api/facturas/${idFactura}`);
+                if (!res.ok) throw new Error("Factura no encontrada");
+
+                const data = await res.json();
+                setFactura(data);
+            } catch (err) {
+                console.error(err);
+                setError("Factura no encontrada o error en el servidor.");
+            } finally {
                 setLoading(false);
             }
-        }, 1000);
+        };
+
+        fetchFactura();
     }, [idFactura]);
 
-    const handlePagar = () => {
-    // Simulación de pago exitoso
-    setTimeout(() => {
-        // 1. Crear objeto de pago (simulado)
-        const pago = {
-            idPago: `pago-${Date.now()}`,
-            idFactura: factura.idFactura,
-            fecha: new Date().toISOString(),
-            metodo: "Simulado",
-            estado: "COMPLETADO"
-        };
-        console.log("Pago registrado:", pago);
 
-        // 2. Actualizar estado de factura
-        const facturaActualizada = { ...factura, estado: "PAGADA" };
-        setFactura(facturaActualizada);
-
-        // 3. Actualizar reserva (simulada)
-        // Nota: Idealmente deberías tener un hook o un contexto para obtener la reserva asociada
-        const reservaSimulada = {
-            idReserva: factura.idReserva,
-            fechaInicio: new Date("2025-06-30"), // <-- asegúrate que sea correcta o dinamízala
-            estadoReserva: "PENDIENTE",
-        };
-
-        const diasAnticipacion = dayjs(reservaSimulada.fechaInicio).diff(dayjs(), "day");
-
-        let alquiler = null;
-
-        if (diasAnticipacion < 3) {
-            // 4. Crear alquiler si la anticipación es menor a 3 días
-            alquiler = {
-                idAlquiler: `alq-${Date.now()}`,
-                idReserva: reservaSimulada.idReserva,
-                fechaInicio: reservaSimulada.fechaInicio,
-                estado: "ACTIVO"
-            };
-            console.log("Alquiler creado automáticamente:", alquiler);
+    useEffect(() => {
+        if (factura && factura.estado === "PENDIENTE" && window.paypal) {
+            window.paypal.Buttons({
+                createOrder: async () => {
+                    const res = await fetch(`http://localhost:8080/api/pagos/crear?idFactura=${factura.idFactura}`, {
+                        method: "POST"
+                    });
+                    const data = await res.text(); // ⚠️ El backend devuelve un string
+                    return data; // debe ser el orderId
+                }
+                ,
+                onApprove: async (data) => {
+                    const res = await fetch(`http://localhost:8080/api/pagos/capturar?orderId=${data.orderID}`, {
+                        method: "POST"
+                    });
+                    const result = await res.text(); // ⚠️ también devuelve texto
+                    if (result === "COMPLETED") {
+                        setPagoExitoso(true);
+                        setFactura((prev) => ({ ...prev, estado: "PAGADA" }));
+                    } else {
+                        setError("Error al procesar el pago.");
+                    }
+                }
+                ,
+                onError: (err) => {
+                    console.error("Error en PayPal:", err);
+                    setError("Ocurrió un error con PayPal.");
+                }
+            }).render("#paypal-button-container");
         }
-
-        console.log("Reserva activada:", {
-            ...reservaSimulada,
-            estadoReserva: "ACTIVA"
-        });
-
-        // Mostrar notificación
-        setPagoExitoso(true);
-    }, 1500);
-};
-
+    }, [factura]);
 
     if (loading) {
         return (
@@ -145,10 +122,8 @@ const Pago = () => {
                 </TableContainer>
 
                 {factura.estado === "PENDIENTE" && (
-                    <Box textAlign="right" mt={3}>
-                        <Button variant="contained" color="primary" onClick={handlePagar}>
-                            Pagar ahora
-                        </Button>
+                    <Box textAlign="center" mt={4}>
+                        <div id="paypal-button-container" />
                     </Box>
                 )}
 
@@ -165,7 +140,7 @@ const Pago = () => {
                 onClose={() => setPagoExitoso(false)}
             >
                 <Alert severity="success" onClose={() => setPagoExitoso(false)}>
-                    ¡Pago exitoso! Puedes revisar tu reserva activa en el panel de usuario.
+                    ¡Pago exitoso! Puedes revisar tu reserva activa en tu perfil.
                 </Alert>
             </Snackbar>
         </Box>
