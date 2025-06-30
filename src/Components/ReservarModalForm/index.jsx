@@ -24,12 +24,11 @@ import Alert from "@mui/material/Alert";
 import mapboxgl from "mapbox-gl";
 import dayjs from "dayjs";
 import { crearReserva } from "../../api/reserva";
-import { crearFactura } from "../../api/factura";
+import { obtenerFacturaPorReserva } from "../../api/factura";
 import FacturaResumen from "../FacturaResumen";
 import { useNavigate } from "react-router-dom";
 import ReservaContext from "../../features/reserva/ReservaContext";
 import FacturaContext from "../../features/factura/FacturaContext";
-import { crearOrdenPaypal } from "../../api/paypal";
 
 mapboxgl.accessToken = "pk.eyJ1IjoiZGFsbWF0YSIsImEiOiJjbWNpM2VkdDUxMjFzMnlwdGg5eGh4N2xoIn0.DUiFxWzL75SniPLlWoilRg";
 
@@ -97,6 +96,9 @@ const ReservarModalForm = ({
         return () => clearTimeout(timeout);
     }, [open]);
 
+
+
+
     const handleConfirmar = async () => {
         if (!aceptaTerminos) {
             alert("Debe aceptar los términos y condiciones para continuar.");
@@ -115,37 +117,36 @@ const ReservarModalForm = ({
                 idVehiculo: vehicle.placa,
                 fechaInicio: fechaHoraRecogida,
                 fechaFin: fechaHoraEntrega,
-                lugarEntregaYRecogida: direccion.toString(),
+                lugarRecogida: direccion.toString(),
+                lugarEntrega: direccion.toString(),
                 estadoReserva: "PENDIENTE"
             };
-            console.log("Tipo de dirección:", typeof direccion, direccion);
 
             alert("Datos enviados a crearReserva:\n" + JSON.stringify(datosReserva, null, 2));
             const reservaResponse = await crearReserva(datosReserva);
             const reserva = reservaResponse.data;
             agregarReserva(reserva);
 
-            // 2. Crear factura con solo el idReserva
-            const facturaId = reserva.idFactura || reserva.idReserva;
-
-            alert("ID enviado a crearFactura:\n" + facturaId);
-            const facturaResponse = await crearFactura(facturaId);
-            const factura = facturaResponse;
+            // 2. Obtener la factura automáticamente generada por el backend
+            const factura = await obtenerFacturaPorReserva(reserva.idReserva);
             agregarFactura(factura);
 
-            // 3. Redirigir a PayPal
-            if (factura.url) {
-                alert("Redirigiendo a URL de PayPal:\n" + factura.url);
-                window.location.href = factura.url;
-            } else {
-                throw new Error("No se recibió una URL válida desde PayPal");
+            alert("Factura recibida:\n" + JSON.stringify(factura, null, 2));
+
+            // 3. Redirigir al componente de pago con el ID de factura
+            if (factura.idFactura) {
+                navigate(`/pago/${factura.idFactura}`);
+            }
+            else {
+                throw new Error("No se recibió una factura válida desde el backend");
             }
 
         } catch (error) {
-            console.error("Error en el proceso de reserva y pago:", error);
+            console.error("Error en el proceso de reserva y obtención de factura:", error);
             alert("Ocurrió un error. Intenta más tarde.");
         }
     };
+
 
 
 

@@ -1,18 +1,7 @@
-const API = "http://localhost:8080/api/pagos";
+import axios from "axios";
+const API = "http://localhost:8080/api";
 
-export const crearFactura = async (idFactura) => {
-    try {
-        const response = await fetch(`${API}/crear?idFactura=${idFactura}`, {
-            method: "POST"
-        });
-
-        if (!response.ok) {
-            throw new Error("Error al crear la factura");
-        }
-
-        return response.json(); // Se espera que esto devuelva una URL de redirección o resultado
-    } catch (error) {
-        console.error("Error creando factura:", error);
-        throw error;
-    }
+export const obtenerFacturaPorReserva = async (idReserva) => {
+    const response = await axios.get(`${API}/reservas/${idReserva}/factura`);
+    return response.data; // debe contener la factura con idFactura
 };

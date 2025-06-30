@@ -36,10 +36,22 @@ const VehicleSummary = ({ vehicle }) => {
     ];
 
     useEffect(() => {
-        return () => {
+        const fechasInvalidas = !fechaHoraRecogida || !fechaHoraEntrega;
+
+        if (fechasInvalidas) {
+            setMostrarBotonReserva(false);
             localStorage.removeItem("mostrarBotonReserva");
-        };
-    }, []);
+        }
+    }, [fechaHoraRecogida, fechaHoraEntrega]);
+
+
+    useEffect(() => {
+        if (fechaHoraRecogida || fechaHoraEntrega) {
+            setMostrarBotonReserva(false);
+            localStorage.removeItem("mostrarBotonReserva");
+        }
+    }, [fechaHoraRecogida, fechaHoraEntrega]);
+
 
     const handleMouseEnter = (url) => {
         setActivePhoto(url);
@@ -179,19 +191,23 @@ const VehicleSummary = ({ vehicle }) => {
                         <Alert severity={alerta.tipo}>{alerta.mensaje}</Alert>
                     </Stack>
                 )}
+                <div className={styles.button__container}>
+                    {mostrarBotonReserva && (
+                        <button
 
-                {mostrarBotonReserva && (
+                            className={styles.reservar__button}
+                            onClick={handleReservarClick}
+                        >
+                            Solicitar reserva
+                        </button>
+                    )}
+
                     <button
-                        className={styles.check__button}
-                        onClick={handleReservarClick}
-                    >
-                        Solicitar reserva
+                        className={styles.check__button} onClick={handleCheckAvailability}>
+                        Check availability
                     </button>
-                )}
+                </div>
 
-                <button className={styles.check__button} onClick={handleCheckAvailability}>
-                    Check availability
-                </button>
             </div>
 
             <ReservarModalForm

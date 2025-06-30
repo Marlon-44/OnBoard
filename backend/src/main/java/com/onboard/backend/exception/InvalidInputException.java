@@ -11,6 +11,7 @@ public class InvalidInputException extends RuntimeException {
         this.detalle = detalle;
     }
 
+
     public String getErrorCode() {
         return errorCode;
     }

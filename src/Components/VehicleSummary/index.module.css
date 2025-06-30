@@ -62,6 +62,19 @@
     font-size: 1.3rem;
     align-self: center;
 }
+.check__button:hover{
+    background-color: #313131;
+}
+.reservar__button {
+    border: none;
+    background-color: #008000;
+    padding: 10px 0;
+    border-radius: 10px;
+    color: #fff;
+    width: 90%;
+    font-size: 1.3rem;
+    align-self: center;
+}
 
 @media screen and (min-width:900px) {
     .vehicle__summary {
@@ -112,8 +125,22 @@
     .summary__info h2{
         font-size: 2rem;
     }
+    .button__container{
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
     .check__button {
-        width: 50%;
+        width: 40.5%;
+        align-self: flex-start;
+        margin-top: 1rem;
+        font-size: 0.8rem;
+        
+    }
+    
+    .reservar__button {
+        width: 40.5%;
         align-self: flex-start;
         margin-top: 1rem;
         font-size: 0.8rem;
