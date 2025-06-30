@@ -31,4 +31,13 @@ public class PagoController {
             return ResponseEntity.badRequest().body("Error al capturar pago: " + e.getMessage());
         }
     }
+
+    @GetMapping
+    public ResponseEntity<?> obtenerTodosLosPagos() {
+        try {
+            return ResponseEntity.ok(pagoService.obtenerTodosLosPagos());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al obtener los pagos: " + e.getMessage());
+        }
+    }
 }

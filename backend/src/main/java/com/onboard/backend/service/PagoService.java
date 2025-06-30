@@ -73,12 +73,6 @@ public class PagoService {
             HttpResponse<Order> response = payPalClient.execute(request);
             Order order = response.result();
 
-            String approvalLink = order.links().stream()
-                    .filter(link -> "approve".equals(link.rel()))
-                    .findFirst()
-                    .map(LinkDescription::href)
-                    .orElseThrow(() -> new RuntimeException("No se encontró el enlace de aprobación"));
-
             Pago pago = new Pago();
             pago.setIdPago(order.id());
             pago.setIdFactura(idFactura);
@@ -88,7 +82,8 @@ public class PagoService {
             pago.setDetalle("Orden PayPal creada");
             pagoRepository.save(pago);
 
-            return approvalLink;
+            // ✅ Devolver JSON con el orderId
+            return "{\"orderId\": \"" + order.id() + "\"}";
 
         } catch (HttpException e) {
             throw new RuntimeException("Error al crear orden en PayPal: " + e.getMessage());
@@ -115,7 +110,7 @@ public class PagoService {
                 throw new RuntimeException("No se encontró el pago con ID: " + orderId);
             }
 
-            Pago pago = pagoOpt.get(); 
+            Pago pago = pagoOpt.get();
             Optional<Factura> facturaOpt = facturaRepository.findById(pago.getIdFactura());
             if (facturaOpt.isEmpty()) {
                 throw new RuntimeException("No se encontró la factura con ID: " + pago.getIdFactura());
@@ -127,6 +122,9 @@ public class PagoService {
             pago.setDetalle("Pago capturado: ID transacción " + transactionId);
             factura.setEstadoPago(status);
 
+            if ("COMPLETED".equalsIgnoreCase(status)) {
+                pago.setFechaPago(LocalDate.now());
+            }
 
             pagoRepository.save(pago);
             facturaRepository.save(factura);
@@ -138,6 +136,10 @@ public class PagoService {
         } catch (HttpException e) {
             throw new RuntimeException("Error al capturar orden: " + e.getMessage());
         }
+    }
+
+    public List<Pago> obtenerTodosLosPagos() {
+        return pagoRepository.findAll();
     }
 
 }
