@@ -5,6 +5,7 @@ import com.onboard.backend.entity.Pago;
 import com.onboard.backend.entity.Reserva;
 import com.onboard.backend.entity.Usuario;
 import com.onboard.backend.entity.Vehiculo;
+import com.onboard.backend.model.EstadoReserva;
 import com.onboard.backend.repository.FacturaRepository;
 import com.onboard.backend.repository.PagoRepository;
 
@@ -144,14 +145,7 @@ public class PagoService {
             pago.setDetalle("Pago capturado: ID transacción " + transactionId);
             factura.setEstadoPago(status);
 
-            if ("COMPLETED".equalsIgnoreCase(status)) {
-                pago.setFechaPago(LocalDate.now());
-            }
-
-            pagoRepository.save(pago);
-            facturaRepository.save(factura);
-
-            // === NUEVO: Obtener reserva, usuario y vehículo para el PDF ===
+            
             Reserva reserva = reservaService.getReservaById(factura.getIdReserva())
                     .orElseThrow(() -> new RuntimeException("Reserva no encontrada con ID: " + factura.getIdReserva()));
 
@@ -162,6 +156,16 @@ public class PagoService {
                     .orElseThrow(
                             () -> new RuntimeException("Vehículo no encontrado con ID: " + reserva.getIdVehiculo()));
 
+
+            if ("COMPLETED".equalsIgnoreCase(status)) {
+                reserva.setEstadoReserva(EstadoReserva.ACTIVA);
+                pago.setFechaPago(LocalDate.now());
+            }
+
+            pagoRepository.save(pago);
+            facturaRepository.save(factura);
+
+           
             emailService.enviarFacturaPorEmail(factura, reserva, cliente, vehiculo, "PayPal");
 
             return ResponseEntity.ok(Map.of(

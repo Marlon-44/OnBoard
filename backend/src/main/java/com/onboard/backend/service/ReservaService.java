@@ -4,6 +4,7 @@ import com.onboard.backend.entity.Factura;
 import com.onboard.backend.entity.Reserva;
 import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.exception.InvalidInputException;
+import com.onboard.backend.model.EstadoAlquiler;
 import com.onboard.backend.model.EstadoReserva;
 import com.onboard.backend.repository.ReservaRepository;
 
@@ -13,9 +14,12 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import com.onboard.backend.entity.Alquiler;
+import org.springframework.scheduling.annotation.Scheduled;
 
 @Service
 public class ReservaService {
@@ -31,6 +35,9 @@ public class ReservaService {
 
     @Autowired
     private FacturaService facturaService;
+
+    @Autowired
+    private AlquilerService alquilerService;
 
     public Reserva saveReserva(Reserva reserva) {
 
@@ -127,6 +134,29 @@ public class ReservaService {
     public Factura getFactura(String idReserva) {
         getReservaById(idReserva);
         return facturaService.getFacturaByIdReserva(idReserva);
+    }
+
+    @Scheduled(cron = "0 0 */4 * * *")
+    public void crearAlquileresParaReservasDeManana() {
+        LocalDateTime mañana = LocalDateTime.now().plusDays(1);
+        List<Reserva> reservas = reservaRepository.findAll();
+
+        for (Reserva reserva : reservas) {
+            if (reserva.getFechaInicio() == null)
+                continue;
+
+            boolean esParaManana = reserva.getFechaInicio().isEqual(mañana);
+            boolean estaActiva = reserva.getEstadoReserva() == EstadoReserva.ACTIVA;
+            boolean alquilerYaExiste = alquilerService.getAlquilerById(reserva.getIdReserva()).isPresent();
+
+            if (esParaManana && estaActiva && !alquilerYaExiste) {
+                Alquiler alquiler = new Alquiler();
+                alquiler.setFechaNovedad(LocalDateTime.now());
+                alquiler.setEstado(EstadoAlquiler.CONFIRMADO);
+                alquiler.setIdAlquiler(reserva.getIdReserva());
+                alquilerService.saveAlquiler(alquiler);
+            }
+        }
     }
 
 }
