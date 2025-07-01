@@ -41,24 +41,30 @@ const Pago = () => {
         fetchFactura();
     }, [idFactura]);
 
-    console.log("Factura> ", factura)
-
     useEffect(() => {
         if (factura && factura.estadoPago === "CREATED" && window.paypal) {
+            // Evitar botones duplicados
+            const container = document.getElementById("paypal-button-container");
+            if (container) {
+                container.innerHTML = "";
+            }
+
             window.paypal.Buttons({
                 createOrder: async () => {
                     const res = await fetch(`http://localhost:8080/api/pagos/crear?idFactura=${factura.idFactura}`, {
                         method: "POST"
                     });
-                    const data = await res.text(); // Backend debe devolver el orderId
-                    return data;
+
+                    const data = await res.json(); // ✅ lee el JSON correctamente
+                    console.log("DATA>", data);
+                    return data.orderId;
                 },
                 onApprove: async (data) => {
                     try {
                         const res = await fetch(`http://localhost:8080/api/pagos/capturar?orderId=${data.orderID}`, {
                             method: "POST"
                         });
-                        const result = await res.json(); // ⚠️ backend debe devolver JSON con estado
+                        const result = await res.json();
 
                         console.log("Resultado de PayPal:", result);
 
@@ -87,7 +93,6 @@ const Pago = () => {
         }
     }, [factura]);
 
-
     if (loading) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
@@ -115,7 +120,7 @@ const Pago = () => {
             <Paper sx={{ p: 3 }}>
                 <Typography variant="subtitle1">ID Factura: {factura.idFactura}</Typography>
                 <Typography variant="subtitle1">Fecha de Emisión: {factura.fechaEmision}</Typography>
-                <Typography variant="subtitle1">Estado: {factura.estado}</Typography>
+                <Typography variant="subtitle1">Estado: {factura.estadoPago}</Typography>
                 <Typography variant="subtitle1">Razón: {factura.razon}</Typography>
 
                 <TableContainer sx={{ mt: 2 }}>
