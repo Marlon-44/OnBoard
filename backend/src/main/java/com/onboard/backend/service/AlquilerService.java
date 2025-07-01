@@ -8,6 +8,7 @@ import com.onboard.backend.model.EstadoAlquiler;
 import com.onboard.backend.repository.AlquilerRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +23,11 @@ import org.slf4j.LoggerFactory;
 public class AlquilerService {
 
     @Autowired
+    @Lazy
     private ReservaService reservaService;
 
     @Autowired
+    @Lazy
     private VehiculoService vehiculoService;
 
     @Autowired

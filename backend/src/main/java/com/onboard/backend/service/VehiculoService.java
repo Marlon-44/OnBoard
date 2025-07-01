@@ -235,7 +235,10 @@ public class VehiculoService {
     }
 
     public Vehiculo updateVehiculo(String placa, Vehiculo vehiculoActualizado) {
+        
         Vehiculo vehiculoExistente = getVehiculoById(placa).get();
+
+  /*  
         vehiculoExistente.setTipoTerreno(vehiculoActualizado.getTipoTerreno());
         vehiculoExistente.setMarca(vehiculoActualizado.getMarca());
         vehiculoExistente.setModelo(vehiculoActualizado.getModelo());
@@ -249,6 +252,11 @@ public class VehiculoService {
         vehiculoExistente.setEstadoOferta(vehiculoActualizado.getEstadoOferta());
         vehiculoExistente.setPrecioPorDia(vehiculoActualizado.getPrecioPorDia());
         vehiculoExistente.setCalificaciones(vehiculoActualizado.getCalificaciones());
+*/
+
+        vehiculoExistente.setCantidadAlquiler(0);
+
+
         return vehiculoRepository.save(vehiculoExistente);
     }
 
