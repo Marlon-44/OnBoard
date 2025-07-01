@@ -117,7 +117,8 @@ const UserRequestTable = () => {
                                         <TableCell>
                                             <IconButton
                                                 style={{ background: "#6100bd", border: "none", padding: "0.2rem 0.4rem", borderRadius: "5px", color: "white" }}
-                                                color="primary" onClick={() => handleVerDetalles(user)}>
+                                                color="primary" 
+                                                onClick={() => handleVerDetalles(user)}>
 
                                                 <VisibilityIcon />
                                             </IconButton>

@@ -63,7 +63,11 @@ const AllReservasModal = ({ reserva, onActualizarEstado, onCerrar, id = "reserva
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">Detalles de la Reserva</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" />
+                        <button type="button" 
+                        className="btn-close" 
+                        data-bs-dismiss="modal" 
+                        aria-label="Cerrar"
+                        onClick={onCerrar} />
                     </div>
 
                     <div className={`modal-body ${styles.modal__body}`}>
@@ -92,20 +96,7 @@ const AllReservasModal = ({ reserva, onActualizarEstado, onCerrar, id = "reserva
                         <Button variant="outlined" color="secondary" data-bs-dismiss="modal" onClick={onCerrar}>
                             Cerrar
                         </Button>
-                        <Button
-                            variant="contained"
-                            color="error"
-                            onClick={() => onActualizarEstado(reserva.placa, "rechazado")}
-                        >
-                            Rechazar
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="success"
-                            onClick={() => onActualizarEstado(reserva.placa, "aprobado")}
-                        >
-                            Aceptar
-                        </Button>
+                        
                     </div>
                 </div>
             </div>

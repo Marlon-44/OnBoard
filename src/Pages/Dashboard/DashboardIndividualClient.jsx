@@ -5,6 +5,7 @@ import SidebarIndividualClient from "../../Components/SidebarIndividualClient.js
 import styles from "./dashboardIndividualClient.module.css"
 import WelcomeCard from "../../Components/WelcomeCard";
 import ProfileSection from "../../Components/ProfileSection";
+import ReservasUCTable from "../../Components/ReservasUCTable/index.jsx";
 
 
 const DashboardIndividualClient = () => {
@@ -14,11 +15,15 @@ const DashboardIndividualClient = () => {
     const renderContenido = () => {
         switch (opcionSeleccionada) {
             case "reservas":
-                return <p>Lista de Reservas</p>
+                return <ReservasUCTable idUsuario={usuario.idUsuario}/>
             case "historial_alquileres":
                 return <p>Historial de Alquileres</p>;
             case "alquileres":
                 return <p>Alquileres en Proceso</p>;
+            case "cuentas_x_pagar":
+                return <p>Facturas</p>;
+            case "telefonos_emergencia":
+                return <p>Telefonos de emergencia</p>;
             default:
                 return <p>Selecciona una opción del menú.</p>;
         }

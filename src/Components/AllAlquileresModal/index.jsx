@@ -71,7 +71,11 @@ const AllAlquileresModal = ({ alquiler, onCerrar, onActualizarEstado, id = "alqu
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">Detalles del Alquiler</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" />
+                        <button type="button" 
+                        className="btn-close" 
+                        data-bs-dismiss="modal" 
+                        aria-label="Cerrar" 
+                        onClick={onCerrar}/>
                     </div>
 
                     <div className={`modal-body ${styles.modal__body}`}>
@@ -99,7 +103,7 @@ const AllAlquileresModal = ({ alquiler, onCerrar, onActualizarEstado, id = "alqu
                         <Button variant="outlined" color="secondary" data-bs-dismiss="modal" onClick={onCerrar}>
                             Cerrar
                         </Button>
-                        {onActualizarEstado && (
+                        {/*onActualizarEstado && (
                             <>
                                 <Button
                                     variant="contained"
@@ -116,7 +120,7 @@ const AllAlquileresModal = ({ alquiler, onCerrar, onActualizarEstado, id = "alqu
                                     Aceptar
                                 </Button>
                             </>
-                        )}
+                        )*/}
                     </div>
                 </div>
             </div>

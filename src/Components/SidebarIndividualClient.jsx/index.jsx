@@ -33,13 +33,13 @@ const SidebarIndividualClient = ({ onSeleccionarOpcion, opcionSeleccionada }) =>
                 </li>
                 <li
                     className={`${styles.menu__option} ${opcionSeleccionada === "cuentas_x_pagar" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("alquileres")}>
+                    onClick={() => onSeleccionarOpcion("cuentas_x_pagar")}>
                     <img src="/assets/icon__user__white.png" alt="" />
                     Cuentas por Pagar
                 </li>
                 <li
                     className={`${styles.menu__option} ${opcionSeleccionada === "telefonos_emergencia" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("alquileres")}>
+                    onClick={() => onSeleccionarOpcion("telefonos_emergencia")}>
                     <img src="/assets/icon__user__white.png" alt="" />
                     Telefonos de Emergencia
                 </li>

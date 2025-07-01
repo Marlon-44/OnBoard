@@ -35,7 +35,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-const VehicleDetailModal = ({ vehiculo, onActualizarEstado, onCerrar, id = "vehiculoModal" }) => {
+const VehicleDetailModal = ({ vehiculo, onCerrar, id = "vehiculoModal" }) => {
     useEffect(() => {
         if (vehiculo) {
             const modal = new window.bootstrap.Modal(document.getElementById(id));
@@ -73,7 +73,11 @@ const VehicleDetailModal = ({ vehiculo, onActualizarEstado, onCerrar, id = "vehi
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">Detalles del Vehículo</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" />
+                        <button type="button" 
+                        className="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Cerrar"
+                        onClick={onCerrar} />
                     </div>
 
                     <div className={`modal-body ${styles.modal__body}`}>
@@ -102,23 +106,15 @@ const VehicleDetailModal = ({ vehiculo, onActualizarEstado, onCerrar, id = "vehi
                     </div>
 
                     <div className="modal-footer">
-                        <Button variant="outlined" color="secondary" data-bs-dismiss="modal" onClick={onCerrar}>
+                        <Button 
+                        onClick={onCerrar} 
+                        variant="outlined" 
+                        color="secondary" 
+                        data-bs-dismiss="modal"
+                        >
                             Cerrar
                         </Button>
-                        <Button
-                            variant="contained"
-                            color="error"
-                            onClick={() => onActualizarEstado(vehiculo.placa, "rechazado")}
-                        >
-                            Rechazar
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="success"
-                            onClick={() => onActualizarEstado(vehiculo.placa, "aprobado")}
-                        >
-                            Aceptar
-                        </Button>
+                        
                     </div>
                 </div>
             </div>

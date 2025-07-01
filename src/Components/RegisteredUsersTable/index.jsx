@@ -98,7 +98,7 @@ const RegisteredUsersTable = () => {
             </Paper>
 
             {/* Modal */}
-            <UserDetailModal user={selectedUser} />
+            <UserDetailModal user={selectedUser} onCerrar={()=>setSelectedUser(null)}/>
         </>
     );
 };

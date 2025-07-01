@@ -119,7 +119,7 @@ export default function AllReservasTable() {
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
         </Paper>
-        <AllReservasModal reserva={reservaSeleccionada}/>
+        <AllReservasModal reserva={reservaSeleccionada} onCerrar={()=>setReservaSeleccionada(null)}/>
         </>
     );
 }

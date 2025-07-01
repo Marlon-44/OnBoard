@@ -42,7 +42,9 @@ export default function TablaVehiculosRegistrados() {
     if (loading) return <p>Cargando vehículos...</p>;
     if (error) return <p>Error al cargar los vehículos: {error.message}</p>;
     if (!vehicles.length) return <p>No hay vehículos registrados.</p>;
-
+    const handleVerDetalles = (vehiculo) => {
+        setVehiculoSeleccionado(vehiculo);
+    };
     return (
         <>
             <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "1rem" }} style={{borderRadius:"1rem"}}>
@@ -80,7 +82,7 @@ export default function TablaVehiculosRegistrados() {
                                             })}
                                             <TableCell>
                                                 <button
-                                                    onClick={() => setVehiculoSeleccionado(vehiculo)}
+                                                    onClick={() => handleVerDetalles(vehiculo)}
                                                     style={{ background: "#6100bd", border: "none", padding: "0.4rem 0.8rem", borderRadius: "5px", color: "white" }}
                                                 >
                                                     Ver
@@ -104,7 +106,7 @@ export default function TablaVehiculosRegistrados() {
             </Paper>
 
             {/* Modal de detalles */}
-            <VehicleDetailModal vehiculo={vehiculoSeleccionado} />
+            <VehicleDetailModal vehiculo={vehiculoSeleccionado} onCerrar={() => setVehiculoSeleccionado(null)}/>
         </>
     );
 }
