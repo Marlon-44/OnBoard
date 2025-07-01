@@ -8,6 +8,8 @@ import com.onboard.backend.model.EstadoAlquiler;
 import com.onboard.backend.model.EstadoReserva;
 import com.onboard.backend.repository.ReservaRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,8 @@ public class ReservaService {
 
     @Autowired
     private AlquilerService alquilerService;
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
     public Reserva saveReserva(Reserva reserva) {
 
@@ -144,8 +148,7 @@ public class ReservaService {
         return factura.getTotal();
     }
 
-    // @Scheduled(cron = "0 0 */4 * * *")
-    @Scheduled(cron = "*/1 * * * * *")
+    @Scheduled(cron = "0 0 */4 * * *")
     public void crearAlquileresParaReservasDeManana() {
         List<Reserva> reservas = reservaRepository.findAll();
 
@@ -174,18 +177,29 @@ public class ReservaService {
 
     public Reserva actualizarEstadoReserva(String idReserva, EstadoReserva nuevoEstado) {
         Reserva reserva = getReservaById(idReserva)
-                .orElseThrow(() -> new InvalidInputException("Reserva no encontrada", "RESERVA_NOT_FOUND",
-                        "No se encontró la reserva con ID: " + idReserva));
+                .orElseThrow(() -> {
+                    String msg = "No se encontró la reserva con ID: " + idReserva;
+                    logger.warn("❗ Error: {} ({})", msg, idReserva);
+                    return new InvalidInputException("Reserva no encontrada", "RESERVA_NOT_FOUND", msg);
+                });
+
+        logger.info("🔄 Actualizando estado de la reserva '{}' a '{}'", idReserva, nuevoEstado);
+
         if (nuevoEstado == EstadoReserva.ACTIVA) {
             try {
                 contratoAlquilerService.generarContratosPdfParaUsuarioYPropietario(idReserva);
+                logger.info("📩 Contratos PDF generados y enviados para la reserva '{}'", idReserva);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("🚨 Error al generar/enviar contratos PDF para reserva '{}': {}", idReserva,
+                        e.getMessage(), e);
             }
-
         }
+
         reserva.setEstadoReserva(nuevoEstado);
-        return reservaRepository.save(reserva);
+        Reserva updated = reservaRepository.save(reserva);
+        logger.info("✅ Estado de la reserva '{}' actualizado exitosamente", idReserva);
+
+        return updated;
     }
 
 }

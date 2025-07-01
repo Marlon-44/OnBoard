@@ -205,47 +205,131 @@ public class EmailService {
     public void enviarContratosPdf(String emailCliente, String nombreCliente, byte[] pdfCliente,
             String emailPropietario, String nombrePropietario, byte[] pdfPropietario) {
         try {
+            logger.info("Iniciando envío de contratos PDF.");
+            logger.info("Email cliente: {}, Nombre cliente: {}", emailCliente, nombreCliente);
+            logger.info("Email propietario: {}, Nombre propietario: {}", emailPropietario, nombrePropietario);
+
+            // Cliente
+            logger.info("Creando mensaje de correo para cliente...");
             MimeMessage mensajeCliente = mailSender.createMimeMessage();
             MimeMessageHelper helperCliente = new MimeMessageHelper(mensajeCliente, true, "UTF-8");
 
             helperCliente.setTo(emailCliente);
             helperCliente.setFrom("onboardnotifications@gmail.com");
             helperCliente.setSubject("📄 Rental Details - Client");
+            logger.info("Encabezados del correo del cliente configurados.");
 
             Context contextCliente = new Context();
             contextCliente.setVariable("nombre", nombreCliente);
             contextCliente.setVariable("logoUrl", LOGO_URL);
+            logger.info("Contexto de plantilla del cliente preparado.");
 
             String contenidoHtmlCliente = templateEngine.process("email/acuerdo_alquiler/contrato_cliente",
                     contextCliente);
             helperCliente.setText(contenidoHtmlCliente, true);
-            helperCliente.addAttachment("Contrato_Cliente.pdf", new ByteArrayResource(pdfCliente));
+            logger.info("Contenido HTML del cliente generado.");
+
+            if (pdfCliente == null || pdfCliente.length == 0) {
+                logger.warn("PDF del cliente está vacío o nulo.");
+            } else {
+                helperCliente.addAttachment("Contrato_Cliente.pdf", new ByteArrayResource(pdfCliente));
+                logger.info("Archivo PDF del cliente adjuntado.");
+            }
 
             mailSender.send(mensajeCliente);
+            logger.info("Correo enviado exitosamente al cliente: {}", emailCliente);
 
+            // Propietario
+            logger.info("Creando mensaje de correo para propietario...");
             MimeMessage mensajePropietario = mailSender.createMimeMessage();
             MimeMessageHelper helperPropietario = new MimeMessageHelper(mensajePropietario, true, "UTF-8");
 
             helperPropietario.setTo(emailPropietario);
             helperPropietario.setFrom("onboardnotifications@gmail.com");
             helperPropietario.setSubject("📄 Rental Details - Owner");
+            logger.info("Encabezados del correo del propietario configurados.");
 
             Context contextPropietario = new Context();
             contextPropietario.setVariable("nombre", nombrePropietario);
             contextPropietario.setVariable("logoUrl", LOGO_URL);
+            logger.info("Contexto de plantilla del propietario preparado.");
 
             String contenidoHtmlPropietario = templateEngine.process("email/acuerdo_alquiler/contrato_propietario",
                     contextPropietario);
             helperPropietario.setText(contenidoHtmlPropietario, true);
-            helperPropietario.addAttachment("Contrato_Propietario.pdf", new ByteArrayResource(pdfPropietario));
+            logger.info("Contenido HTML del propietario generado.");
+
+            if (pdfPropietario == null || pdfPropietario.length == 0) {
+                logger.warn("PDF del propietario está vacío o nulo.");
+            } else {
+                helperPropietario.addAttachment("Contrato_Propietario.pdf", new ByteArrayResource(pdfPropietario));
+                logger.info("Archivo PDF del propietario adjuntado.");
+            }
 
             mailSender.send(mensajePropietario);
+            logger.info("Correo enviado exitosamente al propietario: {}", emailPropietario);
 
         } catch (Exception e) {
             logger.error("Error al enviar contratos PDF a cliente <{}> y propietario <{}>", emailCliente,
                     emailPropietario, e);
         }
     }
+
+    /*
+     * public void enviarContratosPdf(String emailCliente, String nombreCliente,
+     * byte[] pdfCliente,
+     * String emailPropietario, String nombrePropietario, byte[] pdfPropietario) {
+     * try {
+     * MimeMessage mensajeCliente = mailSender.createMimeMessage();
+     * MimeMessageHelper helperCliente = new MimeMessageHelper(mensajeCliente, true,
+     * "UTF-8");
+     * 
+     * helperCliente.setTo(emailCliente);
+     * helperCliente.setFrom("onboardnotifications@gmail.com");
+     * helperCliente.setSubject("📄 Rental Details - Client");
+     * 
+     * Context contextCliente = new Context();
+     * contextCliente.setVariable("nombre", nombreCliente);
+     * contextCliente.setVariable("logoUrl", LOGO_URL);
+     * 
+     * String contenidoHtmlCliente =
+     * templateEngine.process("email/acuerdo_alquiler/contrato_cliente",
+     * contextCliente);
+     * helperCliente.setText(contenidoHtmlCliente, true);
+     * helperCliente.addAttachment("Contrato_Cliente.pdf", new
+     * ByteArrayResource(pdfCliente));
+     * 
+     * mailSender.send(mensajeCliente);
+     * 
+     * MimeMessage mensajePropietario = mailSender.createMimeMessage();
+     * MimeMessageHelper helperPropietario = new
+     * MimeMessageHelper(mensajePropietario, true, "UTF-8");
+     * 
+     * helperPropietario.setTo(emailPropietario);
+     * helperPropietario.setFrom("onboardnotifications@gmail.com");
+     * helperPropietario.setSubject("📄 Rental Details - Owner");
+     * 
+     * Context contextPropietario = new Context();
+     * contextPropietario.setVariable("nombre", nombrePropietario);
+     * contextPropietario.setVariable("logoUrl", LOGO_URL);
+     * 
+     * String contenidoHtmlPropietario =
+     * templateEngine.process("email/acuerdo_alquiler/contrato_propietario",
+     * contextPropietario);
+     * helperPropietario.setText(contenidoHtmlPropietario, true);
+     * helperPropietario.addAttachment("Contrato_Propietario.pdf", new
+     * ByteArrayResource(pdfPropietario));
+     * 
+     * mailSender.send(mensajePropietario);
+     * 
+     * } catch (Exception e) {
+     * logger.
+     * error("Error al enviar contratos PDF a cliente <{}> y propietario <{}>",
+     * emailCliente,
+     * emailPropietario, e);
+     * }
+     * }
+     */
 
     public void enviarFacturaPorEmail(Factura factura, Reserva reserva, Usuario cliente, Vehiculo vehiculo,
             String metodoPago) {

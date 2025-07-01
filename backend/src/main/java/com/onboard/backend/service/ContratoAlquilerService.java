@@ -81,7 +81,7 @@ public class ContratoAlquilerService {
             Reserva reserva,
             float total) throws Exception {
 
-        var resource = new ClassPathResource(plantillaPath);
+        var resource = new ClassPathResource("templates" + plantillaPath);
         String html = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
