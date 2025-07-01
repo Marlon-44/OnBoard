@@ -15,8 +15,8 @@ const VehicleCard = ({ vehicle }) => {
             <div className={styles.info__section}>
                 <h3>{`${vehicle.marca} ${vehicle.modelo}`}</h3>
                 <h2>{`$${vehicle.precioPorDia} /day`}</h2>
+                <h3>Cartagena De Indias - Bolivar</h3>
                 <p>{`${vehicle.anio} | ${vehicle.kilometraje} Km`}</p>
-                <h4>Cartagena De Indias - Bolivar</h4>
             </div>
         </div>
     );

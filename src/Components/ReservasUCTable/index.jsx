@@ -103,7 +103,7 @@ export default function ReservasUCTable({ idUsuario }) {
                                             <button
                                                 onClick={() => setReservaSeleccionada(reserva)}
                                                 style={{
-                                                    background: "#6100bd",
+                                                    background: "#0f6cc9",
                                                     border: "none",
                                                     padding: "0.4rem 0.8rem",
                                                     borderRadius: "5px",

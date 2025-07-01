@@ -3,7 +3,7 @@
     flex-direction: column;
     width: 20%;
     height: 100vh;
-    background: linear-gradient(-45deg,#22005c, #7000da,  #22005c, #7000da);
+    background: radial-gradient(circle at 30% 30%, #52b0db,#00c9a7, #0f6cc9,  #6bc89b);
     background-size: 400% 400%;
     animation: gradientMove 8s ease infinite;
     color: #fff;
@@ -63,7 +63,9 @@
 }
 
 .menu__option:hover {
-    background-color: #1a0047;
+
+    background-color: #ffffff3a;
+    backdrop-filter: blur(20px);
     cursor: pointer;
 }
 

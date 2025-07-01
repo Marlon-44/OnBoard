@@ -91,13 +91,13 @@ const Login = () => {
         <>
             <Header />
             <section className={styles.login__container}>
-                <div className={styles.image__section}></div>
+                <div className={styles.image__section}>
+
+                </div>
 
                 <div className={styles.form__section}>
-                    <h1>Log In</h1>
-                    <p>
-                        Don't Have an Account? <Link to="/register" >Register</Link>
-                    </p>
+                    <h1>Inicia sesion en tu cuenta</h1>
+                    
 
                     {alerta && (
                         <Alert severity={alerta.tipo} sx={{ mb: 2 }}>
@@ -157,6 +157,9 @@ const Login = () => {
                     >
                         Log In
                     </Button>
+                    <p>
+                        Don't Have an Account? <Link to="/register" >Register</Link>
+                    </p>
                 </div>
             </section>
         </>

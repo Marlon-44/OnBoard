@@ -4,14 +4,33 @@
     box-sizing: border-box;
 }
 .highligth__section__container{
-    background-color: #dbdbdb;
-    width: 100vw;
+    background: radial-gradient(circle at 30% 30%, #272727,#3d3d3d, #4e4e4e,  #252525);
+    /*background: linear-gradient(-45deg, #7000da, #22005c, #7000da, #22005c);*/
+    background-size: 600% 600%;
+    animation: gradientAnimation 7s ease-in-out infinite;
+    padding: 2rem 0;
 }
-
-.highligth__section__inside h2{
-    font-family: "Montserrat", sans-serif;
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    25% {
+        background-position: 50% 100%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    75% {
+        background-position: 50% 0%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+.highligth__section__title{
+    font-family: "oswald", sans-serif;
     font-size: 2.5rem;
-    color: #000000;
+    color: #fff;
     margin: 1rem 0;
     z-index: 10;
     font-weight: 800;
@@ -27,14 +46,15 @@
     border-radius: 1rem;
     font-weight: 500;
     backdrop-filter: blur(8px); /* borrosidad */
-    -webkit-backdrop-filter: blur(20px); /* compatibilidad Safari */
-    background-color: rgb(0, 0, 0);
+    -webkit-backdrop-filter: blur(100px); /* compatibilidad Safari */
+    background-color: rgba(255, 255, 255, 0.521);
     margin-bottom: 5%;
+    
 }
 
 .link:hover{
     cursor: pointer;
-    
+    background-color: rgba(255, 255, 255, 0.562);
 }
 .highligth__section{
     width: 100%;
@@ -72,9 +92,11 @@
         height: 100vh;
     }
 
-    .highligth__section__inside h2{
-        font-family: "Manrope", sans-serif;
-        font-size: 2rem;
+    .highligth__section__title{
+        font-family: "oswald", sans-serif;
+        font-size: 3rem;
+        font-weight: 900;
+        letter-spacing: 1rem;
         margin: 1rem 0;
         
     }

@@ -12,7 +12,7 @@ const Home = () => {
     const { ofertas, loading } = useContext(OfertasContext);
     console.log("ofertas: ", ofertas);
     const [currentPage, setCurrentPage] = useState(1);
-    const vehiclesPerPage = 15;
+    const vehiclesPerPage = 9;
 
     // Cálculo de índices
     const indexOfLastVehicle = currentPage * vehiclesPerPage;

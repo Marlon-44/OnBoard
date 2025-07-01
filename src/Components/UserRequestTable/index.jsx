@@ -116,7 +116,7 @@ const UserRequestTable = () => {
                                         <TableCell>{user.estadoVerificacion.toLowerCase()}</TableCell>
                                         <TableCell>
                                             <IconButton
-                                                style={{ background: "#6100bd", border: "none", padding: "0.2rem 0.4rem", borderRadius: "5px", color: "white" }}
+                                                style={{ background: "#0f6cc9", border: "none", padding: "0.2rem 0.4rem", borderRadius: "5px", color: "white" }}
                                                 color="primary" 
                                                 onClick={() => handleVerDetalles(user)}>
 

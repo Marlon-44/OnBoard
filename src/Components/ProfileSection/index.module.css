@@ -9,7 +9,7 @@
 }
 
 .profile__banner {
-    background: linear-gradient(-45deg, #7000da, #22005c, #7000da, #22005c);
+    background: radial-gradient(circle at 30% 30%, #52b0db,#00c9a7, #0f6cc9,  #6bc89b);
     background-size: 400% 400%;
     animation: gradientMove 8s ease infinite;
     width: 100%;

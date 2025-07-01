@@ -74,7 +74,7 @@ const RegisteredUsersTable = () => {
                                         </TableCell>
                                         <TableCell>
                                             <button
-                                                style={{ background: "#6100bd", border: "none", padding: "0.4rem 0.8rem", borderRadius: "5px", color: "white" }}
+                                                style={{ background: "#0f6cc9", border: "none", padding: "0.4rem 0.8rem", borderRadius: "5px", color: "white" }}
                                                 onClick={() => handleVerDetalles(user)}
                                             >
                                                 Ver

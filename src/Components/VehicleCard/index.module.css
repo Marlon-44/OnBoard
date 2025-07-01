@@ -2,9 +2,9 @@
 .card__container{
     max-width: 32.5%;
     max-height: 450px;
-    background-color: rgb(255, 255, 255);
+    background-color: #ffffff00;
+    backdrop-filter: blur(20px);
     border-radius: 10px;
-    flex-grow: 1;
 }
 
 .card__container:hover{
@@ -31,8 +31,14 @@
 
 .info__section h3{
     font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .info__section h4{
     font-size: 0.9rem;
+    font-weight: 500;
+}
+.info__section h2{
+    font-size: 1.6rem;
+    font-weight: 700;
 }

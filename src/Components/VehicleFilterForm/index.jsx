@@ -210,7 +210,7 @@ const VehicleFilterForm = () => {
                 </label>
             </section>
 
-            <button onClick={handleApply} className={styles.apply__button}>
+            <button   onClick={handleApply} className={styles.apply__button}>
                 Aplicar Filtros
             </button>
         </aside>
