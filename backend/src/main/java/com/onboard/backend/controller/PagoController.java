@@ -1,5 +1,6 @@
 package com.onboard.backend.controller;
 
+import com.onboard.backend.entity.Pago;
 import com.onboard.backend.service.PagoService;
 
 import java.util.Map;
@@ -41,5 +42,12 @@ public class PagoController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al obtener los pagos: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Pago> getPagoById(@PathVariable String id) {
+        return pagoService.getPagoById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

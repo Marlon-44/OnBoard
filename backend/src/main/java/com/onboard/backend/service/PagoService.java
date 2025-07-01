@@ -145,7 +145,6 @@ public class PagoService {
             pago.setDetalle("Pago capturado: ID transacción " + transactionId);
             factura.setEstadoPago(status);
 
-            
             Reserva reserva = reservaService.getReservaById(factura.getIdReserva())
                     .orElseThrow(() -> new RuntimeException("Reserva no encontrada con ID: " + factura.getIdReserva()));
 
@@ -156,7 +155,6 @@ public class PagoService {
                     .orElseThrow(
                             () -> new RuntimeException("Vehículo no encontrado con ID: " + reserva.getIdVehiculo()));
 
-
             if ("COMPLETED".equalsIgnoreCase(status)) {
                 reserva.setEstadoReserva(EstadoReserva.ACTIVA);
                 pago.setFechaPago(LocalDate.now());
@@ -165,7 +163,6 @@ public class PagoService {
             pagoRepository.save(pago);
             facturaRepository.save(factura);
 
-           
             emailService.enviarFacturaPorEmail(factura, reserva, cliente, vehiculo, "PayPal");
 
             return ResponseEntity.ok(Map.of(
@@ -184,6 +181,10 @@ public class PagoService {
 
     public List<Pago> obtenerTodosLosPagos() {
         return pagoRepository.findAll();
+    }
+
+    public Optional<Pago> getPagoById(String id) {
+        return pagoRepository.findById(id);
     }
 
 }
