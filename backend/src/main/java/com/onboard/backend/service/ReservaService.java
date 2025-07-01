@@ -28,6 +28,9 @@ public class ReservaService {
     private ReservaRepository reservaRepository;
 
     @Autowired
+    private ContratoAlquilerService contratoAlquilerService;
+
+    @Autowired
     private VehiculoService vehiculoService;
 
     @Autowired
@@ -137,11 +140,11 @@ public class ReservaService {
     }
 
     public BigDecimal getTotalFacturaByIdReserva(String idReserva) {
-        Factura factura = getFactura(idReserva); 
+        Factura factura = getFactura(idReserva);
         return factura.getTotal();
     }
 
-    //@Scheduled(cron = "0 0 */4 * * *")
+    // @Scheduled(cron = "0 0 */4 * * *")
     @Scheduled(cron = "*/1 * * * * *")
     public void crearAlquileresParaReservasDeManana() {
         List<Reserva> reservas = reservaRepository.findAll();
@@ -154,14 +157,6 @@ public class ReservaService {
 
             boolean esParaManana = reserva.getFechaInicio().toLocalDate().isEqual(mañana);
             boolean estaActiva = reserva.getEstadoReserva() == EstadoReserva.ACTIVA;
-
-            System.out.println("=========================================");
-            System.out.println("Reserva ID: " + reserva.getIdReserva());
-            System.out.println("Fecha Inicio: " + reserva.getFechaInicio());
-            System.out.println("¿Es para mañana?: " + esParaManana);
-            System.out.println("¿Está activa?: " + estaActiva);
-            System.out.println("Total reservas: " + reservas.size());
-            System.out.println("=========================================");
 
             boolean alquilerYaExiste = alquilerService.getAlquilerByIdReserva(reserva.getIdReserva()).isPresent();
 
@@ -181,7 +176,14 @@ public class ReservaService {
         Reserva reserva = getReservaById(idReserva)
                 .orElseThrow(() -> new InvalidInputException("Reserva no encontrada", "RESERVA_NOT_FOUND",
                         "No se encontró la reserva con ID: " + idReserva));
+        if (nuevoEstado == EstadoReserva.ACTIVA) {
+            try {
+                contratoAlquilerService.generarContratosPdfParaUsuarioYPropietario(idReserva);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+        }
         reserva.setEstadoReserva(nuevoEstado);
         return reservaRepository.save(reserva);
     }
