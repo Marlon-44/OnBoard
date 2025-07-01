@@ -9,7 +9,7 @@ export default function ComboBox({ array, text}) {
             disablePortal
             options={array}
             className={styles.combo__box}
-            sx={{width: 300,
+            sx={{
                 overflow: "visible",
                 color: "white", // color del texto en el input desplegado
                 '& .MuiOutlinedInput-root': {

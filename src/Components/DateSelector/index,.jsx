@@ -18,7 +18,7 @@ export default function BasicDateTimePicker({ text }) {
                 <DateTimePicker label={text} 
                 className={styles.date__time__picker}
                 sx={{
-                    width: 300,
+                    
                     fontFamily: "Montserrat"
                 }}
                 slotProps={{

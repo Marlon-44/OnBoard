@@ -7,21 +7,22 @@ import { Link } from "react-router-dom";
 const HighlightSection = () => {
     const isMobile = useIsMobile();
     const { featuredVehicles, loading, error } = useFeaturedVehicleContext();
+    
     console.log("FEATURED VEHICLES: ", featuredVehicles)
     return (
         <section className={styles.highligth__section__container}>
             
             <div className={styles.highligth__section}>
-                <video id="home-video" autoPlay muted loop>
+                {/*<video id="home-video" autoPlay muted loop>
                     <source
-                        src={isMobile ? "assets/vid02.mp4" : "assets/vid02.mp4"}
+                        src={isMobile ? "assets/cloud.mp4" : "assets/cloud.mp4"}
                         type="video/mp4"
                     />
                     Your browser does not support the video tag.
-                </video>
+                </video>*/}
                 <div className={styles.highligth__section__inside}>
 
-                    <h2>Featured Vehicles</h2>
+                    <h2>FEATURED VEHICLES</h2>
 
                     <div className={styles.highligth__section__box}>
                         {loading && <p>Cargando vehículos...</p>}

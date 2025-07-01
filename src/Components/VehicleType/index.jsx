@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import styles from "./index.module.css"
 
 const VehicleType = ({number, ref}) => {
+    const navigate = useNavigate();
+
+    const handleNav =()=>{
+        navigate("/homePage");
+    }
     return (
         <div className={styles.vehicle__type__container}
         style={{backgroundImage: `url(${ref})`}}>
@@ -9,8 +15,9 @@ const VehicleType = ({number, ref}) => {
                     <h2>{number}</h2>
                 </div>
 
-                <button className={styles.vehicle__type__button}>
-                    <a>Explore Now</a>
+                <button className={styles.vehicle__type__button}
+                onClick={handleNav}>
+                    <a style={{color:"#fff"}}>Explore Now</a>
                     <img src="assets/chebron__right.png" alt="" />
                 </button>
             </div>

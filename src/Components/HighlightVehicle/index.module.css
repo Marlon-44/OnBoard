@@ -1,10 +1,33 @@
 .vh__card__container{
     width: 90%;
     height: 150px;
-    border-radius: 0px 15px 0px 15px;
+    border-radius: 1rem;
     backdrop-filter: blur(8px); /* borrosidad */
     -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
-    background-color: rgba(255, 255, 255, 0.062);
+    background: linear-gradient(-45deg, #ffffff, #f1f1f1, #ffffff, #f1f1f1);
+    background-size: 400% 400%;
+    animation: gradientMove 8s ease infinite;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.vh__card__container:hover{
+    /* compatibilidad Safari */
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transform: scale(0);
 }
 .vh__card__overlay{
     width: 100%;
@@ -15,30 +38,32 @@
 }
 .vh__card__img{
     width: 50%;
+    margin:0.5rem;
+    border-radius: 1rem 0 0 1rem;
 }
 .vh__card__img img{
     object-fit: cover;
     max-height: 100%;
+    border-radius: 1rem 0 0 1rem;
+    
 }
 .vh__card__info{
     display: flex;
     flex-direction: column;
     width: 50%;
-    object-fit: contain;
-    margin: 1rem;
-    justify-content: space-between;
-    
+    padding: 1rem 0 1rem 0.5rem;
+    gap: 0.5rem;
 }
 .vh__card__info button{
     width: 70%;
     height: 20%;
     align-self: center;
-    color: #fff;
+    color: #000000;
     border: none;
-    border-radius: 0 10px 0 10px;
+    border-radius: 0.5rem;
     backdrop-filter: blur(8px); /* borrosidad */
     -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
-    background-color: rgba(255, 255, 255, 0.062);
+    background-color: rgba(0, 0, 0, 0.062);
 }
 .vh__card__info button:hover{
     
@@ -47,9 +72,10 @@
     background-color: rgba(255, 255, 255, 0.233);
 }
 .vh__card__info h3{
-    font-size: 1.3rem;
-    color: #fff;
-    font-weight: 400;
+    font-size: 1rem;
+    color: #000000;
+    font-weight: 700;
+    margin-bottom: 1rem;
 }
 .vh__card__overlay{
     position: relative;
@@ -58,6 +84,25 @@
     height: 100%;
     
 }
+.description__item{
+    display: flex;
+    width: 100%;
+}
+.description__item p, h6{
+    font-size: 0.8rem;
+    margin: 0;
+    padding: 0;
+}
+.description__item h6{
+    width: 50%;
+    font-weight: 600;
+}
+.description__item p{
+    min-width: 50%;
+    color: #535353;
+    
+}
+
 @media screen and (min-width: 900px) {
     .vh__card__container{
         width:30%;

@@ -84,7 +84,6 @@ const MainHeader = () => {
                     </Menu>
                 </div>
 
-               
             </div>
 
             <div className={styles.header__down__section}>

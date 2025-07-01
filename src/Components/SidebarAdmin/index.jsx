@@ -18,31 +18,37 @@ const SidebarAdmin = ({ onSeleccionarOpcion, opcionSeleccionada }) => {
                     className={`${styles.menu__option} ${opcionSeleccionada === "solicitudes_usuario" ? styles.active : ""}`}
                     onClick={() => onSeleccionarOpcion("solicitudes_usuario")} >
                     <img src="/assets/icon__user__white.png" alt="" />
-                    Ver solicitudes de usuario
+                    Solicitudes de Usuario
                 </li>
                 <li
                     className={`${styles.menu__option} ${opcionSeleccionada === "solicitudes_vehiculo" ? styles.active : ""}`}
                     onClick={() => onSeleccionarOpcion("solicitudes_vehiculo")} >
                     <img src="/assets/icon__car__white.png" alt="" />
-                    Ver solicitudes de vehículos
+                    Solicitudes de Vehículos
                 </li>
                 <li
                     className={`${styles.menu__option} ${opcionSeleccionada === "usuarios_registrados" ? styles.active : ""}`}
                     onClick={() => onSeleccionarOpcion("usuarios_registrados")}>
                     <img src="/assets/icon__user__white.png" alt="" />
-                    Usuarios registrados
+                    Usuarios 
                 </li>
                 <li
                     className={`${styles.menu__option} ${opcionSeleccionada === "vehiculos_registrados" ? styles.active : ""}`}
                     onClick={() => onSeleccionarOpcion("vehiculos_registrados")}>
                     <img src="/assets/icon__car__white.png" alt="" />
-                    Vehículos registrados
+                    Vehículos 
                 </li>
                 <li
-                    className={`${styles.menu__option} ${opcionSeleccionada === "reservas" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("vehiculos_registrados")}>
+                    className={`${styles.menu__option} ${opcionSeleccionada === "allReservas" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("allReservas")}>
                     <img src="/assets/icon__car__white.png" alt="" />
-                    Vehículos registrados
+                    Reservas 
+                </li>
+                <li
+                    className={`${styles.menu__option} ${opcionSeleccionada === "allAlquileres" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("allAlquileres")}>
+                    <img src="/assets/icon__car__white.png" alt="" />
+                    Alquileres 
                 </li>
             </ul>
         </aside>

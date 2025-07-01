@@ -2,6 +2,35 @@ import axios from "axios";
 
 const API = "http://localhost:8080/api/reservas";
 
+
+export async function getAllReservas(){
+    try {
+        const response = await fetch("http://localhost:8080/api/reservas");
+        if (!response.ok) {
+            throw new Error("Error getting the reservas")
+        }
+        const reservas = await response.json();
+        return reservas;
+    } catch (error) {
+        console.error("error in: getAllReservas()", error);
+        return[];
+    }
+}
+
+export async function getReservasByUser(idUsuario) {
+    try {
+        const response = await fetch(`http://localhost:8080/api/reservas/reservas/${idUsuario}`);
+        if (!response.ok) {
+            throw new Error("Error al obtener las reservas del usuario");
+        }
+        const reservas = await response.json();
+        return reservas;
+    } catch (error) {
+        console.error("Error en: getReservasByUser()", error);
+        return [];
+    }
+}
+
 export const crearReserva = async (reservaData) => {
     try {
         const response = await axios.post(API, reservaData);

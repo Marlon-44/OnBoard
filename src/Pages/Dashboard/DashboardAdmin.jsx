@@ -9,6 +9,8 @@ import VehicleRequestTable from "../../Components/VehicleRequestTable";
 import UserRequestTable from "../../Components/UserRequestTable";
 import RegisteredUsersTable from "../../Components/RegisteredUsersTable";
 import TablaVehiculosRegistrados from "../../Components/TablaVehiculosRegistrados/TablaVehiculosRegistrados";
+import AllReservasTable from "../../Components/AllReservasTable";
+import AllAlquileresTable from "../../Components/AllAlquileresTable";
 
 const DashboardAdmin = () => {
     const { usuario } = useContext(SesionContext);
@@ -24,6 +26,10 @@ const DashboardAdmin = () => {
                 return <RegisteredUsersTable/>;
             case "vehiculos_registrados":
                 return <TablaVehiculosRegistrados/>
+            case "allReservas":
+                return <AllReservasTable/>;
+            case "allAlquileres":
+                return <AllAlquileresTable/>;
             default:
                 return <p>Selecciona una opción del menú.</p>;
         }

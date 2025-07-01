@@ -12,11 +12,12 @@ import ReservaForm from "./Pages/ReservaForm";
 import Pago from "./Pages/Pago";
 import PagoExitoso from "./Pages/Pago/PagoExitoso";
 import PagoCancelado from "./Pages/Pago/PagoCancelado";
+import ScrollToTop from "./Components/ScrollToTop";
 const AppRoutes = () =>{
     
     return(
             <BrowserRouter>
-            
+                <ScrollToTop/>
                 <Routes>
                     <Route path="/" element={<Landing/>}></Route>
                     <Route path="/homePage" element={<Home/>}></Route>
