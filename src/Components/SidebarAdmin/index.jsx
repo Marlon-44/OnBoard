@@ -38,6 +38,12 @@ const SidebarAdmin = ({ onSeleccionarOpcion, opcionSeleccionada }) => {
                     <img src="/assets/icon__car__white.png" alt="" />
                     Vehículos registrados
                 </li>
+                <li
+                    className={`${styles.menu__option} ${opcionSeleccionada === "reservas" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("vehiculos_registrados")}>
+                    <img src="/assets/icon__car__white.png" alt="" />
+                    Vehículos registrados
+                </li>
             </ul>
         </aside>
     )

@@ -9,7 +9,7 @@ import ProfileSection from "../../Components/ProfileSection";
 
 const DashboardIndividualClient = () => {
     const { usuario } = useContext(SesionContext);
-    const [opcionSeleccionada, setOpcionSeleccionada] = useState("solicitudes_usuario");
+    const [opcionSeleccionada, setOpcionSeleccionada] = useState("reservas");
 
     const renderContenido = () => {
         switch (opcionSeleccionada) {

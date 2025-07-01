@@ -13,7 +13,7 @@ import {
     Snackbar
 } from "@mui/material";
 import Alert from "@mui/material/Alert";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Pago = () => {
     const { idFactura } = useParams();
@@ -21,7 +21,7 @@ const Pago = () => {
     const [loading, setLoading] = useState(true);
     const [pagoExitoso, setPagoExitoso] = useState(false);
     const [error, setError] = useState(null);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchFactura = async () => {
             try {
@@ -146,9 +146,25 @@ const Pago = () => {
                     </Box>
                 )}
 
-                {factura.estadoPago === "COMPLETED" && (
+                {(factura.estadoPago === "COMPLETED" || factura.estadoPago === "APPROVED") && (
                     <Box textAlign="center" mt={3}>
-                        <Alert severity="success">Esta factura ya ha sido pagada.</Alert>
+                        <Alert severity="success" sx={{ mb: 2 }}>
+                            Esta factura ya ha sido pagada.
+                        </Alert>
+                        <button
+                            onClick={() => navigate("/dashboard")}
+                            style={{
+                                backgroundColor: "#1976d2",
+                                color: "#fff",
+                                padding: "10px 20px",
+                                borderRadius: "8px",
+                                border: "none",
+                                cursor: "pointer",
+                                fontSize: "16px"
+                            }}
+                        >
+                            Ver mis reservas
+                        </button>
                     </Box>
                 )}
             </Paper>

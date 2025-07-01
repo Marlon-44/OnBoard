@@ -17,7 +17,7 @@ const SidebarIndividualClient = ({ onSeleccionarOpcion, opcionSeleccionada }) =>
                     className={`${styles.menu__option} ${opcionSeleccionada === "reservas" ? styles.active : ""}`}
                     onClick={() => onSeleccionarOpcion("reservas")} >
                     <img src="/assets/icon__user__white.png" alt="" />
-                    Reservas
+                    Mis Reservas
                 </li>
                 <li
                     className={`${styles.menu__option} ${opcionSeleccionada === "historial_alquileres" ? styles.active : ""}`}
@@ -29,9 +29,20 @@ const SidebarIndividualClient = ({ onSeleccionarOpcion, opcionSeleccionada }) =>
                     className={`${styles.menu__option} ${opcionSeleccionada === "alquileres" ? styles.active : ""}`}
                     onClick={() => onSeleccionarOpcion("alquileres")}>
                     <img src="/assets/icon__user__white.png" alt="" />
-                    Alquileres
+                    Alquileres Activos
                 </li>
-                
+                <li
+                    className={`${styles.menu__option} ${opcionSeleccionada === "cuentas_x_pagar" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("alquileres")}>
+                    <img src="/assets/icon__user__white.png" alt="" />
+                    Cuentas por Pagar
+                </li>
+                <li
+                    className={`${styles.menu__option} ${opcionSeleccionada === "telefonos_emergencia" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("alquileres")}>
+                    <img src="/assets/icon__user__white.png" alt="" />
+                    Telefonos de Emergencia
+                </li>
             </ul>
         </aside>
     )
