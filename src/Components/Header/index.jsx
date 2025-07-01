@@ -11,6 +11,9 @@ const Header =()=>{
         
         navigate(`/register`)
     }
+    const handleClickLogo =()=>{
+        navigate("/homePage")
+    }
     return(
         <motion.header 
             initial={{y:-50 , opacity: 0}}
@@ -19,9 +22,14 @@ const Header =()=>{
             className={styles.header__container}>
             
                 
-                <Link to="/homePage" className={styles.header__logo__container}>
-                    <img src="assets/logo__op1.png" alt="" />
-                </Link>
+                <div className={styles.header__logo__container}
+                onClick={handleClickLogo}>
+                    {/*<img src="assets/logo__op1.png" alt="" />*/}
+                    <h1 >
+                        OnBoard
+                    </h1>
+                </div>
+
                 <div className={styles.header__buttons__container}>
                     <button onClick={handleClickLogin}>Login</button>
                     <button onClick={handleClickRegister}>Register</button>

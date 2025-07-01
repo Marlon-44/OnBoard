@@ -22,7 +22,7 @@ const HighlightSection = () => {
                 </video>*/}
                 <div className={styles.highligth__section__inside}>
 
-                    <h2>FEATURED VEHICLES</h2>
+                    <h2 className={styles.highligth__section__title}>FEATURED VEHICLES</h2>
 
                     <div className={styles.highligth__section__box}>
                         {loading && <p>Cargando vehículos...</p>}

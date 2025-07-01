@@ -1,91 +1,116 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Manrope", sans-serif;
 }
 
-.header__container{
+.header__container {
     position: absolute;
     width: 100vw;
     height: 10vh;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 0 5% 0;
-    
+
 }
-.header__logo__container{
-    width: 20%;
-    height: 100%;
-    background-color: #4c005c;
+
+.header__logo__container {
+    width: auto;
     display: flex;
     align-items: flex-end;
     justify-content: center;
     border-radius: 0 0 10px 10px;
-     backdrop-filter: blur(8px); /* borrosidad */
-    -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
-    background-color: rgba(255, 255, 255, 0.2);
+    /* backdrop-filter: blur(8px); 
+    -webkit-backdrop-filter: blur(8px); 
+    background-color: rgba(255, 255, 255, 0.2);*/
 }
 
-.header__logo__container img{
-    width: 40%;
-    margin-bottom: 30%;
+.header__logo__container h1 {
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    padding: 1rem;
 }
-.header__buttons__container{
+
+.header__logo__container h1 {
+    cursor: pointer;
+}
+
+.header__buttons__container {
     display: flex;
     gap: 6%;
     align-items: center;
     width: 50%;
 }
-.header__buttons__container button{
+
+.header__buttons__container button {
     border: none;
     width: 100%;
     height: 50%;
-    backdrop-filter: blur(8px); /* borrosidad */
-    -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
+    backdrop-filter: blur(8px);
+    /* borrosidad */
+    -webkit-backdrop-filter: blur(8px);
+    /* compatibilidad Safari */
     background-color: rgba(0, 0, 0, 0.2);
     color: #fff;
     border-radius: 10px;
 }
-.header__buttons__container button:hover{
+
+.header__buttons__container button:hover {
     cursor: pointer;
     background-color: #ffffff53;
 }
+
 @media screen and (min-width: 900px) {
-    .header__container{
+    .header__container {
         height: 8rem;
-        
-    }
-    .header__logo__container{
-        width: 8%;
-        height: 100%;
-        background-color: #4c005c;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0 0 10px 10px;
-        backdrop-filter: blur(8px); /* borrosidad */
-        -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
-        background-color: rgba(255, 255, 255, 0.2);
+
     }
 
-    .header__logo__container img{
+    .header__logo__container {
+        width: auto;
+        height: 30%;
+        display: flex;
+        border-radius: 0 0 10px 10px;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+
+
+    }
+
+    .header__logo__container h1 {
+        color: #fff;
+        font-size: 2rem;
+        font-weight: 700;
+        height: auto;
+        padding: 1rem 0;
+    }
+
+    .header__logo__container img {
         width: 40%;
         margin-bottom: 0;
     }
-    .header__buttons__container{
+
+    .header__buttons__container {
         gap: 6%;
         width: 20%;
     }
-    .header__buttons__container button{
+
+    .header__buttons__container button {
         border: none;
         width: 100%;
         height: 30%;
-        background-color:#4c005c ;
+        padding: 0.5rem;
         color: #fff;
         border-radius: 5px;
-        backdrop-filter: blur(8px); /* borrosidad */
-        -webkit-backdrop-filter: blur(8px); /* compatibilidad Safari */
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         background-color: rgba(255, 255, 255, 0.2);
     }
+
 }

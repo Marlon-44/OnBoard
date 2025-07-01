@@ -17,7 +17,7 @@ const WelcomeCard = ({message}) => {
             </div>
 
             <div>
-                <h1>Buen día, {usuario.nombre}</h1>
+                <h1>Hola, {usuario.nombre}</h1>
                 <h6>{message}</h6>
             </div>
 

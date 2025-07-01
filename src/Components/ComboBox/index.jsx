@@ -10,6 +10,7 @@ export default function ComboBox({ array, text}) {
             options={array}
             className={styles.combo__box}
             sx={{
+                width:"22.5%",
                 overflow: "visible",
                 color: "white", // color del texto en el input desplegado
                 '& .MuiOutlinedInput-root': {

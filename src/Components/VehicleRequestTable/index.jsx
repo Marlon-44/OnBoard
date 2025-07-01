@@ -103,7 +103,7 @@ const VehicleRequestTable = () => {
                                         <TableCell>{vehiculo.estadoOferta.toLowerCase()}</TableCell>
                                         <TableCell>
                                             <IconButton
-                                                style={{ background: "#6100bd", border: "none", padding: "0.2rem 0.4rem", borderRadius: "5px", color: "white", marginLeft: "0.2rem" }}
+                                                style={{ background: "#0f6cc9", border: "none", padding: "0.2rem 0.4rem", borderRadius: "5px", color: "white", marginLeft: "0.2rem" }}
                                                 onClick={() => setSelectedVehicle(vehiculo)}
                                             >
                                                 <VisibilityIcon />
