@@ -13,6 +13,9 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.onboard.backend.entity.Factura;
+import com.onboard.backend.entity.Reserva;
+import com.onboard.backend.entity.Usuario;
+import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.model.EstadoOferta;
 import com.onboard.backend.model.EstadoReserva;
 import com.onboard.backend.model.EstadoVerificacion;
@@ -244,17 +247,18 @@ public class EmailService {
         }
     }
 
-    public void enviarFacturaPorEmail(Factura factura, String nombreCliente, String correoCliente, String metodoPago) {
+    public void enviarFacturaPorEmail(Factura factura, Reserva reserva, Usuario cliente, Vehiculo vehiculo,
+            String metodoPago) {
         try {
             MimeMessage mensaje = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
 
-            helper.setTo(correoCliente);
+            helper.setTo(cliente.getCorreo());
             helper.setFrom("onboardnotifications@gmail.com");
             helper.setSubject("🧾 Tu Factura Electrónica - OnBoard");
 
             Context context = new Context();
-            context.setVariable("nombre", nombreCliente);
+            context.setVariable("nombre", cliente.getNombre());
             context.setVariable("logoUrl", LOGO_URL);
             context.setVariable("total", factura.getTotal());
             context.setVariable("fecha", factura.getFechaEmision());
@@ -262,12 +266,13 @@ public class EmailService {
             String contenidoHtml = templateEngine.process("email/factura/factura_cliente", context);
             helper.setText(contenidoHtml, true);
 
-            byte[] pdfFactura = pdfService.generarFacturaPdf(factura, nombreCliente, correoCliente, metodoPago);
+            // 🚨 Aquí se pasa todo lo necesario explícitamente
+            byte[] pdfFactura = pdfService.generarFacturaPdf(factura, cliente, vehiculo, reserva, metodoPago);
             helper.addAttachment("Factura_OnBoard.pdf", new ByteArrayResource(pdfFactura));
 
             mailSender.send(mensaje);
         } catch (Exception e) {
-            logger.error("Error al enviar la factura por email a <{}>", correoCliente, e);
+            logger.error("Error al enviar la factura por email a <{}>", cliente.getCorreo(), e);
         }
     }
 

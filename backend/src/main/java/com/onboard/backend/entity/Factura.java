@@ -22,7 +22,8 @@ public class Factura {
     public Factura() {
     }
 
-    public Factura(String idFactura, String idReserva, BigDecimal total, LocalDate fechaEmision, String razon, String estadoPago) {
+    public Factura(String idFactura, String idReserva, BigDecimal total, LocalDate fechaEmision, String razon,
+            String estadoPago) {
         this.idFactura = idFactura;
         this.idReserva = idReserva;
         this.total = total.setScale(2, RoundingMode.HALF_UP);
@@ -52,9 +53,9 @@ public class Factura {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total.setScale(2, RoundingMode.HALF_UP);
-        this.impuesto = total.multiply(new BigDecimal("0.004")).setScale(2, RoundingMode.HALF_UP);
+    public void setTotal(BigDecimal subtotal) {
+        this.impuesto = subtotal.multiply(new BigDecimal("0.004")).setScale(2, RoundingMode.HALF_UP);
+        this.total = subtotal.add(this.impuesto).setScale(2, RoundingMode.HALF_UP);
     }
 
     public LocalDate getFechaEmision() {

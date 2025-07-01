@@ -2,6 +2,9 @@ package com.onboard.backend.service;
 
 import com.onboard.backend.entity.Factura;
 import com.onboard.backend.entity.Pago;
+import com.onboard.backend.entity.Reserva;
+import com.onboard.backend.entity.Usuario;
+import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.repository.FacturaRepository;
 import com.onboard.backend.repository.PagoRepository;
 
@@ -34,6 +37,15 @@ public class PagoService {
 
     @Autowired
     private PayPalHttpClient payPalClient;
+
+    @Autowired
+    private ReservaService reservaService;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private VehiculoService vehiculoService;
 
     public static final String exitoso = "http://localhost:5173/pago/cancelado";
     public static final String cancelado = "http://localhost:5173/pago/exitoso";
@@ -130,7 +142,18 @@ public class PagoService {
             pagoRepository.save(pago);
             facturaRepository.save(factura);
 
-            emailService.enviarFacturaPorEmail(factura, payerName, payerEmail, "PayPal");
+            // === NUEVO: Obtener reserva, usuario y vehículo para el PDF ===
+            Reserva reserva = reservaService.getReservaById(factura.getIdReserva())
+                    .orElseThrow(() -> new RuntimeException("Reserva no encontrada con ID: " + factura.getIdReserva()));
+
+            Usuario cliente = usuarioService.getUsuarioById(reserva.getIdCliente())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + reserva.getIdCliente()));
+
+            Vehiculo vehiculo = vehiculoService.getVehiculoById(reserva.getIdVehiculo())
+                    .orElseThrow(
+                            () -> new RuntimeException("Vehículo no encontrado con ID: " + reserva.getIdVehiculo()));
+
+            emailService.enviarFacturaPorEmail(factura, reserva, cliente, vehiculo, "PayPal");
 
             return ResponseEntity.ok(Map.of(
                     "status", status,
