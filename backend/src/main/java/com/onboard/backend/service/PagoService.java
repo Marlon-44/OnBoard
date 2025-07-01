@@ -18,7 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
@@ -58,7 +61,12 @@ public class PagoService {
 
         Factura factura = facturaOpt.get();
         BigDecimal total = factura.getTotal();
-        String valor = String.format("%.2f", total);
+
+        // ⚠️ Formatear el valor con punto decimal (PayPal no acepta comas)
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        DecimalFormat formatter = new DecimalFormat("0.00", symbols);
+        String valor = formatter.format(total); // ← por ejemplo: "79.07"
 
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.checkoutPaymentIntent("CAPTURE");
@@ -94,12 +102,13 @@ public class PagoService {
             pago.setEstadoPago(order.status());
             factura.setEstadoPago(order.status());
             pago.setDetalle("Orden PayPal creada");
+
             pagoRepository.save(pago);
 
             return "{\"orderId\": \"" + order.id() + "\"}";
 
         } catch (HttpException e) {
-            throw new RuntimeException("Error al crear orden en PayPal: " + e.getMessage());
+            return "{\"error\": \"Error al crear orden en PayPal: " + e.getMessage().replace("\"", "'") + "\"}";
         }
     }
 
@@ -162,8 +171,10 @@ public class PagoService {
                     "payerName", payerName,
                     "message", "Pago capturado exitosamente"));
 
-        } catch (HttpException e) {
-            throw new RuntimeException("Error al capturar orden: " + e.getMessage());
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error al capturar pago: " + e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 
