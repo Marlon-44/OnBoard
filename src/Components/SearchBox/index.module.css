@@ -41,14 +41,13 @@
         height: 12%;
         flex-direction: row;
         align-items: center;
-        padding: 1%;
+        padding: 3% 1% ;
         gap: 2%;
     }
     .search__button{
         height: 55px;
-        width: auto;
+        width: 22.5%;
         padding: 0 1rem;
-
         margin-top: 0;
     }
 }

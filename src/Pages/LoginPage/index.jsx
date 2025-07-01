@@ -87,17 +87,32 @@ const Login = () => {
         }
     };
 
+    const handleNav = () => {
+        navigate("/homePage")
+    }
     return (
-        <>
-            <Header />
-            <section className={styles.login__container}>
-                <div className={styles.image__section}>
+        <div className={styles.login__page}>
+            <div style={{ position: "absolute", width: "auto" }}
+                className={styles.logo__container}
+                onClick={handleNav}>
+                <h2 style={{
+                    color: "#fff",
+                    fontFamily: "Montserrat",
+                    fontWeight: "700",
+                    fontSize: "1.5rem",
+                    padding: "1rem",
+                    paddingLeft:"4rem"
+                }} >OnBoard</h2>
+            </div>
+            <div className={styles.image__section}>
 
-                </div>
+            </div>
+            <section className={styles.login__container}>
+
 
                 <div className={styles.form__section}>
                     <h1>Inicia sesion en tu cuenta</h1>
-                    
+
 
                     {alerta && (
                         <Alert severity={alerta.tipo} sx={{ mb: 2 }}>
@@ -113,15 +128,9 @@ const Login = () => {
                         onChange={handleChange}
                         error={!!errors.correo}
                         helperText={errors.correo}
-                        InputLabelProps={{ style: { color: "white" } }}
-                        InputProps={{ style: { color: "white" } }}
                         sx={{
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "white" },
-                                "&:hover fieldset": { borderColor: "white" },
-                                "&.Mui-focused fieldset": { borderColor: "white" },
-                            },
-                            marginBottom: 2,
+                            
+                            marginBottom: "0.5rem",
                         }}
                         fullWidth
                     />
@@ -135,34 +144,57 @@ const Login = () => {
                         onChange={handleChange}
                         error={!!errors.password}
                         helperText={errors.password}
-                        InputLabelProps={{ style: { color: "white" } }}
-                        InputProps={{ style: { color: "white" } }}
+                        
                         sx={{
-                            "& .MuiOutlinedInput-root": {
-                                "& fieldset": { borderColor: "white" },
-                                "&:hover fieldset": { borderColor: "white" },
-                                "&.Mui-focused fieldset": { borderColor: "white" },
-                            },
+                            
                             marginBottom: 2,
                         }}
                         fullWidth
                     />
+                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                        <input name="remember" type="checkbox"></input>
+                        <label style={{ fontSize: "0.8rem" }} htmlFor="remember">Recordarme en este dispositivo</label>
 
-                    <Button
-                        variant="contained"
-                        color="primary"
+                    </div>
+                    <button
+
                         fullWidth
                         onClick={handleSubmit}
                         className={styles.login__button}
                     >
-                        Log In
-                    </Button>
-                    <p>
-                        Don't Have an Account? <Link to="/register" >Register</Link>
+                        Iniciar Sesion
+                    </button>
+
+                    <hr />
+
+                    <button
+
+                        fullWidth
+                        onClick={handleSubmit}
+                        className={styles.loginWith__button}
+                    >
+                        <img className={styles.button__icon} src="./assets/google.svg" alt="" /> Inicia sesion con Google
+                    </button>
+                    <button
+
+                        fullWidth
+                        onClick={""}
+                        className={styles.loginWith__button}
+                    >
+                        <img className={styles.button__icon} src="/assets/outlook.svg" alt="" />
+                        Inicia sesion con Outlook
+                    </button>
+
+                    <p style={{ marginTop: "1rem" }}>
+                        ¿Eres nuevo en OnBoard? <Link to="/register" style={{ textDecoration: "none", color: "#4431b3", fontWeight: "600" }}>Crea una cuenta</Link>
                     </p>
                 </div>
+                <div style={{ display: "flex", gap: "0.5rem", alignItems:"flex-start"}}>
+                    <img style={{width:"3.5%", margin:0, paddingTop:"0.1rem"}} src="/assets/lock.svg" alt="" />
+                    <p style={{margin:"0px", padding:"0px", color:"#b4b4b4"}}>Por tu seguridad, nunca compartas tus credenciales de acceso usuario, contraseña o tokens con nadie.</p>
+                </div>
             </section>
-        </>
+        </div>
     );
 };
 

@@ -12,7 +12,7 @@ const ProfileSection =({usuario})=>{
             <div className={styles.profile__info}>
                 <div className={styles.info__row}>
                     <h6>Identificacion</h6>
-                    <p>{usuario.idUsuario}</p>
+                    <p style={{color:"#000"}}>{usuario.idUsuario}</p>
                 </div>
                 <div className={styles.info__row}>
                     <h6>Correo</h6>

@@ -17,6 +17,8 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { registrarUsuario } from '../../api/registro';
+import { Link, useNavigate } from 'react-router-dom';
+import { style } from 'framer-motion/client';
 
 const roles = [
     { idRol: 'company_owner', label: 'Empresa - Dueña' },
@@ -36,13 +38,13 @@ const tipoIdLabels = {
 
 const estilosInput = {
     '& .MuiOutlinedInput-root': {
-        '& fieldset': { borderColor: 'white' },
-        '&:hover fieldset': { borderColor: 'white' },
-        '&.Mui-focused fieldset': { borderColor: 'white' },
+        '& fieldset': { borderColor: '#c9c9c9' },
+        '&:hover fieldset': { borderColor: '#c9c9c9' },
+        '&.Mui-focused fieldset': { borderColor: '#c9c9c9' },
     },
-    '& .MuiInputLabel-root': { color: 'white' },
-    '& .MuiInputLabel-root.Mui-focused': { color: 'white' },
-    input: { color: 'white' },
+    '& .MuiInputLabel-root': { color: '#000' },
+    '& .MuiInputLabel-root.Mui-focused': { color: '#000' },
+    input: { color: '#000' },
 };
 
 const Register = () => {
@@ -68,14 +70,13 @@ const Register = () => {
     });
     const estilosInput = {
         '& .MuiOutlinedInput-root': {
-            '& fieldset': { borderColor: 'white' },
-            '&:hover fieldset': { borderColor: 'white' },
-            '&.Mui-focused fieldset': { borderColor: 'white' },
-            '& svg': { color: 'white' }, // <-- icono desplegable blanco
+            '& fieldset': { borderColor: '#c9c9c9' },
+            '&:hover fieldset': { borderColor: '#c9c9c9' },
+            '&.Mui-focused fieldset': { borderColor: '#c9c9c9' },
         },
-        '& .MuiInputLabel-root': { color: 'white' },
-        '& .MuiInputLabel-root.Mui-focused': { color: 'white' },
-        input: { color: 'white' },
+        '& .MuiInputLabel-root': { color: '#000' },
+        '& .MuiInputLabel-root.Mui-focused': { color: '#000' },
+        input: { color: '#000' },
     };
 
     const validateField = (name, value) => {
@@ -195,7 +196,7 @@ const Register = () => {
 
     const handleClickShowPassword = () => setShowPassword((prev) => !prev);
     const handleMouseDownPassword = (e) => e.preventDefault();
-    const handleMouseUpPassword = () => {};
+    const handleMouseUpPassword = () => { };
     const [alerta, setAlerta] = useState({ tipo: '', mensaje: '' });
 
     const handleSubmit = async () => {
@@ -268,21 +269,31 @@ const Register = () => {
             console.error('Error al registrar usuario:', error);
         }
     };
-
+    const navigate = useNavigate();
+    const handleNav = () => {
+        navigate("/homePage")
+    }
     return (
-        <>
-            <Header />
-            <section className={styles.login__container}>
-                <div className={styles.image__section}></div>
+        <div className='login__page'>
+            <div style={{ position: "absolute", width: "auto" }}
+                className={styles.logo__container}
+                onClick={handleNav}>
+                <h2 style={{
+                    color: "#fff",
+                    fontFamily: "Montserrat",
+                    fontWeight: "700",
+                    fontSize: "1.5rem",
+                    padding: "1rem",
+                    paddingLeft: "4rem"
+                }} >OnBoard</h2>
+            </div>
+            <div className={styles.image__section}>
 
-                <Box className={styles.form__section} sx={{ maxWidth: 600 }}>
-                    <Typography
-                        variant="h4"
-                        gutterBottom
-                        sx={{ color: 'white' }}
-                    >
-                        Registro de Usuario
-                    </Typography>
+            </div>
+            <section className={styles.login__container}>
+
+                <div className={styles.form__section} >
+                    <h1>Registrate en nuestra plataforma</h1>
 
                     <FormControl fullWidth margin="normal" sx={estilosInput}>
                         <InputLabel>Tipo de Usuario</InputLabel>
@@ -290,7 +301,7 @@ const Register = () => {
                             value={tipoUsuario}
                             onChange={(e) => setTipoUsuario(e.target.value)}
                             label="Tipo de Usuario"
-                            sx={{ ...estilosInput, color: 'white' }}
+                            sx={{ ...estilosInput, color: '#000' }}
                         >
                             <MenuItem value="particular">Particular</MenuItem>
                             <MenuItem value="empresa">Empresa</MenuItem>
@@ -303,7 +314,7 @@ const Register = () => {
                             value={rolSeleccionado}
                             onChange={(e) => setRolSeleccionado(e.target.value)}
                             label="Rol"
-                            sx={{ ...estilosInput, color: 'white' }}
+                            sx={{ ...estilosInput, color: '000' }}
                         >
                             {roles.map((rol) => (
                                 <MenuItem key={rol.idRol} value={rol.idRol}>
@@ -321,7 +332,7 @@ const Register = () => {
                             value={formData.tipoIdentificacion}
                             onChange={handleChange}
                             label="Tipo de Identificación"
-                            sx={{ ...estilosInput, color: 'white' }}
+                            sx={{ ...estilosInput, color: '#000' }}
                         >
                             <MenuItem value="CC">CC</MenuItem>
                             <MenuItem value="CE">CE</MenuItem>
@@ -331,142 +342,152 @@ const Register = () => {
                     </FormControl>
 
                     {/* ID Usuario con label dinámico */}
-                    <TextField
-                        label={
-                            tipoIdLabels[formData.tipoIdentificacion] ||
-                            'Identificación'
-                        }
-                        name="idUsuario"
-                        fullWidth
-                        margin="normal"
-                        onChange={handleChange}
-                        error={!!errors.idUsuario}
-                        helperText={errors.idUsuario}
-                        sx={estilosInput}
-                    />
+                    <div className={styles.double__input__box}>
+                        <TextField
+                            label={
+                                tipoIdLabels[formData.tipoIdentificacion] ||
+                                'Identificación'
+                            }
+                            name="idUsuario"
+                            fullWidth
+                            margin="normal"
+                            onChange={handleChange}
+                            error={!!errors.idUsuario}
+                            helperText={errors.idUsuario}
+                            sx={estilosInput}
+                        />
 
-                    {/* Resto de campos comunes */}
-                    <TextField
-                        label="Nombre"
-                        name="nombre"
-                        fullWidth
-                        margin="normal"
-                        onChange={handleChange}
-                        sx={estilosInput}
-                        error={!!errors.nombre}
-                        helperText={errors.nombre}
-                    />
-                    <TextField
-                        label="Correo"
-                        name="correo"
-                        fullWidth
-                        margin="normal"
-                        value={formData.correo}
-                        onChange={handleChange}
-                        error={!!errors.correo}
-                        helperText={errors.correo}
-                        sx={estilosInput}
-                    />
+                        {/* Resto de campos comunes */}
+                        <TextField
+                            label="Nombre"
+                            name="nombre"
+                            fullWidth
+                            margin="normal"
+                            onChange={handleChange}
+                            sx={estilosInput}
+                            error={!!errors.nombre}
+                            helperText={errors.nombre}
+                        />
+                    </div>
 
-                    <TextField
-                        label="Confirmar Correo"
-                        name="confirmarCorreo"
-                        fullWidth
-                        margin="normal"
-                        value={formData.confirmarCorreo}
-                        onChange={handleChange}
-                        error={!!errors.confirmarCorreo}
-                        helperText={errors.confirmarCorreo}
-                        sx={estilosInput}
-                    />
+                    <div className={styles.double__input__box}>
+                        <TextField
+                            label="Correo"
+                            name="correo"
+                            fullWidth
+                            margin="normal"
+                            value={formData.correo}
+                            onChange={handleChange}
+                            error={!!errors.correo}
+                            helperText={errors.correo}
+                            sx={estilosInput}
+                        />
+
+                        <TextField
+                            label="Confirmar Correo"
+                            name="confirmarCorreo"
+                            fullWidth
+                            margin="normal"
+                            value={formData.confirmarCorreo}
+                            onChange={handleChange}
+                            error={!!errors.confirmarCorreo}
+                            helperText={errors.confirmarCorreo}
+                            sx={estilosInput}
+                        />
+                    </div>
+
+                    <div className={styles.double__input__box}>
+                        <FormControl
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            sx={estilosInput}
+                        >
+
+                            <InputLabel htmlFor="outlined-password">
+                                Contraseña
+                            </InputLabel>
+                            <OutlinedInput
+                                id="outlined-password"
+                                name="password"
+                                type={showPassword ? 'text' : 'password'}
+                                value={formData.password}
+                                onChange={handleChange}
+                                error={!!errors.password}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? (
+                                                <VisibilityOff
+                                                    sx={{ color: '#000' }}
+                                                />
+                                            ) : (
+                                                <Visibility
+                                                    sx={{ color: '#000' }}
+                                                />
+                                            )}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Contraseña"
+                            />
+                            {errors.password && (
+                                <Typography color="error" fontSize="0.75rem">
+                                    {errors.password}
+                                </Typography>
+                            )}
+                        </FormControl>
+
+                        <FormControl
+                            fullWidth
+                            margin="normal"
+                            variant="outlined"
+                            sx={estilosInput}
+                        >
+                            <InputLabel htmlFor="confirmar-password">
+                                Confirmar Contraseña
+                            </InputLabel>
+                            <OutlinedInput
+                                id="confirmar-password"
+                                name="confirmarPassword"
+                                type={showPassword ? 'text' : 'password'}
+                                value={formData.confirmarPassword}
+                                onChange={handleChange}
+                                error={!!errors.confirmarPassword}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? (
+                                                <VisibilityOff
+                                                    sx={{ color: '#000' }}
+                                                />
+                                            ) : (
+                                                <Visibility
+                                                    sx={{ color: '#000' }}
+                                                />
+                                            )}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Confirmar Contraseña"
+                            />
+                            {errors.confirmarPassword && (
+                                <Typography color="error" fontSize="0.75rem">
+                                    {errors.confirmarPassword}
+                                </Typography>
+                            )}
+                        </FormControl>
+                    </div>
                     {/* Contraseña con visibilidad */}
-                    <FormControl
-                        fullWidth
-                        margin="normal"
-                        variant="outlined"
-                        sx={estilosInput}
-                    >
-                        <InputLabel htmlFor="outlined-password">
-                            Contraseña
-                        </InputLabel>
-                        <OutlinedInput
-                            id="outlined-password"
-                            name="password"
-                            type={showPassword ? 'text' : 'password'}
-                            value={formData.password}
-                            onChange={handleChange}
-                            error={!!errors.password}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                    >
-                                        {showPassword ? (
-                                            <VisibilityOff
-                                                sx={{ color: 'white' }}
-                                            />
-                                        ) : (
-                                            <Visibility
-                                                sx={{ color: 'white' }}
-                                            />
-                                        )}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Contraseña"
-                        />
-                        {errors.password && (
-                            <Typography color="error" fontSize="0.75rem">
-                                {errors.password}
-                            </Typography>
-                        )}
-                    </FormControl>
 
-                    <FormControl
-                        fullWidth
-                        margin="normal"
-                        variant="outlined"
-                        sx={estilosInput}
-                    >
-                        <InputLabel htmlFor="confirmar-password">
-                            Confirmar Contraseña
-                        </InputLabel>
-                        <OutlinedInput
-                            id="confirmar-password"
-                            name="confirmarPassword"
-                            type={showPassword ? 'text' : 'password'}
-                            value={formData.confirmarPassword}
-                            onChange={handleChange}
-                            error={!!errors.confirmarPassword}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                    >
-                                        {showPassword ? (
-                                            <VisibilityOff
-                                                sx={{ color: 'white' }}
-                                            />
-                                        ) : (
-                                            <Visibility
-                                                sx={{ color: 'white' }}
-                                            />
-                                        )}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Confirmar Contraseña"
-                        />
-                        {errors.confirmarPassword && (
-                            <Typography color="error" fontSize="0.75rem">
-                                {errors.confirmarPassword}
-                            </Typography>
-                        )}
-                    </FormControl>
 
                     <TextField
                         label="Teléfono"
@@ -524,26 +545,29 @@ const Register = () => {
                                 helperText={errors.representante}
                                 sx={estilosInput}
                             />
-                            <TextField
-                                label="Tipo de Documento del Representante"
-                                name="tipoDocumentoRepresentante"
-                                fullWidth
-                                margin="normal"
-                                onChange={handleChange}
-                                error={!!errors.tipoDocumentoRepresentante}
-                                helperText={errors.tipoDocumentoRepresentante}
-                                sx={estilosInput}
-                            />
-                            <TextField
-                                label="Documento del Representante"
-                                name="documentoRepresentante"
-                                fullWidth
-                                margin="normal"
-                                onChange={handleChange}
-                                error={!!errors.documentoRepresentante}
-                                helperText={errors.documentoRepresentante}
-                                sx={estilosInput}
-                            />
+                            <div className={styles.double__input__box}>
+                                <TextField
+                                    label="Tipo de Documento del Representante"
+                                    name="tipoDocumentoRepresentante"
+                                    fullWidth
+                                    margin="normal"
+                                    onChange={handleChange}
+                                    error={!!errors.tipoDocumentoRepresentante}
+                                    helperText={errors.tipoDocumentoRepresentante}
+                                    sx={estilosInput}
+                                />
+                                <TextField
+                                    label="Documento del Representante"
+                                    name="documentoRepresentante"
+                                    fullWidth
+                                    margin="normal"
+                                    onChange={handleChange}
+                                    error={!!errors.documentoRepresentante}
+                                    helperText={errors.documentoRepresentante}
+                                    sx={estilosInput}
+                                />
+                            </div>
+
                         </>
                     )}
                     {alerta.mensaje && (
@@ -558,9 +582,16 @@ const Register = () => {
                     >
                         Registrar
                     </button>
-                </Box>
+                    <p style={{ marginTop: "1rem" }}>
+                        ¿Ya estas en OnBoard? <Link to="/register" style={{ textDecoration: "none", color: "#4431b3", fontWeight: "600" }}>Inicia sesion.</Link>
+                    </p>
+                </div>
+                <div style={{ display: "flex", gap: "0.5rem", alignItems:"flex-start", marginTop:"1rem"}}>
+                    <img style={{width:"3.5%", margin:0, paddingTop:"0.1rem"}} src="/assets/lock.svg" alt="" />
+                    <p style={{margin:"0px", padding:"0px", color:"#b4b4b4"}}>Por tu seguridad, nunca compartas tus credenciales de acceso usuario, contraseña o tokens con nadie.</p>
+                </div>
             </section>
-        </>
+        </div>
     );
 };
 

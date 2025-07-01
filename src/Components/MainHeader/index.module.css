@@ -56,6 +56,10 @@
     border-radius: 50px;
     margin-right: 2%;
 }
+.header__down__section button:hover {
+    
+    background-color: rgb(221, 221, 221);
+}
 
 @media screen and (min-width: 900px) {
     .header__up__section {

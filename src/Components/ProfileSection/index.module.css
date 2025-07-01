@@ -9,7 +9,7 @@
 }
 
 .profile__banner {
-    background: radial-gradient(circle at 30% 30%, #52b0db,#00c9a7, #0f6cc9,  #6bc89b);
+    background: radial-gradient(circle at 30% 30%, #52b0db, #00c9a7, #0f6cc9, #6bc89b);
     background-size: 400% 400%;
     animation: gradientMove 8s ease infinite;
     width: 100%;
@@ -31,7 +31,8 @@
         background-position: 0% 50%;
     }
 }
-.profile__section h5{
+
+.profile__section h5 {
     position: relative;
     top: -2rem;
     text-align: center;
@@ -46,24 +47,35 @@
     top: -2.5rem;
     border: 0.3rem #fff solid;
 }
-.profile__info{
+
+.profile__info {
     width: 100%;
 }
-.info__row{
+
+.info__row {
     display: flex;
 }
-.info__row h6, p{
+
+.info__row h6,
+p {
     font-size: 0.8rem;
 }
-.info__row h6{
+
+.info__row h6 {
     font-weight: 600;
     width: 40%;
+    color: #000;
 }
+
 .info__row p {
-  font-weight: 200;
-  max-width: 55%;
-  word-break: break-word;     /* Rompe palabras largas */
-  overflow-wrap: break-word;  /* Alternativa moderna y más estandarizada */
-  white-space: normal; 
-  text-align: left;       /* Asegura que no esté en una sola línea */
+    font-weight: 200;
+    max-width: 55%;
+    word-break: break-word;
+    /* Rompe palabras largas */
+    overflow-wrap: break-word;
+    /* Alternativa moderna y más estandarizada */
+    white-space: normal;
+    text-align: left;
+    color: #000;
+    /* Asegura que no esté en una sola línea */
 }

@@ -6,6 +6,7 @@
     font-size: 0.9rem;
 }
 
+
 @media screen and (min-width: 900px) {
     .combo__box{
         width: 25%;
