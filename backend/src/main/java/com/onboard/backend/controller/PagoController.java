@@ -1,6 +1,9 @@
 package com.onboard.backend.controller;
 
 import com.onboard.backend.service.PagoService;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +26,11 @@ public class PagoController {
     }
 
     @PostMapping("/capturar")
-    public ResponseEntity<String> capturarPago(@RequestParam String orderId) {
+    public ResponseEntity<?> capturarPago(@RequestParam String orderId) {
         try {
-            String resultado = pagoService.capturarPago(orderId);
-            return ResponseEntity.ok(resultado);
+            return pagoService.capturarPago(orderId);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error al capturar pago: " + e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", "Error al capturar pago: " + e.getMessage()));
         }
     }
 

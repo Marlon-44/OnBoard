@@ -11,12 +11,14 @@ import com.paypal.http.exceptions.HttpException;
 import com.paypal.orders.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
 
 @Service
 public class PagoService {
@@ -82,7 +84,6 @@ public class PagoService {
             pago.setDetalle("Orden PayPal creada");
             pagoRepository.save(pago);
 
-
             return "{\"orderId\": \"" + order.id() + "\"}";
 
         } catch (HttpException e) {
@@ -90,7 +91,7 @@ public class PagoService {
         }
     }
 
-    public String capturarPago(String orderId) throws Exception {
+    public ResponseEntity<Map<String, String>> capturarPago(String orderId) throws Exception {
         OrdersCaptureRequest request = new OrdersCaptureRequest(orderId);
         request.requestBody(new OrderRequest());
 
@@ -131,7 +132,12 @@ public class PagoService {
 
             emailService.enviarFacturaPorEmail(factura, payerName, payerEmail, "PayPal");
 
-            return "Pago capturado exitosamente. Transacción: " + transactionId;
+            return ResponseEntity.ok(Map.of(
+                    "status", status,
+                    "transactionId", transactionId,
+                    "payerEmail", payerEmail,
+                    "payerName", payerName,
+                    "message", "Pago capturado exitosamente"));
 
         } catch (HttpException e) {
             throw new RuntimeException("Error al capturar orden: " + e.getMessage());
