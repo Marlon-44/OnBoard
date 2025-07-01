@@ -583,7 +583,7 @@ const Register = () => {
                         Registrar
                     </button>
                     <p style={{ marginTop: "1rem" }}>
-                        ¿Ya estas en OnBoard? <Link to="/register" style={{ textDecoration: "none", color: "#4431b3", fontWeight: "600" }}>Inicia sesion.</Link>
+                        ¿Ya estas en OnBoard? <Link to="/login" style={{ textDecoration: "none", color: "#4431b3", fontWeight: "600" }}>Inicia sesion.</Link>
                     </p>
                 </div>
                 <div style={{ display: "flex", gap: "0.5rem", alignItems:"flex-start", marginTop:"1rem"}}>

@@ -188,9 +188,10 @@ const VehicleFilterForm = () => {
 
             <section className={styles.filter__type}>
                 <h3>Capacidad de Pasajeros</h3>
-                <label>
+                <label className={styles.input__number__label}>
                     Mínimo:
                     <input
+                        className={styles.input__number}
                         type="number"
                         min="1"
                         max="100"
@@ -198,9 +199,10 @@ const VehicleFilterForm = () => {
                         onChange={(e) => handleInputNumber("pasajerosMin", e.target.value)}
                     />
                 </label>
-                <label>
+                <label className={styles.input__number__label}>
                     Máximo:
                     <input
+                        className={styles.input__number}
                         type="number"
                         min="1"
                         max="100"

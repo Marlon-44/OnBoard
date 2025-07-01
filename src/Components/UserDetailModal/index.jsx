@@ -119,7 +119,7 @@ const UserDetailModal = ({ user, id = "userModal", onActualizarEstado, onCerrar 
                         <Button
                             variant="contained"
                             color="error"
-                            onClick={() => handleActualizar("rechazado")}
+                            onClick={() => handleActualizar("RECHAZADO")}
                             sx={{ ml: 1 }}
                         >
                             Rechazar
@@ -128,7 +128,7 @@ const UserDetailModal = ({ user, id = "userModal", onActualizarEstado, onCerrar 
                         <Button
                             variant="contained"
                             color="success"
-                            onClick={() => handleActualizar("aprobado")}
+                            onClick={() => handleActualizar("APROBADO")}
                             sx={{ ml: 1 }}
                         >
                             Aceptar

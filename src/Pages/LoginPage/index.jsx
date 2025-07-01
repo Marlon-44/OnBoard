@@ -76,14 +76,24 @@ const Login = () => {
             console.log("Enviando:", credenciales);
 
             const respuesta = await loginUsuario(credenciales);
+            if (respuesta.estadoVerificacion === "PENDIENTE") {
+                setAlerta({
+                    tipo: "warning",
+                    mensaje: "Tu cuenta aún no ha sido verificada. Por favor, inténtalo de nuevo en 10 minutos."
+                });
+                return;
+            }
+
             guardarSesion(respuesta);
             setAlerta({ tipo: "success", mensaje: "Inicio exitoso." });
 
             const destino = location.state?.from || "/homePage";
             navigate(destino, { replace: true });
+
         } catch (error) {
             console.error("Error en login:", error);
-            setAlerta({ tipo: "error", mensaje: "Credenciales inválidas o error de servidor." });
+            setAlerta({ tipo: "error", mensaje: "Credenciales inválidas o cuenta por verificar" });
+            
         }
     };
 
@@ -101,7 +111,7 @@ const Login = () => {
                     fontWeight: "700",
                     fontSize: "1.5rem",
                     padding: "1rem",
-                    paddingLeft:"4rem"
+                    paddingLeft: "4rem"
                 }} >OnBoard</h2>
             </div>
             <div className={styles.image__section}>
@@ -128,10 +138,7 @@ const Login = () => {
                         onChange={handleChange}
                         error={!!errors.correo}
                         helperText={errors.correo}
-                        sx={{
-                            
-                            marginBottom: "0.5rem",
-                        }}
+
                         fullWidth
                     />
 
@@ -144,14 +151,11 @@ const Login = () => {
                         onChange={handleChange}
                         error={!!errors.password}
                         helperText={errors.password}
-                        
-                        sx={{
-                            
-                            marginBottom: 2,
-                        }}
+
+
                         fullWidth
                     />
-                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <div style={{ display: "flex", gap: "1rem" }}>
                         <input name="remember" type="checkbox"></input>
                         <label style={{ fontSize: "0.8rem" }} htmlFor="remember">Recordarme en este dispositivo</label>
 
@@ -172,6 +176,7 @@ const Login = () => {
                         fullWidth
                         onClick={handleSubmit}
                         className={styles.loginWith__button}
+
                     >
                         <img className={styles.button__icon} src="./assets/google.svg" alt="" /> Inicia sesion con Google
                     </button>
@@ -185,13 +190,13 @@ const Login = () => {
                         Inicia sesion con Outlook
                     </button>
 
-                    <p style={{ marginTop: "1rem" }}>
+                    <p >
                         ¿Eres nuevo en OnBoard? <Link to="/register" style={{ textDecoration: "none", color: "#4431b3", fontWeight: "600" }}>Crea una cuenta</Link>
                     </p>
                 </div>
-                <div style={{ display: "flex", gap: "0.5rem", alignItems:"flex-start"}}>
-                    <img style={{width:"3.5%", margin:0, paddingTop:"0.1rem"}} src="/assets/lock.svg" alt="" />
-                    <p style={{margin:"0px", padding:"0px", color:"#b4b4b4"}}>Por tu seguridad, nunca compartas tus credenciales de acceso usuario, contraseña o tokens con nadie.</p>
+                <div style={{ display: "flex", gap: "0.5rem", alignItems: "flex-start" }}>
+                    <img style={{ width: "3.5%", margin: 0, paddingTop: "0.1rem" }} src="/assets/lock.svg" alt="" />
+                    <p style={{ margin: "0px", padding: "0px", color: "#b4b4b4" }}>Por tu seguridad, nunca compartas tus credenciales de acceso usuario, contraseña o tokens con nadie.</p>
                 </div>
             </section>
         </div>
