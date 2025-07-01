@@ -113,7 +113,6 @@ public class VehiculoService {
 
         vehiculo.setPrecioPorDia(vehiculo.getPrecioPorDia() * 1.10f);
 
-
         if (!ValidationUtils.isValidKilometraje(vehiculo.getKilometraje())) {
             throw new InvalidInputException("Invalid mileage", "INVALID_MILEAGE",
                     "Must be a non-negative number.");
@@ -387,6 +386,12 @@ public class VehiculoService {
                 .filter(v -> v.getEstadoOferta() == EstadoOferta.PENDIENTE)
                 .distinct()
                 .toList();
+    }
+
+    @Transactional
+    public void incrementarCantidadAlquiler(Vehiculo vehiculo) {
+        vehiculo.setCantidadAlquiler(vehiculo.getCantidadAlquiler() + 1);
+        vehiculoRepository.save(vehiculo);
     }
 
 }

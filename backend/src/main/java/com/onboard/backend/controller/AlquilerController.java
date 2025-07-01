@@ -16,6 +16,7 @@ public class AlquilerController {
     @Autowired
     private AlquilerService alquilerService;
 
+
     @PostMapping
     public ResponseEntity<Alquiler> createAlquiler(@RequestBody Alquiler alquiler) {
         Alquiler saved = alquilerService.saveAlquiler(alquiler);

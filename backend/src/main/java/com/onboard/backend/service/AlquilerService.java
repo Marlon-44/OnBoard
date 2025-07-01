@@ -2,10 +2,10 @@ package com.onboard.backend.service;
 
 import com.onboard.backend.entity.Alquiler;
 import com.onboard.backend.entity.Reserva;
+import com.onboard.backend.entity.Vehiculo;
 import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.model.EstadoAlquiler;
 import com.onboard.backend.repository.AlquilerRepository;
-import com.onboard.backend.repository.ReservaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +22,10 @@ import org.slf4j.LoggerFactory;
 public class AlquilerService {
 
     @Autowired
-    private ReservaRepository reservaRepository;
+    private ReservaService reservaService;
+
+    @Autowired
+    private VehiculoService vehiculoService;
 
     @Autowired
     private AlquilerRepository alquilerRepository;
@@ -30,6 +33,10 @@ public class AlquilerService {
     private static final Logger schedulerLogger = LoggerFactory.getLogger(AlquilerService.class);
 
     public Alquiler saveAlquiler(Alquiler alquiler) {
+        Reserva reserva = reservaService.getReservaById(alquiler.getIdReserva()).get();
+        Vehiculo vehiculo = vehiculoService.getVehiculoById(reserva.getIdVehiculo()).get();
+
+        vehiculoService.incrementarCantidadAlquiler(vehiculo);
 
         return alquilerRepository.save(alquiler);
     }
@@ -64,7 +71,7 @@ public class AlquilerService {
         List<Alquiler> alquileres = alquilerRepository.findAll();
 
         for (Alquiler alquiler : alquileres) {
-            Optional<Reserva> reservaOpt = reservaRepository.findById(alquiler.getIdReserva());
+            Optional<Reserva> reservaOpt = reservaService.getReservaById(alquiler.getIdReserva());
             if (reservaOpt.isEmpty())
                 continue;
 

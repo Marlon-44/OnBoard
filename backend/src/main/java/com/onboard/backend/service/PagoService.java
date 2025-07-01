@@ -187,4 +187,7 @@ public class PagoService {
         return pagoRepository.findById(id);
     }
 
+    public void eliminarPago(String id) {
+        pagoRepository.deleteById(id);
+    }
 }

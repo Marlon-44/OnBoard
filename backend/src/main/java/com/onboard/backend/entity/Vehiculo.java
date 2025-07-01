@@ -36,7 +36,6 @@ public class Vehiculo {
     private List<String> fotosUrls;
     private EstadoOferta estadoOferta;
     private float precioPorDia;
-    //private EstadoVerificacion estadoVerificacion;
     private Map<String, Calificacion> calificaciones;
 
     public Vehiculo() {

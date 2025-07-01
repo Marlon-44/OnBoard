@@ -50,4 +50,15 @@ public class PagoController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarPago(@PathVariable String id) {
+        try {
+            pagoService.eliminarPago(id);
+            return ResponseEntity.ok("Pago eliminado exitosamente");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al eliminar pago: " + e.getMessage());
+        }
+    }
+
 }
