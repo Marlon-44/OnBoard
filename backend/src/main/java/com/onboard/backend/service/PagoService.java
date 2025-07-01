@@ -155,9 +155,9 @@ public class PagoService {
                     .orElseThrow(
                             () -> new RuntimeException("Vehículo no encontrado con ID: " + reserva.getIdVehiculo()));
 
-            if ("COMPLETED".equalsIgnoreCase(status)) {
-                reserva.setEstadoReserva(EstadoReserva.ACTIVA);
+            if ("COMPLETED".equals(status.toString())) {
                 pago.setFechaPago(LocalDate.now());
+                reservaService.actualizarEstadoReserva(reserva.getIdReserva(), EstadoReserva.ACTIVA);
             }
 
             pagoRepository.save(pago);

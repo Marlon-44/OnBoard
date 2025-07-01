@@ -26,7 +26,7 @@ public class FacturaController {
     public ResponseEntity<Factura> getFacturaById(@PathVariable String id) {
         Optional<Factura> factura = facturaService.getFacturaById(id);
         return factura.map(ResponseEntity::ok)
-                      .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -39,5 +39,10 @@ public class FacturaController {
     public ResponseEntity<Void> deleteFactura(@PathVariable String id) {
         facturaService.deleteFacturaById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/por-cliente/{idCliente}")
+    public List<Factura> obtenerFacturasPorIdCliente(@PathVariable String idCliente) {
+        return facturaService.obtenerFacturasPorIdCliente(idCliente);
     }
 }

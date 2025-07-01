@@ -116,4 +116,8 @@ public class AlquilerService {
         schedulerLogger.info("→ INCIDENTE_GRAVE: {}", contadorIncidentes);
     }
 
+    public Optional<Alquiler> getAlquilerByIdReserva(String idReserva) {
+        return alquilerRepository.findByIdReserva(idReserva);
+    }
+
 }

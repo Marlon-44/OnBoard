@@ -136,27 +136,54 @@ public class ReservaService {
         return facturaService.getFacturaByIdReserva(idReserva);
     }
 
-    @Scheduled(cron = "0 0 */4 * * *")
+    public BigDecimal getTotalFacturaByIdReserva(String idReserva) {
+        Factura factura = getFactura(idReserva); 
+        return factura.getTotal();
+    }
+
+    //@Scheduled(cron = "0 0 */4 * * *")
+    @Scheduled(cron = "*/1 * * * * *")
     public void crearAlquileresParaReservasDeManana() {
-        LocalDateTime mañana = LocalDateTime.now().plusDays(1);
         List<Reserva> reservas = reservaRepository.findAll();
+
+        LocalDate mañana = LocalDate.now().plusDays(1);
 
         for (Reserva reserva : reservas) {
             if (reserva.getFechaInicio() == null)
                 continue;
 
-            boolean esParaManana = reserva.getFechaInicio().isEqual(mañana);
+            boolean esParaManana = reserva.getFechaInicio().toLocalDate().isEqual(mañana);
             boolean estaActiva = reserva.getEstadoReserva() == EstadoReserva.ACTIVA;
-            boolean alquilerYaExiste = alquilerService.getAlquilerById(reserva.getIdReserva()).isPresent();
+
+            System.out.println("=========================================");
+            System.out.println("Reserva ID: " + reserva.getIdReserva());
+            System.out.println("Fecha Inicio: " + reserva.getFechaInicio());
+            System.out.println("¿Es para mañana?: " + esParaManana);
+            System.out.println("¿Está activa?: " + estaActiva);
+            System.out.println("Total reservas: " + reservas.size());
+            System.out.println("=========================================");
+
+            boolean alquilerYaExiste = alquilerService.getAlquilerByIdReserva(reserva.getIdReserva()).isPresent();
 
             if (esParaManana && estaActiva && !alquilerYaExiste) {
                 Alquiler alquiler = new Alquiler();
                 alquiler.setFechaNovedad(LocalDateTime.now());
                 alquiler.setEstado(EstadoAlquiler.CONFIRMADO);
-                alquiler.setIdAlquiler(reserva.getIdReserva());
+                alquiler.setIdReserva(reserva.getIdReserva());
+                alquiler.setPrecioTotal(getTotalFacturaByIdReserva(reserva.getIdReserva()));
                 alquilerService.saveAlquiler(alquiler);
             }
         }
+
+    }
+
+    public Reserva actualizarEstadoReserva(String idReserva, EstadoReserva nuevoEstado) {
+        Reserva reserva = getReservaById(idReserva)
+                .orElseThrow(() -> new InvalidInputException("Reserva no encontrada", "RESERVA_NOT_FOUND",
+                        "No se encontró la reserva con ID: " + idReserva));
+
+        reserva.setEstadoReserva(nuevoEstado);
+        return reservaRepository.save(reserva);
     }
 
 }

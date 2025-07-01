@@ -12,17 +12,15 @@ public class Pago {
     private String idPago;
     private String idFactura;
     private LocalDate fechaPago;
-    private String idMetodoPago;
     private String estadoPago;
     private String detalle;
 
     public Pago() {}
 
-    public Pago(String idPago, String idFactura, LocalDate fechaPago, String idMetodoPago, String estadoPago, String detalle) {
+    public Pago(String idPago, String idFactura, LocalDate fechaPago, String estadoPago, String detalle) {
         this.idPago = idPago;
         this.idFactura = idFactura;
         this.fechaPago = fechaPago;
-        this.idMetodoPago = idMetodoPago;
         this.estadoPago = estadoPago;
         this.detalle = detalle;
     }
@@ -51,13 +49,6 @@ public class Pago {
         this.fechaPago = fechaPago;
     }
 
-    public String getIdMetodoPago() {
-        return idMetodoPago;
-    }
-
-    public void setIdMetodoPago(String idMetodoPago) {
-        this.idMetodoPago = idMetodoPago;
-    }
 
     public String getEstadoPago() {
         return estadoPago;
