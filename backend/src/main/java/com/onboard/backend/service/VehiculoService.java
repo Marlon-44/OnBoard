@@ -382,6 +382,10 @@ public class VehiculoService {
                 .toList();
     }
 
+     public List<Vehiculo> obtenerVehiculosPorIdPropietarioSinEstado(String idPropietario) {
+        return vehiculoRepository.findAllByIdPropietario(idPropietario);
+    }
+
     public List<Vehiculo> obtenerVehiculosConOfertaActiva() {
         return vehiculoRepository.findAll().stream()
                 .filter(v -> v.getEstadoOferta() == EstadoOferta.ACTIVA)

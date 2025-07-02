@@ -59,4 +59,10 @@ public class ReservaController {
         return ResponseEntity.ok(factura);
     }
 
+    @GetMapping("/propietario/{idPropietario}")
+    public ResponseEntity<List<Reserva>> getReservasByIdPropietario(@PathVariable String idPropietario) {
+        List<Reserva> reservas = reservaService.getReservasByIdPropietario(idPropietario);
+        return ResponseEntity.ok(reservas);
+    }
+
 }

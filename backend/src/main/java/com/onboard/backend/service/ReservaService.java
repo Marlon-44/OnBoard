@@ -18,6 +18,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import com.onboard.backend.entity.Alquiler;
@@ -164,6 +165,8 @@ public class ReservaService {
             boolean alquilerYaExiste = alquilerService.getAlquilerByIdReserva(reserva.getIdReserva()).isPresent();
 
             if (esParaManana && estaActiva && !alquilerYaExiste) {
+                reserva.setEstadoReserva(EstadoReserva.FINALIZADA);
+                reservaRepository.save(reserva);
                 Alquiler alquiler = new Alquiler();
                 alquiler.setFechaNovedad(LocalDateTime.now());
                 alquiler.setEstado(EstadoAlquiler.CONFIRMADO);
@@ -197,9 +200,26 @@ public class ReservaService {
 
         reserva.setEstadoReserva(nuevoEstado);
         Reserva updated = reservaRepository.save(reserva);
-        logger.info("✅ Estado de la reserva '{}' actualizado exitosamente", idReserva);
+        logger.info(" Estado de la reserva '{}' actualizado exitosamente", idReserva);
 
         return updated;
+    }
+
+    public List<Reserva> getReservasByIdPropietario(String idPropietario) {
+        List<Vehiculo> vehiculosPropietario = vehiculoService.obtenerVehiculosPorIdPropietarioSinEstado(idPropietario);
+        List<Reserva> reservasPropietario = new ArrayList<>();
+
+        for (Vehiculo v : vehiculosPropietario) {
+            List<Reserva> reservasVehiculo = reservaRepository.findAllByIdVehiculo(v.getPlaca()); // o getIdVehiculo()
+
+            for (Reserva reserva : reservasVehiculo) {
+                if (reserva.getEstadoReserva() == EstadoReserva.ACTIVA) {
+                    reservasPropietario.add(reserva);
+                }
+            }
+        }
+
+        return reservasPropietario;
     }
 
 }

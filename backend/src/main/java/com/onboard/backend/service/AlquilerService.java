@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -128,6 +128,58 @@ public class AlquilerService {
 
     public Optional<Alquiler> getAlquilerByIdReserva(String idReserva) {
         return alquilerRepository.findByIdReserva(idReserva);
+    }
+
+    public List<Alquiler> getAlquileresByPropietarioIdAndEstado(String idPropietario, String estado) {
+        EstadoAlquiler estadoEnum = EstadoAlquiler.valueOf(estado.toUpperCase());
+        List<Alquiler> alquileres = getAllAlquileres();
+        List<Alquiler> alquileresPropietario = new ArrayList<>();
+
+        for (Alquiler a : alquileres) {
+            Optional<Reserva> reservaOpt = reservaService.getReservaById(a.getIdReserva());
+            if (reservaOpt.isEmpty())
+                continue;
+
+            Reserva r = reservaOpt.get();
+
+            Optional<Vehiculo> vehiculoOpt = vehiculoService.getVehiculoById(r.getIdVehiculo());
+            if (vehiculoOpt.isEmpty())
+                continue;
+
+            Vehiculo v = vehiculoOpt.get();
+
+            if (v.getIdPropietario().equals(idPropietario) && a.getEstado() == estadoEnum) {
+                alquileresPropietario.add(a);
+            }
+        }
+
+        return alquileresPropietario;
+    }
+
+    public Alquiler actualizarEstadoAlquiler(String idAlquiler, String nuevoEstado) {
+        EstadoAlquiler estadoEnum;
+        try {
+            estadoEnum = EstadoAlquiler.valueOf(nuevoEstado.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidInputException(
+                    "Estado de alquiler inválido",
+                    "INVALID_ESTADO",
+                    "El estado '" + nuevoEstado + "' no es válido");
+        }
+
+        Optional<Alquiler> alquilerOpt = alquilerRepository.findById(idAlquiler);
+        if (alquilerOpt.isEmpty()) {
+            throw new InvalidInputException(
+                    "Alquiler no encontrado",
+                    "ALQUILER_NOT_FOUND",
+                    "No se encontró un alquiler con el ID: " + idAlquiler);
+        }
+
+        Alquiler alquiler = alquilerOpt.get();
+        alquiler.setEstado(estadoEnum);
+        alquiler.setFechaNovedad(LocalDateTime.now());
+
+        return alquilerRepository.save(alquiler);
     }
 
 }

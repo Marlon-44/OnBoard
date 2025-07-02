@@ -1,6 +1,7 @@
 package com.onboard.backend.controller;
 
 import com.onboard.backend.entity.Alquiler;
+import com.onboard.backend.exception.InvalidInputException;
 import com.onboard.backend.service.AlquilerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,6 @@ public class AlquilerController {
     @Autowired
     private AlquilerService alquilerService;
 
-
     @PostMapping
     public ResponseEntity<Alquiler> createAlquiler(@RequestBody Alquiler alquiler) {
         Alquiler saved = alquilerService.saveAlquiler(alquiler);
@@ -27,7 +27,7 @@ public class AlquilerController {
     public ResponseEntity<Alquiler> getAlquilerById(@PathVariable String id) {
         Optional<Alquiler> alquiler = alquilerService.getAlquilerById(id);
         return alquiler.map(ResponseEntity::ok)
-                      .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -41,4 +41,29 @@ public class AlquilerController {
         alquilerService.deleteAlquilerById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/propietario/{idPropietario}/estado/{estado}")
+    public ResponseEntity<List<Alquiler>> getAlquileresByPropietarioAndEstado(
+            @PathVariable String idPropietario,
+            @PathVariable String estado) {
+        try {
+            List<Alquiler> alquileres = alquilerService.getAlquileresByPropietarioIdAndEstado(idPropietario, estado);
+            return ResponseEntity.ok(alquileres);
+        } catch (InvalidInputException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<Alquiler> actualizarEstadoAlquiler(
+            @PathVariable String id,
+            @RequestParam String nuevoEstado) {
+        try {
+            Alquiler actualizado = alquilerService.actualizarEstadoAlquiler(id, nuevoEstado);
+            return ResponseEntity.ok(actualizado);
+        } catch (InvalidInputException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }
