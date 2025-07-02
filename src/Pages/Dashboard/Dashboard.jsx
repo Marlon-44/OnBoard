@@ -17,18 +17,18 @@ const Dashboard = () => {
     const idRol = usuario?.idRol || usuario?.rol?.idRol;
 
     const renderContenidoDashboard = () => {
-        switch (idRol) {
+        switch (idRol) {//admin
             case "6833e09897afeccb1eaa3700":
                 return <DashboardAdmin />;
-            case "684f50a55541c74c244569ff":
-                return <DashboardCompanyOwner />;
+            case "684f50a55541c74c244569ff"://companyowner
+                return /*<DashboardCompanyOwner />*/<DashboardIndividualOwner />;
             case "6833e0e097afeccb1eaa3703":
                 return <DashboardCompanyClient />;
             case "684f50a65541c74c24456a00":
                 return <DashboardCompanyDual />;
             case "6833e0d497afeccb1eaa3701":
                 return <DashboardIndividualClient />;
-            case "6833e0db97afeccb1eaa3702":
+            case "6833e0db97afeccb1eaa3702"://individual owner
                 return <DashboardIndividualOwner />;
             case "6833e10397afeccb1eaa3704":
                 return <DashboardIndividualDual />;

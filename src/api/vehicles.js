@@ -1,4 +1,4 @@
-
+import axios from "axios";
 export async function getVehicles(){
     try {
         const response = await fetch("http://localhost:8080/api/vehiculos");
@@ -39,3 +39,16 @@ export async function getRequestedVehicles() {
         return [];
     }
 }
+
+
+
+
+export const getVehiclesByOwner = async (idPropietario) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/vehiculos/propietario/${idPropietario}/sin-estado`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error al obtener los vehículos del propietario ${idPropietario}:`, error);
+        throw new Error("No se pudieron obtener los vehículos del propietario.");
+    }
+};

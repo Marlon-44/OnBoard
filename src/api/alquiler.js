@@ -52,3 +52,12 @@ export const finalizarAlquiler = async (idAlquiler) => {
     }
 };
 
+export const obtenerAlquileresPorPropietario = async (idPropietario) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/alquileres/propietario/${idPropietario}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error al obtener alquileres del propietario ${idPropietario}:`, error);
+        throw new Error("No se pudieron obtener los alquileres del propietario.");
+    }
+};
