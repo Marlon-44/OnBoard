@@ -71,5 +71,6 @@ public class AlquilerController {
         List<Alquiler> alquileres = alquilerService.getAlquileresByPropietarioId(idPropietario);
         return ResponseEntity.ok(alquileres);
     }
+    
 
 }
