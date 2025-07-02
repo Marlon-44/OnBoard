@@ -66,4 +66,10 @@ public class AlquilerController {
         }
     }
 
+    @GetMapping("/propietario/{idPropietario}")
+    public ResponseEntity<List<Alquiler>> getAlquileresByPropietario(@PathVariable String idPropietario) {
+        List<Alquiler> alquileres = alquilerService.getAlquileresByPropietarioId(idPropietario);
+        return ResponseEntity.ok(alquileres);
+    }
+
 }

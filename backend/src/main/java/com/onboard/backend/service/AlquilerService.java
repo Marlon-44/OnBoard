@@ -156,6 +156,31 @@ public class AlquilerService {
         return alquileresPropietario;
     }
 
+    public List<Alquiler> getAlquileresByPropietarioId(String idPropietario) {
+        List<Alquiler> alquileres = getAllAlquileres();
+        List<Alquiler> alquileresPropietario = new ArrayList<>();
+
+        for (Alquiler a : alquileres) {
+            Optional<Reserva> reservaOpt = reservaService.getReservaById(a.getIdReserva());
+            if (reservaOpt.isEmpty())
+                continue;
+
+            Reserva r = reservaOpt.get();
+
+            Optional<Vehiculo> vehiculoOpt = vehiculoService.getVehiculoById(r.getIdVehiculo());
+            if (vehiculoOpt.isEmpty())
+                continue;
+
+            Vehiculo v = vehiculoOpt.get();
+
+            if (v.getIdPropietario().equals(idPropietario)) {
+                alquileresPropietario.add(a);
+            }
+        }
+
+        return alquileresPropietario;
+    }
+
     public Alquiler actualizarEstadoAlquiler(String idAlquiler, String nuevoEstado) {
         EstadoAlquiler estadoEnum;
         try {
