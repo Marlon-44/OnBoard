@@ -7,6 +7,7 @@ import ProfileSection from "../../Components/ProfileSection";
 import AlquileresActivosIOTable from "../../Components/AlquileresActivosIOTable";
 import AllAlquileresIOTable from "../../Components/AllAlquileresIOTable";
 import MisVehiculosIOTable from "../../Components/MisVehiculosIOTable";
+import AllReservasIOTable from "../../Components/AllReservasIOTable";
 const DashboardIndividualOwner = () => {
     const {usuario}= useContext(SesionContext);
     const [opcionSeleccionada, setOpcionSeleccionada] = useState("reservas");
@@ -14,7 +15,7 @@ const DashboardIndividualOwner = () => {
     const renderContenido = () => {
         switch (opcionSeleccionada) {
             case "reservas":
-                return <p>Reservas</p>;
+                return <AllReservasIOTable/>;
             case "alquileres_activos":
                 return <AlquileresActivosIOTable/>;
             case "alquileres":

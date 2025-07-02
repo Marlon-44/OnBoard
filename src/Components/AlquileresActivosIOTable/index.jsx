@@ -14,16 +14,16 @@ import {
     Button,
     CircularProgress,
     Box,
+    Snackbar,
+    Alert,
 } from "@mui/material";
 import SesionContext from "../../features/sesion/SesionContext";
 import { obtenerAlquileresConfirmadosPorPropietario, finalizarAlquiler } from "../../api/alquiler";
 
 const AlquileresActivosColumns = [
     { id: "idAlquiler", label: "ID Alquiler", minWidth: 100 },
-    { id: "vehiculo", label: "Vehículo", minWidth: 150 },
-    { id: "cliente", label: "Cliente", minWidth: 150 },
-    { id: "fechaInicio", label: "Inicio", minWidth: 100 },
-    { id: "fechaFin", label: "Fin", minWidth: 100 },
+    { id: "idReserva", label: "ID Reserva", minWidth: 150 },
+    { id: "fechaNovedad", label: "Fecha Novedad", minWidth: 100 },
     { id: "estado", label: "Estado", minWidth: 130 },
 ];
 
@@ -140,10 +140,8 @@ export default function AlquileresActivosIOTable() {
                                 .map((alquiler) => (
                                     <TableRow hover key={alquiler.idAlquiler}>
                                         <TableCell>{alquiler.idAlquiler}</TableCell>
-                                        <TableCell>{alquiler.vehiculo?.marca} {alquiler.vehiculo?.modelo}</TableCell>
-                                        <TableCell>{alquiler.cliente?.nombre}</TableCell>
-                                        <TableCell>{formatFecha(alquiler.fechaInicio)}</TableCell>
-                                        <TableCell>{formatFecha(alquiler.fechaFin)}</TableCell>
+                                        <TableCell>{alquiler.idReserva} </TableCell>
+                                        <TableCell>{formatFecha(alquiler.fechaNovedad)}</TableCell>
                                         <TableCell>{alquiler.estado}</TableCell>
                                         <TableCell>
                                             <button

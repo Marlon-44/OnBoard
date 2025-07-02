@@ -56,3 +56,15 @@ export const confirmarDisponibilidad = async (idVehiculo) => {
         throw error;
     }
 };
+// src/api/reserva.js
+
+
+export const getReservasByPropietario = async (idPropietario) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/reservas/propietario/${idPropietario}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error al obtener las reservas del propietario ${idPropietario}:`, error);
+        throw new Error("No se pudieron obtener las reservas del propietario.");
+    }
+};

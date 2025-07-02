@@ -11,37 +11,38 @@ import {
     TablePagination,
     TableRow,
 } from "@mui/material";
-import { obtenerAlquileresPorPropietario } from "../../api/alquiler"; // Asegúrate de que el path sea correcto
+import { getReservasByPropietario } from "../../api/reserva"; // Asegúrate que el path es correcto
 import SesionContext from "../../features/sesion/SesionContext";
 
 const columns = [
-    { id: "idAlquiler", label: "ID Alquiler", minWidth: 100 },
-    { id: "isReserva", label: "Reserva", minWidth: 150 },
-    { id: "fechaNovedad", label: "Fecha Novedad", minWidth: 120 },
+    { id: "idReserva", label: "ID Reserva", minWidth: 100 },
+    { id: "isVehiculo", label: "Vehículo", minWidth: 150 },
+    { id: "isCliente", label: "Cliente", minWidth: 150 },
+    { id: "fechaInicio", label: "Inicio", minWidth: 120 },
+    { id: "fechaFin", label: "Fin", minWidth: 120 },
     { id: "estado", label: "Estado", minWidth: 130 },
 ];
 
-export default function AllAlquileresIOTable() {
+export default function AllReservasIOTable() {
     const { usuario } = useContext(SesionContext);
-    const [alquileres, setAlquileres] = useState([]);
+    const [reservas, setReservas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    const formatFecha = (fecha) => {
-        return new Date(fecha).toLocaleDateString("es-CO", {
+    const formatFecha = (fecha) =>
+        new Date(fecha).toLocaleDateString("es-CO", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
         });
-    };
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchReservas = async () => {
             try {
-                const data = await obtenerAlquileresPorPropietario(usuario.idUsuario);
-                setAlquileres(data);
+                const data = await getReservasByPropietario(usuario.idUsuario);
+                setReservas(data);
             } catch (err) {
                 console.error(err);
                 setError(err);
@@ -50,32 +51,29 @@ export default function AllAlquileresIOTable() {
             }
         };
 
-        if (usuario) fetchData();
+        if (usuario) fetchReservas();
     }, [usuario]);
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
+    const handleChangePage = (event, newPage) => setPage(newPage);
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
 
     if (loading) {
-    return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>
-            <CircularProgress />
-        </Box>
-    );
-}
+        return (
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "40vh" }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
-    if (error) return <p>Error al cargar los alquileres: {error.message}</p>;
+    if (error) return <p>Error al cargar las reservas: {error.message}</p>;
 
     return (
         <Paper sx={{ width: "100%", overflow: "hidden", mt: 2 }} style={{ borderRadius: "1rem" }}>
             <TableContainer sx={{ maxHeight: "48vh", minHeight: "48vh" }}>
-                <Table stickyHeader aria-label="tabla de alquileres">
+                <Table stickyHeader aria-label="tabla de reservas">
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
@@ -87,17 +85,19 @@ export default function AllAlquileresIOTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {alquileres
+                        {reservas
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((alquiler) => (
-                                <TableRow hover key={alquiler.idAlquiler}>
-                                    <TableCell>{alquiler.idAlquiler}</TableCell>
-                                    <TableCell>{alquiler.idReserva} </TableCell>
-                                    <TableCell>{formatFecha(alquiler.fechaNovedad)}</TableCell>
-                                    <TableCell>{alquiler.estado}</TableCell>
+                            .map((reserva) => (
+                                <TableRow hover key={reserva.idReserva}>
+                                    <TableCell>{reserva.idReserva}</TableCell>
+                                    <TableCell>{reserva.idVehiculo}</TableCell>
+                                    <TableCell>{reserva.idCliente}</TableCell>
+                                    <TableCell>{formatFecha(reserva.fechaInicio)}</TableCell>
+                                    <TableCell>{formatFecha(reserva.fechaFin)}</TableCell>
+                                    <TableCell>{reserva.estadoReserva}</TableCell>
                                     <TableCell>
                                         <button
-                                            onClick={() => window.location.href = `/detalle-alquiler/${alquiler.idAlquiler}`}
+                                            onClick={() => alert("PROBANDO BOTON VER")}
                                             style={{
                                                 background: "#0d6efd",
                                                 border: "none",
@@ -117,7 +117,7 @@ export default function AllAlquileresIOTable() {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 50]}
                 component="div"
-                count={alquileres.length}
+                count={reservas.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

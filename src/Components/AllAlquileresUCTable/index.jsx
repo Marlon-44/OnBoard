@@ -11,17 +11,17 @@ import {
     TablePagination,
     TableRow,
 } from "@mui/material";
-import { obtenerAlquileresPorPropietario } from "../../api/alquiler"; // Asegúrate de que el path sea correcto
 import SesionContext from "../../features/sesion/SesionContext";
+import { getAllAlquileresByCliente } from "../../api/alquiler";
 
 const columns = [
     { id: "idAlquiler", label: "ID Alquiler", minWidth: 100 },
-    { id: "isReserva", label: "Reserva", minWidth: 150 },
-    { id: "fechaNovedad", label: "Fecha Novedad", minWidth: 120 },
+    { id: "idReserva", label: "ID Reserva", minWidth: 150 },
+    { id: "fechaInicio", label: "Fecha Novedad", minWidth: 120 },
     { id: "estado", label: "Estado", minWidth: 130 },
 ];
 
-export default function AllAlquileresIOTable() {
+export default function AllAlquileresUCTable() {
     const { usuario } = useContext(SesionContext);
     const [alquileres, setAlquileres] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ export default function AllAlquileresIOTable() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await obtenerAlquileresPorPropietario(usuario.idUsuario);
+                const data = await getAllAlquileresByCliente(usuario.idUsuario);
                 setAlquileres(data);
             } catch (err) {
                 console.error(err);
@@ -63,19 +63,19 @@ export default function AllAlquileresIOTable() {
     };
 
     if (loading) {
-    return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>
-            <CircularProgress />
-        </Box>
-    );
-}
+        return (
+            <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "40vh" }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     if (error) return <p>Error al cargar los alquileres: {error.message}</p>;
 
     return (
         <Paper sx={{ width: "100%", overflow: "hidden", mt: 2 }} style={{ borderRadius: "1rem" }}>
             <TableContainer sx={{ maxHeight: "48vh", minHeight: "48vh" }}>
-                <Table stickyHeader aria-label="tabla de alquileres">
+                <Table stickyHeader aria-label="tabla de alquileres cliente">
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
@@ -92,12 +92,14 @@ export default function AllAlquileresIOTable() {
                             .map((alquiler) => (
                                 <TableRow hover key={alquiler.idAlquiler}>
                                     <TableCell>{alquiler.idAlquiler}</TableCell>
-                                    <TableCell>{alquiler.idReserva} </TableCell>
+                                    <TableCell>{alquiler.idReserva}</TableCell>
                                     <TableCell>{formatFecha(alquiler.fechaNovedad)}</TableCell>
                                     <TableCell>{alquiler.estado}</TableCell>
                                     <TableCell>
                                         <button
-                                            onClick={() => window.location.href = `/detalle-alquiler/${alquiler.idAlquiler}`}
+                                            onClick={() =>
+                                                window.location.href = `/detalle-alquiler/${alquiler.idAlquiler}`
+                                            }
                                             style={{
                                                 background: "#0d6efd",
                                                 border: "none",

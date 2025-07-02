@@ -7,6 +7,8 @@ import WelcomeCard from "../../Components/WelcomeCard";
 import ProfileSection from "../../Components/ProfileSection";
 import ReservasUCTable from "../../Components/ReservasUCTable/index.jsx";
 import CuentasXPagarUCTable from "../../Components/CuentasXPagarUCTable/index.jsx";
+import AlquileresActivosUCTable from "../../Components/AlquileresActivosUCTable/index.jsx";
+import AllAlquileresUCTable from "../../Components/AllAlquileresUCTable/index.jsx";
 
 
 const DashboardIndividualClient = () => {
@@ -18,9 +20,9 @@ const DashboardIndividualClient = () => {
             case "reservas":
                 return <ReservasUCTable idUsuario={usuario.idUsuario}/>
             case "historial_alquileres":
-                return <p>Historial de Alquileres</p>;
+                return <AllAlquileresUCTable/>;
             case "alquileres_activosIC":
-                return <p>Alquileres en Curso</p>;
+                return <AlquileresActivosUCTable/>;
             case "cuentas_x_pagar":
                 return <CuentasXPagarUCTable/>;
             case "telefonos_emergencia":
