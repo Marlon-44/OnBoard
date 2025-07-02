@@ -1,3 +1,4 @@
+import axios from "axios";
 export async function getAllAlquileres() {
     try {
         const response = await fetch("http://localhost:8080/api/alquileres");
@@ -24,3 +25,30 @@ export async function getAlquileresByUser(idUsuario) {
         return [];
     }
 }
+// src/api/alquiler.js
+
+
+export const obtenerAlquileresConfirmadosPorPropietario = async (idPropietario) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/alquileres/propietario/${idPropietario}/estado/CONFIRMADO`);
+        console.log("Alquileres confirmados:", response.data);
+        return response.data; // Array de alquileres con estado CONFIRMADO
+    } catch (error) {
+        console.error("Error al obtener alquileres confirmados:", error);
+        throw new Error("No se pudieron cargar los alquileres confirmados.");
+    }
+};
+
+
+
+export const finalizarAlquiler = async (idAlquiler) => {
+    try {
+        const response = await axios.put(`http://localhost:8080/api/alquileres/${idAlquiler}/estado?nuevoEstado=FINALIZADO`);
+        console.log("Alquiler finalizado:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error al finalizar el alquiler:", error);
+        throw new Error("No se pudo finalizar el alquiler.");
+    }
+};
+
