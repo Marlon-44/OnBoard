@@ -4,6 +4,7 @@ import SidebarIndividualOwner from "../../Components/SidebarIndividualOwner";
 import styles from "./dashboardIndividualOwner.module.css"
 import WelcomeCard from "../../Components/WelcomeCard";
 import ProfileSection from "../../Components/ProfileSection";
+import AlquileresActivosIOTable from "../../Components/AlquileresActivosIOTable";
 const DashboardIndividualOwner = () => {
     const {usuario}= useContext(SesionContext);
     const [opcionSeleccionada, setOpcionSeleccionada] = useState("reservas");
@@ -13,7 +14,7 @@ const DashboardIndividualOwner = () => {
             case "reservas":
                 return <p>Reservas</p>;
             case "alquileres_activos":
-                return <p>Alquileres Activos</p>;
+                return <AlquileresActivosIOTable/>;
             case "alquileres":
                 return <p>Todos los Alquileres</p>;
             case "cuentas_x_pagar":
