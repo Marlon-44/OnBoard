@@ -41,14 +41,13 @@ export default function TablaVehiculosRegistrados() {
 
     if (loading) return <p>Cargando vehículos...</p>;
     if (error) return <p>Error al cargar los vehículos: {error.message}</p>;
-    if (!vehicles.length) return <p>No hay vehículos registrados.</p>;
     const handleVerDetalles = (vehiculo) => {
         setVehiculoSeleccionado(vehiculo);
     };
     return (
         <>
             <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "1rem" }} style={{borderRadius:"1rem"}}>
-                <TableContainer sx={{ maxHeight: "48vh" }}>
+                <TableContainer sx={{ maxHeight: "48vh", minHeight: "48vh" }}>
                     <Table stickyHeader aria-label="vehiculos registrados">
                         <TableHead>
                             <TableRow>
