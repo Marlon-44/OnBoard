@@ -127,7 +127,9 @@ public class ReservaService {
         List<Reserva> reservas = reservaRepository.findAllByIdVehiculo(idVehiculo);
 
         return reservas.stream()
-                .filter(reserva -> reserva.getFechaInicio() != null && reserva.getFechaFin() != null)
+                .filter(reserva -> reserva.getFechaInicio() != null
+                        && reserva.getFechaFin() != null
+                        && reserva.getEstadoReserva() != EstadoReserva.FINALIZADA)
                 .flatMap(reserva -> {
                     LocalDate start = reserva.getFechaInicio().toLocalDate();
                     LocalDate end = reserva.getFechaFin().toLocalDate();
@@ -136,7 +138,6 @@ public class ReservaService {
                 })
                 .distinct()
                 .toList();
-
     }
 
     public Factura getFactura(String idReserva) {

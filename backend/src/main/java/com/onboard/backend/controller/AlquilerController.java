@@ -71,6 +71,18 @@ public class AlquilerController {
         List<Alquiler> alquileres = alquilerService.getAlquileresByPropietarioId(idPropietario);
         return ResponseEntity.ok(alquileres);
     }
-    
+
+
+    @GetMapping("/cliente/{idCliente}")
+    public ResponseEntity<List<Alquiler>> getAlquileresByIdCliente(@PathVariable String idCliente) {
+        List<Alquiler> alquileres = alquilerService.getAlquileresByIdCliente(idCliente);
+        return ResponseEntity.ok(alquileres);
+    }
+
+    @GetMapping("/cliente/{idCliente}/activos")
+    public ResponseEntity<List<Alquiler>> getAlquileresActivosByIdCliente(@PathVariable String idCliente) {
+        List<Alquiler> alquileres = alquilerService.getAlquileresActivosByIdCliente(idCliente);
+        return ResponseEntity.ok(alquileres);
+    }
 
 }

@@ -207,4 +207,41 @@ public class AlquilerService {
         return alquilerRepository.save(alquiler);
     }
 
+    public List<Alquiler> getAlquileresByIdCliente(String idCliente) {
+        List<Alquiler> alquileres = alquilerRepository.findAll();
+        List<Alquiler> resultado = new ArrayList<>();
+
+        for (Alquiler alquiler : alquileres) {
+            Optional<Reserva> reservaOpt = reservaService.getReservaById(alquiler.getIdReserva());
+            if (reservaOpt.isPresent()) {
+                Reserva reserva = reservaOpt.get();
+                if (reserva.getIdCliente().equals(idCliente)) {
+                    resultado.add(alquiler);
+                }
+            }
+        }
+
+        return resultado;
+    }
+
+    public List<Alquiler> getAlquileresActivosByIdCliente(String idCliente) {
+        List<Alquiler> alquileres = alquilerRepository.findAll();
+        List<Alquiler> resultado = new ArrayList<>();
+
+        for (Alquiler alquiler : alquileres) {
+            Optional<Reserva> reservaOpt = reservaService.getReservaById(alquiler.getIdReserva());
+            if (reservaOpt.isPresent()) {
+                Reserva reserva = reservaOpt.get();
+                if (reserva.getIdCliente().equals(idCliente)) {
+                    EstadoAlquiler estado = alquiler.getEstado();
+                    if (estado == EstadoAlquiler.CONFIRMADO || estado == EstadoAlquiler.EN_CURSO) {
+                        resultado.add(alquiler);
+                    }
+                }
+            }
+        }
+
+        return resultado;
+    }
+
 }
