@@ -149,33 +149,35 @@ public class ReservaService {
         return factura.getTotal();
     }
 
-    @Scheduled(cron = "0 0 */4 * * *")
-    public void crearAlquileresParaReservasDeManana() {
+    @Scheduled(cron = "0 */15 * * * *")
+    public void crearAlquileresParaReservasDeHoyOMañana() {
         List<Reserva> reservas = reservaRepository.findAll();
 
-        LocalDate mañana = LocalDate.now().plusDays(1);
+        LocalDate hoy = LocalDate.now();
+        LocalDate mañana = hoy.plusDays(1);
 
         for (Reserva reserva : reservas) {
             if (reserva.getFechaInicio() == null)
                 continue;
 
-            boolean esParaManana = reserva.getFechaInicio().toLocalDate().isEqual(mañana);
+            boolean esParaHoyOMañana = reserva.getFechaInicio().toLocalDate().isEqual(hoy)
+                    || reserva.getFechaInicio().toLocalDate().isEqual(mañana);
             boolean estaActiva = reserva.getEstadoReserva() == EstadoReserva.ACTIVA;
-
             boolean alquilerYaExiste = alquilerService.getAlquilerByIdReserva(reserva.getIdReserva()).isPresent();
 
-            if (esParaManana && estaActiva && !alquilerYaExiste) {
+            if (esParaHoyOMañana && estaActiva && !alquilerYaExiste) {
                 reserva.setEstadoReserva(EstadoReserva.FINALIZADA);
                 reservaRepository.save(reserva);
+
                 Alquiler alquiler = new Alquiler();
                 alquiler.setFechaNovedad(LocalDateTime.now());
                 alquiler.setEstado(EstadoAlquiler.CONFIRMADO);
                 alquiler.setIdReserva(reserva.getIdReserva());
                 alquiler.setPrecioTotal(getTotalFacturaByIdReserva(reserva.getIdReserva()));
+
                 alquilerService.saveAlquiler(alquiler);
             }
         }
-
     }
 
     public Reserva actualizarEstadoReserva(String idReserva, EstadoReserva nuevoEstado) {

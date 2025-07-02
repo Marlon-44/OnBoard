@@ -111,14 +111,19 @@ public class VehiculoController {
         return ResponseEntity.ok(vehiculoCalificado);
     }
 
-    /*@PatchMapping("/{placa}/estado-verificacion")
-    public ResponseEntity<Vehiculo> cambiarEstadoVerificacion(
-            @PathVariable String placa,
-            @RequestParam EstadoVerificacion estado) {
-
-        Vehiculo vehiculoActualizado = vehiculoService.cambiarEstadoVerificacion(placa, estado);
-        return new ResponseEntity<>(vehiculoActualizado, HttpStatus.OK);
-    }*/
+    /*
+     * @PatchMapping("/{placa}/estado-verificacion")
+     * public ResponseEntity<Vehiculo> cambiarEstadoVerificacion(
+     * 
+     * @PathVariable String placa,
+     * 
+     * @RequestParam EstadoVerificacion estado) {
+     * 
+     * Vehiculo vehiculoActualizado =
+     * vehiculoService.cambiarEstadoVerificacion(placa, estado);
+     * return new ResponseEntity<>(vehiculoActualizado, HttpStatus.OK);
+     * }
+     */
 
     @PatchMapping("/{placa}/estado-oferta")
     public ResponseEntity<Vehiculo> cambiarEstadoOferta(
@@ -146,4 +151,12 @@ public class VehiculoController {
         List<Vehiculo> vehiculos = vehiculoService.obtenerVehiculosConEstadoPendiente();
         return ResponseEntity.ok(vehiculos);
     }
+
+    @GetMapping("/propietario/{idPropietario}/sin-estado")
+    public ResponseEntity<List<Vehiculo>> obtenerVehiculosPorIdPropietarioSinEstado(
+            @PathVariable String idPropietario) {
+        List<Vehiculo> vehiculos = vehiculoService.obtenerVehiculosPorIdPropietarioSinEstado(idPropietario);
+        return ResponseEntity.ok(vehiculos);
+    }
+
 }

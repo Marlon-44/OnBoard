@@ -362,6 +362,19 @@ public class UsuarioService {
             empresaService.updateEmpresa(empresa);
         }
 
+        if (usuarioActualizado.getIdRol() != null &&
+                !usuarioActualizado.getIdRol().equals(usuarioExistente.getIdRol())) {
+
+            if (!rolRepository.existsById(usuarioActualizado.getIdRol())) {
+                throw new InvalidInputException(
+                        "Invalid role ID",
+                        "INVALID_ROLE_ID",
+                        "The provided role ID does not exist in the system.");
+            }
+
+            usuarioExistente.setIdRol(usuarioActualizado.getIdRol());
+        }
+
         return usuarioRepository.save(usuarioExistente);
     }
 
