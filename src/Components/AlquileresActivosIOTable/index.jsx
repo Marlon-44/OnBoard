@@ -71,28 +71,47 @@ export default function AlquileresActivosIOTable() {
         setAlquilerSeleccionado(alquiler);
         setDialogOpen(true);
     };
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        severity: "success", // puede ser "error", "info", "warning"
+    });
+    const handleCloseSnackbar = () => {
+        setSnackbar((prev) => ({ ...prev, open: false }));
+    };
 
     const confirmarFinalizarAlquiler = async () => {
         try {
             await finalizarAlquiler(alquilerSeleccionado.idAlquiler);
-            alert("Alquiler marcado como FINALIZADO.");
+
             const dataActualizada = await obtenerAlquileresConfirmadosPorPropietario(usuario.idUsuario);
             setAlquileres(dataActualizada);
+
+            setSnackbar({
+                open: true,
+                message: "Alquiler marcado como FINALIZADO.",
+                severity: "success",
+            });
         } catch (error) {
-            alert("Error al finalizar el alquiler.", error);
+            setSnackbar({
+                open: true,
+                message: "Error al finalizar el alquiler.",
+                severity: "error",
+            });
         } finally {
             setDialogOpen(false);
             setAlquilerSeleccionado(null);
         }
     };
 
+
     if (loading) {
-    return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>
-            <CircularProgress />
-        </Box>
-    );
-}
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     if (error) return <p>Error al cargar los alquileres: {error.message}</p>;
 
@@ -179,6 +198,22 @@ export default function AlquileresActivosIOTable() {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <Alert
+                    onClose={handleCloseSnackbar}
+                    severity={snackbar.severity}
+                    variant="filled"
+                    sx={{ width: "100%" }}
+                >
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
+
         </>
     );
 }

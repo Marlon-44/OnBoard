@@ -26,8 +26,8 @@ const SidebarIndividualClient = ({ onSeleccionarOpcion, opcionSeleccionada }) =>
                     Historial de alquileres
                 </li>
                 <li
-                    className={`${styles.menu__option} ${opcionSeleccionada === "alquileres" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("alquileres")}>
+                    className={`${styles.menu__option} ${opcionSeleccionada === "alquileres_activosIC" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("alquileres_activosIC")}>
                     <img src="/assets/icon__user__white.png" alt="" />
                     Alquileres Activos
                 </li>

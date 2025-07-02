@@ -61,3 +61,27 @@ export const obtenerAlquileresPorPropietario = async (idPropietario) => {
         throw new Error("No se pudieron obtener los alquileres del propietario.");
     }
 };
+
+
+export const getAllAlquileresByCliente = async (idCliente) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/alquileres/cliente/${idCliente}`);
+        console.log("Alquileres del cliente:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener todos los alquileres del cliente:", error);
+        throw new Error("No se pudieron obtener los alquileres.");
+    }
+};
+
+export const getAlquileresActivosByCliente = async (idCliente) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/alquileres/cliente/${idCliente}/activos`);
+        console.log("Alquileres activos del cliente:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error al obtener los alquileres activos del cliente:", error);
+        throw new Error("No se pudieron obtener los alquileres activos.");
+    }
+};
+

@@ -19,8 +19,8 @@ const DashboardIndividualClient = () => {
                 return <ReservasUCTable idUsuario={usuario.idUsuario}/>
             case "historial_alquileres":
                 return <p>Historial de Alquileres</p>;
-            case "alquileres":
-                return <p>Alquileres en Proceso</p>;
+            case "alquileres_activosIC":
+                return <p>Alquileres en Curso</p>;
             case "cuentas_x_pagar":
                 return <CuentasXPagarUCTable/>;
             case "telefonos_emergencia":
