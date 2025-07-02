@@ -5,6 +5,8 @@ import styles from "./dashboardIndividualOwner.module.css"
 import WelcomeCard from "../../Components/WelcomeCard";
 import ProfileSection from "../../Components/ProfileSection";
 import AlquileresActivosIOTable from "../../Components/AlquileresActivosIOTable";
+import AllAlquileresIOTable from "../../Components/AllAlquileresIOTable";
+import MisVehiculosIOTable from "../../Components/MisVehiculosIOTable";
 const DashboardIndividualOwner = () => {
     const {usuario}= useContext(SesionContext);
     const [opcionSeleccionada, setOpcionSeleccionada] = useState("reservas");
@@ -16,9 +18,9 @@ const DashboardIndividualOwner = () => {
             case "alquileres_activos":
                 return <AlquileresActivosIOTable/>;
             case "alquileres":
-                return <p>Todos los Alquileres</p>;
-            case "cuentas_x_pagar":
-                return <p>OP4</p>;
+                return <AllAlquileresIOTable/>;
+            case "mis_vehiculos":
+                return <MisVehiculosIOTable/>;
             case "telefonos_emergencia":
                 return <p>OP5</p>;
             default:

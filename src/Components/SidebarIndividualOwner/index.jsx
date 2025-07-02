@@ -32,17 +32,12 @@ const SidebarIndividualOwner = ({ onSeleccionarOpcion, opcionSeleccionada }) => 
                     Alquileres
                 </li>
                 <li
-                    className={`${styles.menu__option} ${opcionSeleccionada === "cuentas_x_pagar" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("cuentas_x_pagar")}>
+                    className={`${styles.menu__option} ${opcionSeleccionada === "mis_vehiculos" ? styles.active : ""}`}
+                    onClick={() => onSeleccionarOpcion("mis_vehiculos")}>
                     <img src="/assets/icon__user__white.png" alt="" />
-                    Cuentas por Pagar
+                    Mis Vehiculos
                 </li>
-                <li
-                    className={`${styles.menu__option} ${opcionSeleccionada === "telefonos_emergencia" ? styles.active : ""}`}
-                    onClick={() => onSeleccionarOpcion("telefonos_emergencia")}>
-                    <img src="/assets/icon__user__white.png" alt="" />
-                    Telefonos de Emergencia
-                </li>
+                
             </ul>
         </aside>
     )

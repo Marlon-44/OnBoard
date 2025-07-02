@@ -12,6 +12,8 @@ import {
     DialogTitle,
     DialogActions,
     Button,
+    CircularProgress,
+    Box,
 } from "@mui/material";
 import SesionContext from "../../features/sesion/SesionContext";
 import { obtenerAlquileresConfirmadosPorPropietario, finalizarAlquiler } from "../../api/alquiler";
@@ -84,7 +86,14 @@ export default function AlquileresActivosIOTable() {
         }
     };
 
-    if (loading) return <p>Cargando alquileres confirmados...</p>;
+    if (loading) {
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh' }}>
+            <CircularProgress />
+        </Box>
+    );
+}
+
     if (error) return <p>Error al cargar los alquileres: {error.message}</p>;
 
     return (
@@ -119,7 +128,7 @@ export default function AlquileresActivosIOTable() {
                                         <TableCell>{alquiler.estado}</TableCell>
                                         <TableCell>
                                             <button
-                                                onClick={() => window.location.href = `/detalle-alquiler/${alquiler.idAlquiler}`}
+                                                onClick={() => alert("PRUEBA DE MODAL")}
                                                 style={{
                                                     background: "#0d6efd",
                                                     border: "none",
@@ -129,7 +138,7 @@ export default function AlquileresActivosIOTable() {
                                                     marginRight: "5px",
                                                 }}
                                             >
-                                                Ver Detalle
+                                                Ver
                                             </button>
                                             <button
                                                 onClick={() => abrirDialogoFinalizar(alquiler)}
@@ -141,7 +150,7 @@ export default function AlquileresActivosIOTable() {
                                                     color: "white",
                                                 }}
                                             >
-                                                Marcar como Entregado
+                                                Entregado
                                             </button>
                                         </TableCell>
                                     </TableRow>
