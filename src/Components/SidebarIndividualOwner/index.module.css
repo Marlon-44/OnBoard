@@ -1,0 +1,92 @@
+.sidebar__container {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    height: 100vh;
+    background: radial-gradient(circle at 30% 30%, #52b0db,#00c9a7, #0f6cc9,  #6bc89b);
+    background-size: 400% 400%;
+    animation: gradientMove 8s ease infinite;
+    color: #fff;
+    border-radius: 0 0.2rem 0.2rem 0;
+    position: absolute;
+    top: 0;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 10vh;
+}
+
+.logo h2 {
+    align-self: center;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+}
+
+.logo h2:hover {
+    cursor: pointer;
+}
+
+.sidebar__menu {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    width: 95%;
+    align-self: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;}
+
+.menu__option {
+    display: flex;
+    font-size: 0.8rem;
+    padding: 1rem;
+    gap: 1rem;
+    border-radius: 1rem;
+
+}
+
+.menu__option:hover {
+    background-color: #ffffff3a;
+    backdrop-filter: blur(20px);
+    cursor: pointer;
+}
+
+.menu__option img {
+    width: 10%;
+    max-height: 1.8rem;
+}
+
+.active {
+    background-color: #eeeeee;
+    color: black;
+    width: 105%;
+    border-radius: 1rem 0 0 1rem;
+    z-index: 1;
+
+}
+
+.active:hover {
+    background-color: #eeeeee;
+    color: black;
+    width: 105%;
+    border-radius: 1rem 0 0 1rem;
+    z-index: 1;
+
+}

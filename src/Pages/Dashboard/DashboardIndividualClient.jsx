@@ -6,6 +6,7 @@ import styles from "./dashboardIndividualClient.module.css"
 import WelcomeCard from "../../Components/WelcomeCard";
 import ProfileSection from "../../Components/ProfileSection";
 import ReservasUCTable from "../../Components/ReservasUCTable/index.jsx";
+import CuentasXPagarUCTable from "../../Components/CuentasXPagarUCTable/index.jsx";
 
 
 const DashboardIndividualClient = () => {
@@ -21,7 +22,7 @@ const DashboardIndividualClient = () => {
             case "alquileres":
                 return <p>Alquileres en Proceso</p>;
             case "cuentas_x_pagar":
-                return <p>Facturas</p>;
+                return <CuentasXPagarUCTable/>;
             case "telefonos_emergencia":
                 return <p>Telefonos de emergencia</p>;
             default:

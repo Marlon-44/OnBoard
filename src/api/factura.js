@@ -11,4 +11,15 @@ export const obtenerFacturaPorReserva = async (idReserva) => {
         throw new Error("No se pudo obtener la factura desde el servidor.");
     }
 };
+export const getFacturasByClient = async (idCliente) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/facturas/por-cliente/${idCliente}`);
+        console.log("Facturas obtenidas para cliente:", response.data);
+        return response.data; // Se espera que sea un array de facturas
+    } catch (error) {
+        console.error(`Error al obtener facturas para el cliente ${idCliente}:`, error);
+        throw new Error("No se pudieron obtener las facturas del servidor.");
+    }
+};
+
 

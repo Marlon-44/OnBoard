@@ -63,12 +63,11 @@ export default function ReservasUCTable({ idUsuario }) {
 
     if (loading) return <p>Cargando tus reservas...</p>;
     if (error) return <p>Error al cargar tus reservas: {error.message}</p>;
-    if (!reservas.length) return <p>No tienes reservas registradas.</p>;
 
     return (
         <>
             <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "1rem" }} style={{ borderRadius: "1rem" }}>
-                <TableContainer sx={{ maxHeight: "48vh" }}>
+                <TableContainer sx={{ maxHeight: "48vh", minHeight: "48vh" }}>
                     <Table stickyHeader aria-label="tabla de reservas del usuario">
                         <TableHead>
                             <TableRow>
