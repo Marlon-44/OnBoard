@@ -121,7 +121,7 @@ const ReservarModalForm = ({
                 estadoReserva: "PENDIENTE"
             };
 
-            alert("Datos enviados a crearReserva:\n" + JSON.stringify(datosReserva, null, 2));
+            
             
             const reservaResponse = await crearReserva(datosReserva);
             
@@ -133,7 +133,7 @@ const ReservarModalForm = ({
             const factura = await obtenerFacturaPorReserva(reserva.idReserva);
             agregarFactura(factura);
 
-            alert("Factura recibida:\n" + JSON.stringify(factura, null, 2));
+            
 
             // 3. Redirigir al componente de pago con el ID de factura
             if (factura.idFactura) {
