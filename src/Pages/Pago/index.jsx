@@ -118,10 +118,10 @@ const Pago = () => {
             </Typography>
 
             <Paper sx={{ p: 3 }}>
-                <Typography variant="subtitle1">ID Factura: {factura.idFactura}</Typography>
-                <Typography variant="subtitle1">Fecha de Emisión: {factura.fechaEmision}</Typography>
-                <Typography variant="subtitle1">Estado: {factura.estadoPago}</Typography>
-                <Typography variant="subtitle1">Razón: {factura.razon}</Typography>
+                <Typography variant="subtitle1" style={{color: "#000", fontFamily: "Manrope"}}>ID Factura: {factura.idFactura}</Typography>
+                <Typography variant="subtitle1" style={{color: "#000", fontFamily: "Manrope"}}>Fecha de Emisión: {factura.fechaEmision}</Typography>
+                <Typography variant="subtitle1" style={{color: "#000", fontFamily: "Manrope"}}>Estado: {factura.estadoPago}</Typography>
+                <Typography variant="subtitle1" style={{color: "#000", fontFamily: "Manrope"}}>Razón: {factura.razon}</Typography>
 
                 <TableContainer sx={{ mt: 2 }}>
                     <Table size="small">
