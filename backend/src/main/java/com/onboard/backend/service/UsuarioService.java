@@ -185,7 +185,7 @@ public class UsuarioService {
                     usuario.getEstadoVerificacion());
 
             usuario.setFotoPerfilUrl(
-                    "https://lklfmpejhtqwuhlyhpud.supabase.co/storage/v1/object/public/resources/profile_photo/default_photo.jpg");
+                    "https://vbtvwszlngotrdoqcanb.supabase.co/storage/v1/object/public/resources/profile_photo/default_photo.jpg");
             return usuarioRepository.save(usuario);
 
         } catch (Exception e) {
@@ -274,7 +274,7 @@ public class UsuarioService {
 
         Usuario usuario = usuarioOpt.get();
         if (usuario.getFotoPerfilUrl() != null && !usuario.getFotoPerfilUrl().toString().equals(
-                "https://lklfmpejhtqwuhlyhpud.supabase.co/storage/v1/object/public/resources/profile_photo/default_photo.jpg")) {
+                "https://vbtvwszlngotrdoqcanb.supabase.co/storage/v1/object/public/resources/profile_photo/default_photo.jpg")) {
             fileUploadService.deletePhotoByUrl(usuario.getFotoPerfilUrl());
         }
         usuario.setFotoPerfilUrl(fileUrl);

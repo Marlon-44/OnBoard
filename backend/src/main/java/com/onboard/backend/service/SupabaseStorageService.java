@@ -28,8 +28,8 @@ import org.slf4j.Logger;
 @Service
 public class SupabaseStorageService {
 
-    private static final String SUPABASE_URL = "https://lklfmpejhtqwuhlyhpud.supabase.co";
-    private static final String SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxrbGZtcGVqaHRxd3VobHlocHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTQxNTM5MCwiZXhwIjoyMDY0OTkxMzkwfQ.3vsYeeUOPItIBmYO5K1KpaDbfGYi7j8HJ75jfNqIV4k";
+    private static final String SUPABASE_URL = "https://vbtvwszlngotrdoqcanb.supabase.co";
+    private static final String SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidHZ3c3psbmdvdHJkb3FjYW5iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyNjQ3OTAsImV4cCI6MjA3Njg0MDc5MH0.-UzbPEwPj46xyUEWnRn1lefTy4kv1MDQESOPZqf1HwI";
     private static final OkHttpClient client = new OkHttpClient();
     private static final Logger logger = LoggerFactory.getLogger(SupabaseStorageService.class);
 
