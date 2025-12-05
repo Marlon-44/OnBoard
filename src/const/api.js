@@ -1,2 +1,2 @@
-const API_HOST = "http://98.83.38.4:8080";
+const API_HOST = "https://massachusetts-embassy-rescue-fotos.trycloudflare.com";
 export const API_ROOT = `${API_HOST}/api`;
